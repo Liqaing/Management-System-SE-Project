@@ -2,14 +2,21 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./src/index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server",
+    "dev": "nodemon server"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^4.21.1",
     "typescript": "^5.6.3"
+  },
+  "keywords": [],
+  "devDependencies": {
+    "nodemon": "^3.1.7"
   }
 }
