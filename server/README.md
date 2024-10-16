@@ -8,8 +8,8 @@ DATABASE_URL=postgresql://<USER>:<PASSWORD>@<HOST>:<PORT>/DATABASE?schema=public
 ## 1. Setup progres database
 How to install postgres db and pgadmin container: 
     - install postgres and pgadmin image:
-        docker pull postgres
-        docker pull dpage/pgadmin4
+        - docker pull postgres
+        - docker pull dpage/pgadmin4
     
     - got to src/db replace <username>, <password>, <email> with value
     - run cmd:
