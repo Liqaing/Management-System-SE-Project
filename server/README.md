@@ -12,7 +12,8 @@ How to install postgres db and pgadmin container:
         docker pull dpage/pgadmin4
     
     - got to src/db replace <username>, <password>, <email> with value
-    - run cmd docker compose up, w
+    - run cmd:
+        - docker compose up
 
 ## 2. Setup server
 1. cd server
@@ -22,7 +23,7 @@ How to install postgres db and pgadmin container:
     cd src
     cmd: 
         to create first migrations
-        prisma migrate dev --name init
+        - prisma migrate dev --name init
 4. cmd: npm run dev to start server
 
 
