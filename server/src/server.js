@@ -1,8 +1,9 @@
 import express from 'express';
 import morgan from 'morgan';
-import userRouter from './routes/userRouter.js';
+import { userRouter } from './routes/user.route.js';
 import dotenv from 'dotenv';
 import { specs, swaggerUi } from './config/swagger.config.js';
+import { authRouter } from './routes/auth.route.js';
 
 dotenv.config();
 
@@ -16,7 +17,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 // routes
+app.use('/api/auth', authRouter)
 app.use('/api/user', userRouter);
+
 
 app.get('/', (req, res) => {
     res.sendStatus(200)

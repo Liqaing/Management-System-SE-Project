@@ -19,4 +19,13 @@ const dbCreateUser = async(username, password, telephone) => {
     }
 }
 
-export { dbCreateUser }
+const dbFindUser = async (telephone) => {
+    const user = await prisma.users.findUnique({
+        where: {            
+            telephone: telephone
+        }
+    })
+    return user;
+}
+
+export { dbCreateUser, dbFindUser }

@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import { dbCreateUser } from "../db/queries.js";
+import { dbCreateUser } from "../db/user.queries.js";
 import saltRounds from "../config/bcrypt.config.js";
 
 const createUser = async (req, res) => {
