@@ -4,6 +4,11 @@
   "description": "",
   "main": "./src/server.js",
   "type": "module",
+  "imports": {
+    "./swagger/swagger-output.json": {
+      "default": "./src/config/swagger/swagger-output.json"
+    }
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server",

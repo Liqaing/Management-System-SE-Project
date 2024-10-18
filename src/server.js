@@ -4,8 +4,7 @@ import { userRouter } from "./routes/user.route.js";
 import dotenv from "dotenv";
 import swaggerUi from "swagger-ui-express";
 import { authRouter } from "./routes/auth.route.js";
-
-// const swaggerFile = require("./config/swagger/swagger-output.json");
+import swaggerFile from "./config/swagger/swagger-output.json" assert { type: "json" };
 
 dotenv.config();
 
@@ -25,11 +24,7 @@ app.get("/", (req, res) => {
     return res.sendStatus(200);
 });
 
-app.use(
-    "/api-docs",
-    swaggerUi.serve,
-    swaggerUi.setup("./config/swagger/swagger-output.json")
-);
+app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 app.listen(port, () => {
     console.log(`Server is listening on ${port}`);
