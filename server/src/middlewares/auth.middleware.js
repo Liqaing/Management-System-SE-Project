@@ -1,17 +1,27 @@
-import jwt from 'jsonwebtoken';
-import { jwtSecretKey } from '../config/auth.config';
+import jwt from "jsonwebtoken";
+import { jwtSecretKey } from "../config/auth.config.js";
 
 const verifyToken = (req, res, next) => {
-    const bearerHeader = req.headers['authorization'];
+    const bearerHeader = req.headers["authorization"];
     if (!bearerHeader) {
-        res.status(401).json({
+        return res.status(401).json({
             success: false,
-            message: "Unauthorize request"
+            message: "Unauthorize request",
         });
     }
 
-    const bearerToken = bearerHeader.split(' ')[1];
-    jwt.verifyToken(bearerToken, jwtSecretKey, (err, authData) => {
-        
+    const bearerToken = bearerHeader.split(" ")[1];
+    jwt.verify(bearerToken, jwtSecretKey, (err, authData) => {
+        if (err) {
+            return res.status(401).json({
+                success: false,
+                message: "Unauthorize request",
+            });
+        }
+        req.authData = authData;
+        console.log(req.authData);
+        next();
     });
-}
+};
+
+export { verifyToken };
