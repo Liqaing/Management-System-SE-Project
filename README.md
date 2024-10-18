@@ -1,6 +1,7 @@
 # Management-System-SE-Project
 
 ## .env
+
 ```
     DATABASE_URL=postgresql://<USER>:<PASSWORD>@<HOST>:<PORT>/<DATABASE>?schema=public
 ```
@@ -10,45 +11,43 @@
 How to install PostgreSQL DB and pgAdmin using Docker:
 
 1. **Install PostgreSQL and pgAdmin images:**
+
     - Run the following commands in your terminal:
-      ```bash
-      docker pull postgres
-      docker pull dpage/pgadmin4
-      ```
+        ```bash
+        docker pull postgres
+        docker pull dpage/pgadmin4
+        ```
 
 2. **Configure your value :**
+
     - Navigate to `src/db` and replace `<USER>`, `<PASSWORD>`, `<HOST>`, `<PORT>`, and `DATABASE` with your own values.
-          
 
 3. **Run Docker Compose:**
     - Start the PostgreSQL and pgAdmin containers by running:
-      ```bash
-      docker compose up
-      ```
+        ```bash
+        docker compose up
+        ```
 
 ### 2. Setup Server
 
-1. **Navigate to the server directory:**
-    ```bash
-    cd server
-    ```
+1. **Install Node packages:**
 
-2. **Install Node packages:**
     ```bash
     npm install
     ```
 
-3. **Migrate the database:**
-    - Navigate to the `src` directory:
-      ```bash
-      cd src
-      ```
-    - Run the following command to create the initial migration:
-      ```bash
-      prisma migrate dev --name init
-      ```
+2. **Migrate the database:**
 
-4. **Start the server:**
+    - Navigate to the `src` directory:
+        ```bash
+        cd src
+        ```
+    - Run the following command to create the initial migration:
+        ```bash
+        prisma migrate dev --name init
+        ```
+
+3. **Start the server:**
     ```bash
     npm run dev
     ```
@@ -57,5 +56,5 @@ How to install PostgreSQL DB and pgAdmin using Docker:
 
 ### Additional Information
 
-- Ensure that your database is correctly configured and running before starting the server.
-- You can manage your PostgreSQL database through the pgAdmin interface by accessing the web client.
+-   Ensure that your database is correctly configured and running before starting the server.
+-   You can manage your PostgreSQL database through the pgAdmin interface by accessing the web client.
