@@ -1,23 +1,19 @@
-import swaggerJsdoc from 'swagger-jsdoc';
-import swaggerUi from 'swagger-ui-express';
+import swaggerJsdoc from "swagger-jsdoc";
 
-const options = {
-    definition: {
-        openapi: '3.0.0',
-        info: {
-            title: 'Swagger Express API',
-            version: '1.0.0',
-            description: 'A simple Express API with Swagger documentation',
-        }, 
-        servers: [{ url: '/api' }]
+import swaggerAutogen from "swagger-autogen";
+
+const doc = {
+    info: {
+        title: "My API",
+        description: "Description",
     },
-    apis: ['../routes/*.js']
-}
-
-const specs = swaggerJsdoc(options);
-
-export {
-    specs,
-    swaggerUi,
+    host: "localhost:8000",
 };
 
+const outputFile = "./swagger/swagger-output.json";
+const routes = ["../server.js"];
+
+/* NOTE: If you are using the express Router, you must pass in the 'routes' only the 
+  root file where the route starts, such as index.js, app.js, routes.js, etc ... */
+
+swaggerAutogen(outputFile, routes, doc);
