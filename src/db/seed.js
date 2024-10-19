@@ -1,8 +1,9 @@
 // Seeding database
-
+import bcrypt from "bcrypt";
 import { PrismaClient } from "@prisma/client";
 import { ROLES } from "../utils/constants.js";
 import dotenv from "dotenv";
+import saltRounds from "../config/bcrypt.config.js";
 
 dotenv.config();
 
@@ -35,8 +36,8 @@ async function main() {
         await prisma.users.create({
             data: {
                 username: "admin",
-                password: "admin",
-                telephone: "010",
+                password: bcrypt.hashSync("admin", saltRounds),
+                telephone: "011",
                 role: {
                     connect: { id: 1 },
                 },
@@ -44,7 +45,7 @@ async function main() {
         });
     }
 
-    await seedRole();
+    // await seedRole();
     await seedUser();
 }
 
