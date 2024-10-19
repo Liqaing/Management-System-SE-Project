@@ -21,6 +21,10 @@ const doc = {
             name: "User",
             description: "operation on user",
         },
+        {
+            name: "Role",
+            description: "operation on role",
+        },
     ],
     components: {
         securitySchemes: {

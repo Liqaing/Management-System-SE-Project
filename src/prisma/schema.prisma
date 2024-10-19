@@ -27,7 +27,7 @@ model users {
 
 model role {
   id          Int     @id @default(autoincrement())
-  roleName    String  @db.VarChar(50)
+  roleName    String  @unique @db.VarChar(50)
   description String? @db.VarChar
   user        users[]
 }

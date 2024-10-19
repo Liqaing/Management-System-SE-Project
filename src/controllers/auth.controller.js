@@ -5,6 +5,7 @@ import { jwtSecretKey } from "../config/auth.config.js";
 import asyncHandler from "express-async-handler";
 import { ROLES } from "../utils/constants.js";
 import saltRounds from "../config/bcrypt.config.js";
+import { dbFindRole } from "../db/role.queries.js";
 
 const loginUser = asyncHandler(async (req, res) => {
     // #swagger.tags = ['Auth']
@@ -46,11 +47,13 @@ const loginUser = asyncHandler(async (req, res) => {
     );
 });
 
-const signupUser = asyncHandler((req, res) => {
+const signupUser = asyncHandler(async (req, res) => {
     // #swagger.tags = ['Auth']
-    // #swagger.description = 'Sinup a user'
+    // #swagger.description = 'Singup a user, only call this endpoint on creat customer'
 
     const { username, password, telephone } = req.body;
+
+    const role = await dbFindRole(ROLES.userRole);
 
     //hashing the password and saving it in the database
     bcrypt.hash(password, saltRounds, async (err, hash) => {
@@ -58,7 +61,7 @@ const signupUser = asyncHandler((req, res) => {
             console.error("Error hashing password:", err);
             throw err;
         } else {
-            await dbCreateUser(username, hash, telephone);
+            await dbCreateUser(username, hash, telephone, role.id);
             return res.sendStatus(201);
         }
     });

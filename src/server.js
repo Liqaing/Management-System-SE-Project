@@ -6,6 +6,7 @@ import swaggerUi from "swagger-ui-express";
 import { authRouter } from "./routes/auth.route.js";
 import swaggerFile from "./config/swagger/swagger-output.json" assert { type: "json" };
 import { errorHandler } from "./middlewares/errorHandler.middleware.js";
+import { roleRouter } from "./routes/role.route.js";
 
 dotenv.config();
 
@@ -20,6 +21,7 @@ app.use(express.json());
 // routes
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
+app.use("/api/role", roleRouter);
 
 app.get("/", (req, res) => {
     return res.sendStatus(200);
