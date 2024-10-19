@@ -5,7 +5,7 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"  
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -14,11 +14,20 @@ datasource db {
 }
 
 model users {
-  id Int @id @default(autoincrement())
-  username  String   @db.VarChar(255)
-  password  String   @db.VarChar(255)
-  telephone String   @unique @db.VarChar(255)
-  createAt DateTime? @default(now())
-  createBy String?  @db.VarChar(255)
+  id        Int       @id @default(autoincrement())
+  username  String    @db.VarChar(255)
+  password  String    @db.VarChar(255)
+  telephone String    @unique @db.VarChar(255)
+  createAt  DateTime? @default(now())
+  createBy  String?   @db.VarChar(255)
+
+  role   role @relation(fields: [roleId], references: [id])
+  roleId Int
 }
 
+model role {
+  id          Int     @id @default(autoincrement())
+  roleName    String  @db.VarChar(50)
+  description String? @db.VarChar
+  user        users[]
+}
