@@ -22,6 +22,23 @@ const doc = {
             description: "operation on user",
         },
     ],
+    components: {
+        securitySchemes: {
+            bearerAuth: {
+                type: "http",
+                in: "header",
+                name: "Authorization",
+                description: "Bearer token to access these api endpoints",
+                scheme: "bearer",
+                bearerFormat: "JWT",
+            },
+        },
+    },
+    security: [
+        {
+            bearerAuth: [],
+        },
+    ],
 };
 
 const outputFile = "./swagger/swagger-output.json";

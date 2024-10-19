@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import swaggerUi from "swagger-ui-express";
 import { authRouter } from "./routes/auth.route.js";
 import swaggerFile from "./config/swagger/swagger-output.json" assert { type: "json" };
+import { errorHandler } from "./middlewares/errorHandler.middleware.js";
 
 dotenv.config();
 
@@ -25,6 +26,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerFile));
+app.use(errorHandler);
 
 app.listen(port, () => {
     console.log(`Server is listening on ${port}`);
