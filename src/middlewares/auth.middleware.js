@@ -1,9 +1,10 @@
 import jwt from "jsonwebtoken";
 import { jwtSecretKey } from "../config/auth.config.js";
+import expressAsyncHandler from "express-async-handler";
 
 const validateHeader = [];
 
-const verifyToken = (req, res, next) => {
+const verifyToken = expressAsyncHandler((req, res, next) => {
     /*
     #swagger.security = [{
         "bearerAuth": []
@@ -30,6 +31,6 @@ const verifyToken = (req, res, next) => {
         console.log(req.authData);
         next();
     });
-};
+});
 
 export { verifyToken };
