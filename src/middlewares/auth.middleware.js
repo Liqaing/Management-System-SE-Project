@@ -10,7 +10,6 @@ const verifyToken = (req, res, next) => {
     }]
     */
     const bearerHeader = req.headers["authorization"];
-    console.log(req.headers);
     if (!bearerHeader) {
         return res.status(401).json({
             success: false,

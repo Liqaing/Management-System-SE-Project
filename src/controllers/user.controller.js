@@ -6,14 +6,23 @@ import asyncHandler from "express-async-handler";
 import { body, validationResult } from "express-validator";
 
 const validateUser = [
-    body("username").notEmpty().withMessage("Username cannot be empty").trim(),
-    body("password").notEmpty().withMessage("Password cannot be empty").trim(),
+    body("username")
+        .notEmpty()
+        .withMessage("Username cannot be empty")
+        .trim()
+        .escape(),
+    body("password")
+        .notEmpty()
+        .withMessage("Password cannot be empty")
+        .trim()
+        .escape(),
     body("telephone")
         .notEmpty()
         .withMessage("Telephone cannot be empty")
         .trim()
         .isNumeric()
-        .withMessage("Invalid Telephone"),
+        .withMessage("Invalid, Telephone can only contain number")
+        .escape(),
 ];
 
 const createUser = [
@@ -21,7 +30,7 @@ const createUser = [
     asyncHandler(async (req, res) => {
         // #swagger.tags = ['User']
 
-        if ((req.authData.role = ROLES.adminRole)) {
+        if (req.authData.role != ROLES.adminRole) {
             return res.status(403).json({
                 success: false,
                 message: "Unauthorize operation",
@@ -29,10 +38,11 @@ const createUser = [
         }
 
         const error = validationResult(req);
+        console.log(error);
         if (!error.isEmpty()) {
             return res.status(400).json({
                 success: false,
-                message: errors.array(),
+                message: error.array()[0].msg,
             });
         }
 
