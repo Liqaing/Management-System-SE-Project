@@ -4,6 +4,8 @@ import { dbCreateUser, dbFindUser } from "../db/user.queries.js";
 import { jwtSecretKey } from "../config/auth.config.js";
 
 const loginUser = async (req, res) => {
+    // #swagger.tags = ['Auth']
+    // #swagger.description = 'Log in a user'
     const password = req.body.password;
     const telephone = req.body.telephone;
 

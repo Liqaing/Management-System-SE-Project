@@ -4,6 +4,7 @@ import saltRounds from "../config/bcrypt.config.js";
 import { ROLES } from "../config/constants.js";
 
 const createUser = async (req, res) => {
+    // #swagger.tags = ['User']
     try {
         if ((req.authData.role = ROLES.adminRole)) {
             return res.status(403).json({

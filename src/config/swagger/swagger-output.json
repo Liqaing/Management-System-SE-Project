@@ -13,6 +13,16 @@
       "url": "https://localhost:8000/"
     }
   ],
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "authentication user"
+    },
+    {
+      "name": "User",
+      "description": "operation on user"
+    }
+  ],
   "paths": {
     "/": {
       "get": {
@@ -26,7 +36,10 @@
     },
     "/api/auth/login": {
       "post": {
-        "description": "",
+        "tags": [
+          "Auth"
+        ],
+        "description": "Log in a user",
         "responses": {
           "200": {
             "description": "OK"
@@ -56,6 +69,9 @@
     },
     "/api/user/": {
       "post": {
+        "tags": [
+          "User"
+        ],
         "description": "",
         "parameters": [
           {
@@ -89,36 +105,6 @@
                   "username": {
                     "example": "any"
                   },
-                  "password": {
-                    "example": "any"
-                  },
-                  "telephone": {
-                    "example": "any"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/login": {
-      "post": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized"
-          }
-        },
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
                   "password": {
                     "example": "any"
                   },

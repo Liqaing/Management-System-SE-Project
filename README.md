@@ -58,3 +58,11 @@ How to install PostgreSQL DB and pgAdmin using Docker:
 
 -   Ensure that your database is correctly configured and running before starting the server.
 -   You can manage your PostgreSQL database through the pgAdmin interface by accessing the web client.
+
+### Generate swagger doc (route: /doc)
+
+-   **To generate swagger doc run**
+
+```bash
+    npm run swagger
+```

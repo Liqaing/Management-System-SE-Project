@@ -13,7 +13,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server",
     "dev": "nodemon server",
-    "swagger-autogen": "node ./src/config/swagger.config.js"
+    "swagger": "node ./src/config/swagger.config.js"
   },
   "author": "",
   "license": "ISC",
@@ -24,6 +24,7 @@
     "bcrypt": "^5.1.1",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
+    "express-validator": "^7.2.0",
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
     "pg": "^8.13.0",

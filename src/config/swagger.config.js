@@ -1,5 +1,3 @@
-import swaggerJsdoc from "swagger-jsdoc";
-
 import swaggerAutogen from "swagger-autogen";
 
 const doc = {
@@ -14,6 +12,16 @@ const doc = {
     schemes: ["http", "https"],
     consumes: ["application/json"],
     produces: ["application/json"],
+    tags: [
+        {
+            name: "Auth", // Tag name
+            description: "authentication user", // Tag description
+        },
+        {
+            name: "User",
+            description: "operation on user",
+        },
+    ],
 };
 
 const outputFile = "./swagger/swagger-output.json";
