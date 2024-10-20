@@ -13,7 +13,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server",
     "dev": "nodemon server",
-    "swagger": "node ./src/config/swagger.config.js"
+    "swagger": "node ./src/config/swagger.config.js",
+    "seed": "node ./src/db/seed.js"
   },
   "author": "",
   "license": "ISC",

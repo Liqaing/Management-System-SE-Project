@@ -46,6 +46,10 @@ How to install PostgreSQL DB and pgAdmin using Docker:
         ```bash
         prisma migrate dev --name init
         ```
+    - After that whenever make change to model, run following cmd to migrate:
+        ```bash
+        prisma migrate dev --name added_job_title
+        ```
 
 3. **Start the server:**
     ```bash

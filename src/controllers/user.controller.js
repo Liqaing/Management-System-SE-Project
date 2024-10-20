@@ -14,7 +14,7 @@ const createUser = asyncHandler(async (req, res) => {
         });
     }
 
-    const { username, password, telephone } = req.body;
+    const { username, password, telephone, roleId } = req.body;
 
     const existing_user = await dbFindUser(telephone);
     if (existing_user != null) {
@@ -30,7 +30,7 @@ const createUser = asyncHandler(async (req, res) => {
             console.error("Error hashing password:", err);
             throw err;
         } else {
-            await dbCreateUser(username, hash, telephone);
+            await dbCreateUser(username, hash, telephone, Number(roleId));
             return res.sendStatus(201);
         }
     });

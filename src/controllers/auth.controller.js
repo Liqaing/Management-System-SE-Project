@@ -10,8 +10,7 @@ import { dbFindRole } from "../db/role.queries.js";
 const loginUser = asyncHandler(async (req, res) => {
     // #swagger.tags = ['Auth']
     // #swagger.description = 'Log in a user'
-    const password = req.body.password;
-    const telephone = req.body.telephone;
+    const { password, telephone } = req.body;
 
     const user = await dbFindUser(telephone);
 

@@ -152,6 +152,9 @@
                   },
                   "telephone": {
                     "example": "any"
+                  },
+                  "roleId": {
+                    "example": "any"
                   }
                 }
               }
