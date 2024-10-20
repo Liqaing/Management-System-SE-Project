@@ -7,13 +7,15 @@ import { authRouter } from "./routes/auth.route.js";
 import swaggerFile from "./config/swagger/swagger-output.json" assert { type: "json" };
 import { errorHandler } from "./middlewares/errorHandler.middleware.js";
 import { roleRouter } from "./routes/role.route.js";
+import cors from "cors";
 
 dotenv.config();
 
 const app = express();
 const port = 8000;
 
-// middlewares
+// middlewares]
+app.use(cors());
 app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
@@ -23,8 +25,11 @@ app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 app.use("/api/role", roleRouter);
 
-app.get("/", (req, res) => {
-    return res.sendStatus(200);
+app.get("/api", (req, res) => {
+    return res.status(200).json({
+        success: true,
+        message: "receive",
+    });
 });
 
 app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerFile));
