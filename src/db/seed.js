@@ -45,7 +45,7 @@ async function main() {
         });
     }
 
-    // await seedRole();
+    await seedRole();
     await seedUser();
 }
 
