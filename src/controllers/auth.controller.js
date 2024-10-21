@@ -51,6 +51,13 @@ const signupUser = asyncHandler(async (req, res) => {
     // #swagger.description = 'Singup a user, only call this endpoint on creat customer'
 
     const { username, password, telephone } = req.body;
+    const existing_user = await dbFindUser(telephone);
+    if (existing_user != null) {
+        res.status(409).json({
+            success: false,
+            message: "A user with this telephone is already exist",
+        });
+    }
 
     const role = await dbFindRole(ROLES.userRole);
 
