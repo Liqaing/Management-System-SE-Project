@@ -17,7 +17,9 @@ const loginUser = asyncHandler(async (req, res) => {
     if (user == null) {
         return res.status(401).json({
             success: false,
-            message: "Telephone or password is not correct",
+            error: {
+                message: "Telephone or password is not correct",
+            },
         });
     }
 
@@ -25,7 +27,9 @@ const loginUser = asyncHandler(async (req, res) => {
     if (!match) {
         return res.status(401).json({
             success: false,
-            message: "Telephone or password is not correct",
+            error: {
+                message: "Telephone or password is not correct",
+            },
         });
     }
 
@@ -35,12 +39,18 @@ const loginUser = asyncHandler(async (req, res) => {
         (err, token) => {
             if (err) {
                 return res.status(401).json({
-                    message: "Unauthorized",
+                    success: false,
+                    error: {
+                        message: "Unauthorized",
+                    },
                 });
             }
 
             return res.json({
-                token: token,
+                success: true,
+                data: {
+                    token: token,
+                },
             });
         }
     );
@@ -55,7 +65,9 @@ const signupUser = asyncHandler(async (req, res) => {
     if (existing_user != null) {
         res.status(409).json({
             success: false,
-            message: "A user with this telephone is already exist",
+            error: {
+                message: "A user with this telephone is already exist",
+            },
         });
     }
 
@@ -68,7 +80,9 @@ const signupUser = asyncHandler(async (req, res) => {
             throw err;
         } else {
             await dbCreateUser(username, hash, telephone, role.id);
-            return res.sendStatus(201);
+            return res.status(201).json({
+                success: true,
+            });
         }
     });
 });

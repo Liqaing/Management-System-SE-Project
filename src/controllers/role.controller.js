@@ -9,15 +9,18 @@ const getAllRoles = expressAsyncHandler(async (req, res) => {
     if (req.authData.role != ROLES.adminRole) {
         return res.status(403).json({
             success: false,
-            message: "Unauthorize operation",
+            error: {
+                message: "Unauthorize operation",
+            },
         });
     }
 
     const roles = await dbFindAllRoles();
     res.status(200).json({
         success: true,
-        message: "Success get all roles",
-        data: roles,
+        data: {
+            ...roles,
+        },
     });
 });
 

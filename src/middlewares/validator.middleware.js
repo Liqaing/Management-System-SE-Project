@@ -12,7 +12,10 @@ const validatorHandler = expressAsyncHandler((req, res, next) => {
     if (!errors.isEmpty()) {
         return res.status(422).json({
             success: false,
-            message: errors.array()[0].msg,
+            error: {
+                code: 422,
+                message: errors.array()[0].msg,
+            },
         });
     }
     next();

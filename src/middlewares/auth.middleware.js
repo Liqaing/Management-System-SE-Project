@@ -14,7 +14,9 @@ const verifyToken = expressAsyncHandler((req, res, next) => {
     if (!bearerHeader) {
         return res.status(401).json({
             success: false,
-            message: "Unauthorize request, please make sure you are login",
+            error: {
+                message: "Unauthorize request, please make sure you are login",
+            },
         });
     }
 
@@ -24,11 +26,12 @@ const verifyToken = expressAsyncHandler((req, res, next) => {
         if (err) {
             return res.status(401).json({
                 success: false,
-                message: "Unauthorize request",
+                error: {
+                    message: "Unauthorize request",
+                },
             });
         }
         req.authData = authData;
-        console.log(req.authData);
         next();
     });
 });

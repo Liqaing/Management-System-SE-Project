@@ -10,7 +10,9 @@ const createUser = asyncHandler(async (req, res) => {
     if (req.authData.role != ROLES.adminRole) {
         return res.status(403).json({
             success: false,
-            message: "Unauthorize operation",
+            error: {
+                message: "Unauthorize operation",
+            },
         });
     }
 
@@ -20,7 +22,9 @@ const createUser = asyncHandler(async (req, res) => {
     if (existing_user != null) {
         res.status(409).json({
             success: false,
-            message: "A user with this telephone is already exist",
+            error: {
+                message: "A user with this telephone is already exist",
+            },
         });
     }
 
@@ -31,7 +35,9 @@ const createUser = asyncHandler(async (req, res) => {
             throw err;
         } else {
             await dbCreateUser(username, hash, telephone, Number(roleId));
-            return res.sendStatus(201);
+            return res.status(201).json({
+                success: true,
+            });
         }
     });
 });
