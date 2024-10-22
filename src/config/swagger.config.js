@@ -28,13 +28,18 @@ const doc = {
     ],
     components: {
         securitySchemes: {
-            bearerAuth: {
-                type: "http",
-                in: "header",
-                name: "Authorization",
-                description: "Bearer token to access these api endpoints",
-                scheme: "bearer",
-                bearerFormat: "JWT",
+            // bearerAuth: {
+            //     type: "http",
+            //     in: "header",
+            //     name: "Authorization",
+            //     description: "Bearer token to access these api endpoints",
+            //     scheme: "bearer",
+            //     bearerFormat: "JWT",
+            // },
+            cookieAuth: {
+                type: "apiKey",
+                in: "cookie",
+                name: "token", // This should match your cookie name for JWT
             },
         },
     },

@@ -28,14 +28,31 @@
     }
   ],
   "paths": {
-    "/": {
+    "/api": {
       "get": {
         "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/api/auth/login": {
@@ -80,6 +97,9 @@
         "responses": {
           "201": {
             "description": "Created"
+          },
+          "409": {
+            "description": "Conflict"
           }
         },
         "requestBody": {
@@ -144,16 +164,10 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "username": {
+                  "success": {
                     "example": "any"
                   },
-                  "password": {
-                    "example": "any"
-                  },
-                  "telephone": {
-                    "example": "any"
-                  },
-                  "roleId": {
+                  "error": {
                     "example": "any"
                   }
                 }
@@ -206,6 +220,11 @@
         "description": "Bearer token to access these api endpoints",
         "scheme": "bearer",
         "bearerFormat": "JWT"
+      },
+      "cookieAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "token"
       }
     }
   },

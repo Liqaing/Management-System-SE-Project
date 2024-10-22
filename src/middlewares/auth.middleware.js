@@ -5,23 +5,17 @@ import expressAsyncHandler from "express-async-handler";
 const validateHeader = [];
 
 const verifyToken = expressAsyncHandler((req, res, next) => {
-    /*
-    #swagger.security = [{
-        "bearerAuth": []
-    }]
-    */
-    const bearerHeader = req.headers["authorization"];
-    if (!bearerHeader) {
+    const token = req.cookies.token;
+    if (!token) {
         return res.status(401).json({
             success: false,
             error: {
-                message: "Unauthorize request, please make sure you are login",
+                message: "Unauthorized, please make sure you are login",
             },
         });
     }
 
-    const bearerToken = bearerHeader.split(" ")[1];
-    jwt.verify(bearerToken, jwtSecretKey, (err, authData) => {
+    jwt.verify(token, jwtSecretKey, (err, authData) => {
         console.log(err);
         if (err) {
             return res.status(401).json({

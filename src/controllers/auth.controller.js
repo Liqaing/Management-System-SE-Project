@@ -46,10 +46,18 @@ const loginUser = asyncHandler(async (req, res) => {
                 });
             }
 
-            return res.json({
+            res.cookie("token", token, {
+                httpOnly: true,
+                secure: false,
+                sameSite: "Strict",
+                maxAge: 3600000 * 36,
+            });
+
+            res.status(200).json({
                 success: true,
                 data: {
                     token: token,
+                    message: "Loggin successful",
                 },
             });
         }
