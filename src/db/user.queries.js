@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import expressAsyncHandler from "express-async-handler";
 
 const prisma = new PrismaClient();
 

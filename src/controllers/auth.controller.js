@@ -2,12 +2,12 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { dbCreateUser, dbFindUser } from "../db/user.queries.js";
 import { jwtSecretKey } from "../config/auth.config.js";
-import asyncHandler from "express-async-handler";
 import { ROLES } from "../utils/constants.js";
 import saltRounds from "../config/bcrypt.config.js";
 import { dbFindRole } from "../db/role.queries.js";
+import expressAsyncHandler from "express-async-handler";
 
-const loginUser = asyncHandler(async (req, res) => {
+const loginUser = expressAsyncHandler(async (req, res) => {
     // #swagger.tags = ['Auth']
     // #swagger.description = 'Log in a user'
     const { password, telephone } = req.body;
@@ -53,7 +53,7 @@ const loginUser = asyncHandler(async (req, res) => {
                 maxAge: 3600000 * 36,
             });
 
-            res.status(200).json({
+            return res.status(200).json({
                 success: true,
                 data: {
                     token: token,
@@ -64,14 +64,14 @@ const loginUser = asyncHandler(async (req, res) => {
     );
 });
 
-const signupUser = asyncHandler(async (req, res) => {
+const signupUser = expressAsyncHandler(async (req, res) => {
     // #swagger.tags = ['Auth']
     // #swagger.description = 'Singup a user, only call this endpoint on creat customer'
 
     const { username, password, telephone } = req.body;
     const existing_user = await dbFindUser(telephone);
     if (existing_user != null) {
-        res.status(409).json({
+        return res.status(409).json({
             success: false,
             error: {
                 message: "A user with this telephone is already exist",

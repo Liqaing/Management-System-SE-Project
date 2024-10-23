@@ -20,7 +20,7 @@ const createUser = asyncHandler(async (req, res) => {
 
     const existing_user = await dbFindUser(telephone);
     if (existing_user != null) {
-        res.status(409).json({
+        return res.status(409).json({
             success: false,
             error: {
                 message: "A user with this telephone is already exist",

@@ -16,7 +16,7 @@ const getAllRoles = expressAsyncHandler(async (req, res) => {
     }
 
     const roles = await dbFindAllRoles();
-    res.status(200).json({
+    return res.status(200).json({
         success: true,
         data: {
             ...roles,
