@@ -1,5 +1,4 @@
 import { PrismaClient } from "@prisma/client";
-import expressAsyncHandler from "express-async-handler";
 
 const prisma = new PrismaClient();
 
@@ -15,10 +14,13 @@ const dbCreateUser = async (username, password, telephone, roleId) => {
     return user;
 };
 
-const dbFindUser = async (telephone) => {
+const dbFindUser = async (telephone, includeOptions = {}) => {
     const user = await prisma.users.findUnique({
         where: {
             telephone: telephone,
+        },
+        include: {
+            ...includeOptions,
         },
     });
     return user;

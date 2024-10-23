@@ -10,9 +10,9 @@ import expressAsyncHandler from "express-async-handler";
 const loginUser = expressAsyncHandler(async (req, res) => {
     // #swagger.tags = ['Auth']
     // #swagger.description = 'Log in a user'
-    const { password, telephone } = req.body;
 
-    const user = await dbFindUser(telephone);
+    const { password, telephone } = req.body;
+    const user = await dbFindUser(telephone, { role: true });
 
     if (user == null) {
         return res.status(401).json({
@@ -34,7 +34,7 @@ const loginUser = expressAsyncHandler(async (req, res) => {
     }
 
     jwt.sign(
-        { username: user.username, role: ROLES.adminRole },
+        { username: user.username, role: user.role.roleName },
         jwtSecretKey,
         (err, token) => {
             if (err) {
@@ -56,7 +56,8 @@ const loginUser = expressAsyncHandler(async (req, res) => {
             return res.status(200).json({
                 success: true,
                 data: {
-                    token: token,
+                    username: user.username,
+                    role: user.role.roleName,
                     message: "Loggin successful",
                 },
             });

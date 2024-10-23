@@ -2,9 +2,9 @@ import bcrypt from "bcrypt";
 import { dbCreateUser, dbFindUser } from "../db/user.queries.js";
 import saltRounds from "../config/bcrypt.config.js";
 import { ROLES } from "../utils/constants.js";
-import asyncHandler from "express-async-handler";
+import expressAsyncHandler from "express-async-handler";
 
-const createUser = asyncHandler(async (req, res) => {
+const createUser = expressAsyncHandler(async (req, res) => {
     // #swagger.tags = ['User']
 
     if (req.authData.role != ROLES.adminRole) {
