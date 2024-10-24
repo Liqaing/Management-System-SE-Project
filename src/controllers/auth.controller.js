@@ -133,4 +133,16 @@ const AuthUser = expressAsyncHandler(async (req, res) => {
     });
 });
 
-export { loginUser, signupUser, AuthUser };
+const logoutUser = expressAsyncHandler(async (req, res) => {
+    // #swagger.tags = ['Auth']
+    // #swagger.description = 'Logout a user'
+    res.clearCookie("token");
+    return res.status(200).json({
+        success: true,
+        data: {
+            message: "Logout successful",
+        },
+    });
+});
+
+export { loginUser, signupUser, logoutUser, AuthUser };
