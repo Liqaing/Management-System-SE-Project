@@ -96,4 +96,41 @@ const signupUser = expressAsyncHandler(async (req, res) => {
     });
 });
 
-export { loginUser, signupUser };
+const AuthUser = expressAsyncHandler(async (req, res) => {
+    // #swagger.tags = ['Auth']
+    // #swagger.description = 'Verify if a user is login, or is thier token is not expired'
+
+    const token = req.cookies.token;
+    if (!token) {
+        return res.status(401).json({
+            success: false,
+            error: {
+                isLogin: false,
+                message: "user is not login",
+            },
+        });
+    }
+
+    jwt.verify(token, jwtSecretKey, (err, authData) => {
+        if (err) {
+            return res.status(401).json({
+                success: false,
+                error: {
+                    isLogin: false,
+                    message: "Unauthorized, invalid token",
+                },
+            });
+        }
+        return res.status(200).json({
+            success: true,
+            data: {
+                isLogin: true,
+                role: authData.role,
+                username: authData.username,
+                message: "user is login",
+            },
+        });
+    });
+});
+
+export { loginUser, signupUser, AuthUser };

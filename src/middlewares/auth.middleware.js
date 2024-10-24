@@ -21,7 +21,7 @@ const verifyToken = expressAsyncHandler((req, res, next) => {
             return res.status(401).json({
                 success: false,
                 error: {
-                    message: "Unauthorize request",
+                    message: "Unauthorized, Incorrect credentials",
                 },
             });
         }

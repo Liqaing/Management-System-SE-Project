@@ -31,28 +31,11 @@
     "/api": {
       "get": {
         "description": "",
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized"
           }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
+        }
       }
     },
     "/api/auth/login": {
@@ -124,21 +107,28 @@
         }
       }
     },
+    "/api/auth/token": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "Verify if a user is login, or is thier token is not expired",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
     "/api/user/": {
       "post": {
         "tags": [
           "User"
         ],
         "description": "",
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
         "responses": {
           "201": {
             "description": "Created"
@@ -153,11 +143,6 @@
             "description": "Conflict"
           }
         },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -183,15 +168,6 @@
           "Role"
         ],
         "description": "",
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -213,14 +189,6 @@
   },
   "components": {
     "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "in": "header",
-        "name": "Authorization",
-        "description": "Bearer token to access these api endpoints",
-        "scheme": "bearer",
-        "bearerFormat": "JWT"
-      },
       "cookieAuth": {
         "type": "apiKey",
         "in": "cookie",
