@@ -8,12 +8,11 @@ import fs from "fs";
 import { errorHandler } from "./middlewares/errorHandler.middleware.js";
 import { roleRouter } from "./routes/role.route.js";
 import cors from "cors";
-import { verifyToken } from "./middlewares/auth.middleware.js";
 import cookieParser from "cookie-parser";
 
 dotenv.config();
 const swaggerFile = JSON.parse(
-    fs.readFileSync("./src/config/swagger/swagger-output.json", "utf-8")
+    fs.readFileSync("src/config/swagger/swagger-output.json", "utf-8")
 );
 
 const app = express();
