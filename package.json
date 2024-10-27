@@ -14,7 +14,8 @@
     "start": "node server",
     "dev": "nodemon server",
     "swagger": "node ./src/config/swagger.config.js",
-    "seed": "node ./src/db/seed.js"
+    "seed": "node ./src/db/seed.js",
+    "vercel-build": "prisma generate && prisma migrate deploy"
   },
   "author": "",
   "license": "ISC",
