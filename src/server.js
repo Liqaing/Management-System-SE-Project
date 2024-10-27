@@ -15,7 +15,7 @@ dotenv.config();
 
 const swaggerFilePath = path.join(
     process.cwd(),
-    "config/swagger/swagger-output.json"
+    "src/config/swagger/swagger-output.json"
 );
 
 const swaggerFile = JSON.parse(fs.readFileSync(swaggerFilePath, "utf-8"));
