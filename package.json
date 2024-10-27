@@ -11,7 +11,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server",
+    "start": "node ./src/server.js",
     "dev": "nodemon server",
     "swagger": "node ./src/config/swagger.config.js",
     "seed": "node ./src/db/seed.js",
