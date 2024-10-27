@@ -15,5 +15,5 @@
       "dest": "server.js"
     }
   ],
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "rewrites": [{ "source": "/(.*)", "destination": "./src/server.html" }]
 }
