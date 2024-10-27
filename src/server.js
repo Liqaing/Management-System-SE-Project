@@ -38,6 +38,8 @@ app.get("/api", (req, res) => {
 app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 app.use(errorHandler);
 
-app.listen(port, () => {
-    console.log(`Server is listening on ${port}`);
-});
+// app.listen(port, () => {
+//     console.log(`Server is listening on ${port}`);
+// });
+
+export default (req, res) => app(req, res);
