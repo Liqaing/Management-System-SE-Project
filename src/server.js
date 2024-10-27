@@ -4,7 +4,7 @@ import { userRouter } from "./routes/user.route.js";
 import dotenv from "dotenv";
 import swaggerUi from "swagger-ui-express";
 import { authRouter } from "./routes/auth.route.js";
-import swaggerFile from "./config/swagger/swagger-output.json" assert { type: "json" };
+import fs from "fs";
 import { errorHandler } from "./middlewares/errorHandler.middleware.js";
 import { roleRouter } from "./routes/role.route.js";
 import cors from "cors";
@@ -12,6 +12,9 @@ import { verifyToken } from "./middlewares/auth.middleware.js";
 import cookieParser from "cookie-parser";
 
 dotenv.config();
+const swaggerFile = JSON.parse(
+    fs.readFileSync("src/config/swagger/swagger-output.json", "utf-8")
+);
 
 const app = express();
 const port = 8000;
