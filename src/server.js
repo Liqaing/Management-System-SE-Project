@@ -13,7 +13,7 @@ import cookieParser from "cookie-parser";
 
 dotenv.config();
 const swaggerFile = JSON.parse(
-    fs.readFileSync("src/config/swagger/swagger-output.json", "utf-8")
+    fs.readFileSync("./src/config/swagger/swagger-output.json", "utf-8")
 );
 
 const app = express();
