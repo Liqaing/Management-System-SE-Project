@@ -38,7 +38,7 @@ const loginUser = expressAsyncHandler(async (req, res) => {
     }
 
     jwt.sign(
-        { username: user.username, role: user.role.roleName },
+        { userId: user.id, username: user.username, role: user.role.roleName },
         jwtSecretKey,
         (err, token) => {
             if (err) {
