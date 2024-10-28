@@ -18,7 +18,7 @@ model users {
   username  String    @db.VarChar(255)
   password  String    @db.VarChar(255)
   telephone String    @unique @db.VarChar(255)
-  userImage Bytes     @db.ByteA
+  userImage Bytes?    @db.ByteA
   createAt  DateTime? @default(now())
   createBy  String?   @db.VarChar(255)
 

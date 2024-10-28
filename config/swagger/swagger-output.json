@@ -145,6 +145,7 @@
           "User"
         ],
         "description": "",
+        "parameters": [],
         "responses": {
           "201": {
             "description": "Created"
@@ -165,10 +166,28 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "success": {
+                  "in": {
                     "example": "any"
                   },
-                  "error": {
+                  "description": {
+                    "example": "any"
+                  },
+                  "required": {
+                    "example": "any"
+                  },
+                  "schema": {
+                    "example": "any"
+                  },
+                  "password": {
+                    "example": "any"
+                  },
+                  "telephone": {
+                    "example": "any"
+                  },
+                  "roleId": {
+                    "example": "any"
+                  },
+                  "userImage": {
                     "example": "any"
                   }
                 }
