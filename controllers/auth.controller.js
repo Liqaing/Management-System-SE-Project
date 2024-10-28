@@ -11,6 +11,10 @@ const loginUser = expressAsyncHandler(async (req, res) => {
     // #swagger.tags = ['Auth']
     // #swagger.description = 'Log in a user'
 
+    /**
+     * Use for login and authenticate user
+     */
+
     const { password, telephone } = req.body;
     const user = await dbFindUser(telephone, { role: true });
 
@@ -68,6 +72,10 @@ const loginUser = expressAsyncHandler(async (req, res) => {
 const signupUser = expressAsyncHandler(async (req, res) => {
     // #swagger.tags = ['Auth']
     // #swagger.description = 'Singup a user, only call this endpoint on creat customer'
+
+    /**
+     * Signup a user, create a new user with customer role
+     */
 
     const { username, password, telephone } = req.body;
     const existing_user = await dbFindUser(telephone);
