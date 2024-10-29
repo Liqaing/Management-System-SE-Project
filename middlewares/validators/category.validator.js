@@ -1,7 +1,7 @@
 import { body } from "express-validator";
 import { validatorHandler } from "../validator.middleware.js";
 
-const validateCategoryCreate = [
+const validateCategoryUpsert = [
     body("categoryName")
         .notEmpty()
         .withMessage("Category name cannot be empty")
@@ -15,4 +15,4 @@ const validateCategoryCreate = [
     validatorHandler,
 ];
 
-export { validateCategoryCreate };
+export { validateCategoryUpsert };

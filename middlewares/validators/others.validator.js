@@ -4,10 +4,11 @@ import { validatorHandler } from "../validator.middleware.js";
 const validateParamId = [
     param("id")
         .notEmpty()
-        .withMessage("Invalid parameter")
+        .withMessage("Invalid input")
         .trim()
-        .toInt()
-        .withMessage("Invalid parameter"),
+        .isInt()
+        .withMessage("Invalid input")
+        .toInt(),
     validatorHandler,
 ];
 
