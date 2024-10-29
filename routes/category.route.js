@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { verifyToken } from "../middlewares/auth.middleware";
+import { getAllCategory } from "../controllers/category.controller.js";
 
 const categoryRouter = Router();
 
-categoryRouter.get("/");
+categoryRouter.get("/", getAllCategory);
 
 export { categoryRouter };

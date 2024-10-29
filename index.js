@@ -10,6 +10,7 @@ import { errorHandler } from "./middlewares/errorHandler.middleware.js";
 import { roleRouter } from "./routes/role.route.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import { categoryRouter } from "./routes/category.route.js";
 
 dotenv.config();
 
@@ -34,6 +35,7 @@ app.use(express.json());
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 app.use("/api/role", roleRouter);
+app.use("/api/category", categoryRouter);
 
 app.get("/api", (req, res) => {
     return res.status(200).json({

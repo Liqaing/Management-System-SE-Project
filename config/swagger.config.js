@@ -25,6 +25,10 @@ const doc = {
             name: "Role",
             description: "operation on role",
         },
+        {
+            name: "Category",
+            description: "operation on product category",
+        },
     ],
     components: {
         securitySchemes: {
@@ -39,7 +43,7 @@ const doc = {
             cookieAuth: {
                 type: "apiKey",
                 in: "cookie",
-                name: "token", // This should match your cookie name for JWT
+                name: "token",
             },
         },
     },
