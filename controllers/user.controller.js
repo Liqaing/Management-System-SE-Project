@@ -3,12 +3,12 @@ import {
     dbCreateUser,
     dbFindUserByTel,
     dbFindUserById,
-} from "../../db/user.queries.js";
-import saltRounds from "../../config/bcrypt.config.js";
-import { ROLES } from "../../utils/constants.js";
+} from "../db/user.queries.js";
+import saltRounds from "../config/bcrypt.config.js";
+import { ROLES } from "../utils/constants.js";
 import expressAsyncHandler from "express-async-handler";
-import upload from "../../config/multer.config.js";
-import { checkImageType } from "../../utils/utils.js";
+import upload from "../config/multer.config.js";
+import { checkImageType } from "../utils/utils.js";
 
 /**
  * Create new user with select role
@@ -93,9 +93,14 @@ const createUser = [
 ];
 
 const getUserImage = expressAsyncHandler(async (req, res) => {
-    // End for retireving user iamge
+    // Endpoint for retireving user iamge
     const { id } = req.params;
     const user = await dbFindUserById(id);
+
+    if (req.authData.role != ROLES.adminRole && req.authData.id != user.id) {
+        return res.status(403);
+    }
+
     const image = user.userImage;
     const imageType = checkImageType(image);
     res.set("Content-Type", imageType);

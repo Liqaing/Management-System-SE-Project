@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { verifyToken } from "../../middlewares/auth.middleware.js";
-import { getAllRoles } from "../../controllers/admin/role.controller.js";
+import { verifyToken } from "../middlewares/auth.middleware.js";
+import { getAllRoles } from "../controllers/role.controller.js";
 
 const roleRouter = Router();
 

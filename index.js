@@ -1,13 +1,13 @@
 import express from "express";
 import morgan from "morgan";
-import { userRouter } from "./routes/admin/user.route.js";
+import { userRouter } from "./routes/user.route.js";
 import dotenv from "dotenv";
 import swaggerUi from "swagger-ui-express";
 import { authRouter } from "./routes/auth.route.js";
 import fs from "fs";
 import path from "path";
 import { errorHandler } from "./middlewares/errorHandler.middleware.js";
-import { roleRouter } from "./routes/admin/role.route.js";
+import { roleRouter } from "./routes/role.route.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
