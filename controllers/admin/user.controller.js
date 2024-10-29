@@ -1,9 +1,14 @@
 import bcrypt from "bcrypt";
-import { dbCreateUser, dbFindUser } from "../../db/user.queries.js";
+import {
+    dbCreateUser,
+    dbFindUserByTel,
+    dbFindUserById,
+} from "../../db/user.queries.js";
 import saltRounds from "../../config/bcrypt.config.js";
 import { ROLES } from "../../utils/constants.js";
 import expressAsyncHandler from "express-async-handler";
 import upload from "../../config/multer.config.js";
+import { checkImageType } from "../../utils/utils.js";
 
 /**
  * Create new user with select role
@@ -12,9 +17,10 @@ import upload from "../../config/multer.config.js";
 const createUser = [
     upload.single("userImage"),
     expressAsyncHandler(async (req, res) => {
-        // #swagger.tags = ['User']
-        // #swagger.consumes = ['multipart/form-data']
-        /*             
+        /*
+            #swagger.tags = ['User']
+            #swagger.consumes = ['multipart/form-data']
+                     
             #swagger.parameters['body'] = {
             in: 'body',
             description: 'User creation data',
@@ -44,7 +50,7 @@ const createUser = [
 
         const { username, password, telephone, roleId } = req.body;
 
-        const existing_user = await dbFindUser(telephone);
+        const existing_user = await dbFindUserByTel(telephone);
         if (existing_user != null) {
             return res.status(409).json({
                 success: false,
@@ -55,6 +61,14 @@ const createUser = [
         }
 
         // Retreive filename and byte data
+        if (file.mimetype != "image/jpeg" || file.mimetype != "image/png") {
+            return res.status(403).json({
+                success: false,
+                error: {
+                    message: "Only JPEG and PNG files are allowed",
+                },
+            });
+        }
         const { buffer } = req.file;
 
         //hashing the password and saving it in the database
@@ -78,4 +92,14 @@ const createUser = [
     }),
 ];
 
-export { createUser };
+const getUserImage = expressAsyncHandler(async (req, res) => {
+    // End for retireving user iamge
+    const { id } = req.params;
+    const user = await dbFindUserById(id);
+    const image = user.userImage;
+    const imageType = checkImageType(image);
+    res.set("Content-Type", imageType);
+    res.status(200).send(image);
+});
+
+export { createUser, getUserImage };

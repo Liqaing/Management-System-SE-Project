@@ -1,11 +1,12 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import { dbCreateUser, dbFindUser } from "../db/user.queries.js";
+import { dbCreateUser, dbFindUserByTel } from "../db/user.queries.js";
 import { jwtSecretKey } from "../config/auth.config.js";
 import { ROLES } from "../utils/constants.js";
 import saltRounds from "../config/bcrypt.config.js";
 import { dbFindRole } from "../db/role.queries.js";
 import expressAsyncHandler from "express-async-handler";
+import { constructUrl } from "../utils/utils.js";
 
 const loginUser = expressAsyncHandler(async (req, res) => {
     // #swagger.tags = ['Auth']
@@ -16,7 +17,7 @@ const loginUser = expressAsyncHandler(async (req, res) => {
      */
 
     const { password, telephone } = req.body;
-    const user = await dbFindUser(telephone, { role: true });
+    const user = await dbFindUserByTel(telephone, { role: true });
 
     if (user == null) {
         return res.status(401).json({
@@ -57,11 +58,13 @@ const loginUser = expressAsyncHandler(async (req, res) => {
                 maxAge: 3600000 * 36,
             });
 
+            const url = constructUrl(req);
             return res.status(200).json({
                 success: true,
                 data: {
                     username: user.username,
                     role: user.role.roleName,
+                    userImage: `${url}/api/user/image/${user.id}`,  
                     message: "Loggin successful",
                 },
             });
@@ -78,7 +81,7 @@ const signupUser = expressAsyncHandler(async (req, res) => {
      */
 
     const { username, password, telephone } = req.body;
-    const existing_user = await dbFindUser(telephone);
+    const existing_user = await dbFindUserByTel(telephone);
     if (existing_user != null) {
         return res.status(409).json({
             success: false,
