@@ -11,6 +11,7 @@ import { roleRouter } from "./routes/role.route.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { categoryRouter } from "./routes/category.route.js";
+import { productRouter } from "./routes/product.route.js";
 
 dotenv.config();
 
@@ -36,6 +37,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 app.use("/api/role", roleRouter);
 app.use("/api/category", categoryRouter);
+app.use("/api/product", productRouter);
 
 app.get("/api", (req, res) => {
     return res.status(200).json({

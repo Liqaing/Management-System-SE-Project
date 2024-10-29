@@ -35,11 +35,11 @@ model role {
 
 model category {
   id           Int       @id @default(autoincrement())
-  categoryName String    @db.VarChar(255)
+  categoryName String    @unique @db.VarChar(255)
   description  String?   @db.VarChar
   createAt     DateTime? @default(now())
   createBy     String?   @db.VarChar(255)
-  updateAt     DateTime? @default(now())
+  updateAt     DateTime?
   updateBy     String?   @db.VarChar(255)
   product      product[]
 }
@@ -51,7 +51,7 @@ model product {
   price        Decimal        @db.Decimal
   createAt     DateTime?      @default(now())
   createBy     String?        @db.VarChar(255)
-  updateAt     DateTime?      @default(now())
+  updateAt     DateTime?
   updateBy     String?        @db.VarChar(255)
   categoryId   Int
   category     category       @relation(fields: [categoryId], references: [id])

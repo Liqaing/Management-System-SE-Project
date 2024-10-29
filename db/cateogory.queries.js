@@ -7,4 +7,24 @@ const dbFindAllCategory = async () => {
     return categories;
 };
 
-export { dbFindAllCategory };
+const dbFindCategoryByName = async (catNmae) => {
+    const category = await prisma.category.findUnique({
+        where: {
+            categoryName: catNmae,
+        },
+    });
+    return category;
+};
+
+const dbCreateCategory = async (catName, description, createBy) => {
+    const category = await prisma.category.create({
+        data: {
+            categoryName: catName,
+            description: description,
+            createBy: createBy,
+        },
+    });
+    return category;
+};
+
+export { dbFindAllCategory, dbFindCategoryByName, dbCreateCategory };
