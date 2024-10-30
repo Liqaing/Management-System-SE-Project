@@ -16,23 +16,4 @@ const dbFindAllRoles = async () => {
     return roles;
 };
 
-const dbCreateUser = async (
-    username,
-    password,
-    telephone,
-    roleId,
-    userImage
-) => {
-    const user = await prisma.users.create({
-        data: {
-            username: username,
-            password: password,
-            telephone: telephone,
-            userImage: userImage,
-            roleId: roleId,
-        },
-    });
-    return user;
-};
-
 export { dbFindRole, dbFindAllRoles };

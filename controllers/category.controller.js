@@ -1,6 +1,7 @@
 import expressAsyncHandler from "express-async-handler";
 import {
     dbCreateCategory,
+    dbDeleteCategory,
     dbFindAllCategory,
     dbFindCategoryById,
     dbFindCategoryByName,
@@ -46,11 +47,12 @@ const createCategory = expressAsyncHandler(async (req, res) => {
         });
     }
 
-    const newCategory = await dbCreateCategory(
+    const newCategory = await dbCreateCategory({
         categoryName,
         description,
-        req.authData.username
-    );
+        createBy: req.authData.username,
+        createById: req.authData.userId,
+    });
 
     return res.status(201).json({
         success: true,
@@ -100,12 +102,13 @@ const updateCategory = expressAsyncHandler(async (req, res) => {
         });
     }
 
-    const updatedCategory = await dbUpdateCategory(
+    const updatedCategory = await dbUpdateCategory({
         id,
         categoryName,
         description,
-        req.authData.username
-    );
+        updateBy: req.authData.username,
+        updateById: req.authData.userId,
+    });
 
     return res.status(200).json({
         success: true,
@@ -115,4 +118,51 @@ const updateCategory = expressAsyncHandler(async (req, res) => {
     });
 });
 
-export { getAllCategory, createCategory, updateCategory };
+const deleteCategory = expressAsyncHandler(async (req, res) => {
+    // #swagger.tags = ['Category']
+    // Delete category
+    const { id } = req.params;
+
+    if (
+        req.authData.role != ROLES.adminRole &&
+        req.authData.role != ROLES.staffRole
+    ) {
+        return res.status(403).json({
+            success: false,
+            error: {
+                message: "Unauthorize operation",
+            },
+        });
+    }
+
+    // Find Category
+    const existCategory = await dbFindCategoryById(id, { product: true });
+    if (!existCategory) {
+        return res.status(404).json({
+            success: false,
+            error: {
+                message: "Category not found",
+            },
+        });
+    }
+    console.log(existCategory);
+    if (existCategory.product.length !== 0) {
+        return res.status(409).json({
+            success: false,
+            error: {
+                message:
+                    "Cannot delete category with associated products. Please remove or update products first.",
+            },
+        });
+    }
+
+    const deleteCategory = await dbDeleteCategory(id);
+    return res.status(200).json({
+        success: true,
+        data: {
+            message: `Category ${deleteCategory.categoryName} has been successfully deleted`,
+        },
+    });
+});
+
+export { getAllCategory, createCategory, updateCategory, deleteCategory };

@@ -62,9 +62,10 @@ const loginUser = expressAsyncHandler(async (req, res) => {
             return res.status(200).json({
                 success: true,
                 data: {
+                    userId: user.id,
                     username: user.username,
                     role: user.role.roleName,
-                    userImage: `${url}/api/user/image/${user.id}`,  
+                    userImage: `${url}/api/user/image/${user.id}`,
                     message: "Loggin successful",
                 },
             });

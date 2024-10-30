@@ -31,27 +31,49 @@ const dbFindCategoryById = async (id, includeOptions = {}) => {
     return category;
 };
 
-const dbCreateCategory = async (catName, description, createBy) => {
+const dbCreateCategory = async ({
+    categoryName,
+    description,
+    createBy,
+    createById,
+}) => {
     const category = await prisma.category.create({
         data: {
-            categoryName: catName,
+            categoryName: categoryName,
             description: description,
+            createById: createById,
             createBy: createBy,
         },
     });
     return category;
 };
 
-const dbUpdateCategory = async (id, cateName, description, updateBy) => {
+const dbUpdateCategory = async ({
+    id,
+    categoryName,
+    description,
+    updateBy,
+    updateById,
+}) => {
     const category = await prisma.category.update({
         where: {
             id: id,
         },
         data: {
-            categoryName: cateName,
+            categoryName: categoryName,
             description: description,
+            updateById: updateById,
             updateBy: updateBy,
             updateAt: new Date(),
+        },
+    });
+    return category;
+};
+
+const dbDeleteCategory = async (id) => {
+    const category = await prisma.category.delete({
+        where: {
+            id: id,
         },
     });
     return category;
@@ -63,4 +85,5 @@ export {
     dbCreateCategory,
     dbFindCategoryById,
     dbUpdateCategory,
+    dbDeleteCategory,
 };

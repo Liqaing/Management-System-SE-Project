@@ -14,13 +14,14 @@ datasource db {
 }
 
 model users {
-  id        Int       @id @default(autoincrement())
-  username  String    @db.VarChar(255)
-  password  String    @db.VarChar(255)
-  telephone String    @unique @db.VarChar(255)
-  userImage Bytes?    @db.ByteA
-  createAt  DateTime? @default(now())
-  createBy  String?   @db.VarChar(255)
+  id         Int       @id @default(autoincrement())
+  username   String    @db.VarChar(255)
+  password   String    @db.VarChar(255)
+  telephone  String    @unique @db.VarChar(255)
+  userImage  Bytes?    @db.ByteA
+  createById Int?
+  createAt   DateTime? @default(now())
+  createBy   String?   @db.VarChar(255)
 
   role   role @relation(fields: [roleId], references: [id])
   roleId Int
@@ -37,8 +38,10 @@ model category {
   id           Int       @id @default(autoincrement())
   categoryName String    @unique @db.VarChar(255)
   description  String?   @db.VarChar
-  createAt     DateTime? @default(now())
+  createById   Int?
   createBy     String?   @db.VarChar(255)
+  createAt     DateTime? @default(now())
+  updateById   Int?
   updateAt     DateTime?
   updateBy     String?   @db.VarChar(255)
   product      product[]
@@ -49,10 +52,12 @@ model product {
   productName  String         @db.VarChar(300)
   description  String?        @db.VarChar
   price        Decimal        @db.Decimal
-  createAt     DateTime?      @default(now())
+  createById   Int?
   createBy     String?        @db.VarChar(255)
-  updateAt     DateTime?
+  createAt     DateTime?      @default(now())
+  updateAtId   Int?
   updateBy     String?        @db.VarChar(255)
+  updateAt     DateTime?
   categoryId   Int
   category     category       @relation(fields: [categoryId], references: [id])
   productImage productImage[]

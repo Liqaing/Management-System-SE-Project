@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
     createCategory,
+    deleteCategory,
     getAllCategory,
     updateCategory,
 } from "../controllers/category.controller.js";
@@ -12,6 +13,13 @@ const categoryRouter = Router();
 
 categoryRouter.get("/", getAllCategory);
 categoryRouter.post("/", verifyToken, validateCategoryUpsert, createCategory);
-categoryRouter.put("/:id", verifyToken, validateParamId, updateCategory);
+categoryRouter.put(
+    "/:id",
+    verifyToken,
+    validateParamId,
+    validateCategoryUpsert,
+    updateCategory
+);
+categoryRouter.delete("/:id", verifyToken, validateParamId, deleteCategory);
 
 export { categoryRouter };
