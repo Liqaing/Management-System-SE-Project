@@ -25,7 +25,7 @@ const loginUser = expressAsyncHandler(async (req, res) => {
 
     const match = await bcrypt.compare(password, user.password);
     if (!match) {
-        return res.status(401).json({
+        return res.status(200).json({
             success: false,
             error: {
                 message: "Telephone or password is not correct",

@@ -7,8 +7,8 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USER: <db username>
-      POSTGRES_PASSWORD: <db password>    
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: sodaIT    
   pgadmin:
     image: dpage/pgadmin4
     container_name: pgadmin4_container
