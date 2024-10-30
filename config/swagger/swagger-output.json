@@ -257,6 +257,15 @@
           "Category"
         ],
         "description": "",
+        "parameters": [
+          {
+            "name": "includeProducts",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -302,6 +311,37 @@
       }
     },
     "/api/category/{id}": {
+      "get": {
+        "tags": [
+          "Category"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "includeProducts",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
       "put": {
         "tags": [
           "Category"
@@ -379,6 +419,9 @@
           },
           "404": {
             "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
           }
         }
       }

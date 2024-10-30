@@ -1,4 +1,4 @@
-import { body } from "express-validator";
+import { body, query } from "express-validator";
 import { validatorHandler } from "../validator.middleware.js";
 
 const validateCategoryUpsert = [
@@ -15,4 +15,12 @@ const validateCategoryUpsert = [
     validatorHandler,
 ];
 
-export { validateCategoryUpsert };
+const validateCategoryQueryParams = [
+    query("includeProducts")
+        .optional({ checkFalsy: true })
+        .isBoolean()
+        .withMessage("includeProducts must be a true or false value"),
+    validatorHandler,
+];
+
+export { validateCategoryUpsert, validateCategoryQueryParams };

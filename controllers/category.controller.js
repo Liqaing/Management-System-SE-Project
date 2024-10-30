@@ -7,17 +7,45 @@ import {
     dbFindCategoryByName,
     dbUpdateCategory,
 } from "../db/cateogory.queries.js";
-import { ROLES } from "../utils/constants.js";
+import { BooleanString, ROLES } from "../utils/constants.js";
 
 const getAllCategory = expressAsyncHandler(async (req, res) => {
     // #swagger.tags = ['Category']
+    const { includeProducts } = req.query;
 
-    const categories = await dbFindAllCategory();
+    const categories = await dbFindAllCategory({
+        product: includeProducts === BooleanString.true,
+    });
     return res.status(200).json({
         success: true,
         data: {
             ...categories,
         },
+    });
+});
+
+const getOneCategory = expressAsyncHandler(async (req, res) => {
+    // #swagger.tags = ['Category']
+
+    const { id } = req.params;
+    const { includeProducts } = req.query;
+
+    const category = await dbFindCategoryById(id, {
+        product: includeProducts === BooleanString.true,
+    });
+
+    if (!category) {
+        return res.status(404).json({
+            success: false,
+            error: {
+                message: "Category not found",
+            },
+        });
+    }
+
+    return res.status(200).json({
+        success: true,
+        data: category,
     });
 });
 
@@ -165,4 +193,10 @@ const deleteCategory = expressAsyncHandler(async (req, res) => {
     });
 });
 
-export { getAllCategory, createCategory, updateCategory, deleteCategory };
+export {
+    getAllCategory,
+    createCategory,
+    updateCategory,
+    deleteCategory,
+    getOneCategory,
+};
