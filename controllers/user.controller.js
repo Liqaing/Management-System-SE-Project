@@ -39,11 +39,15 @@ const createUser = [
         }         
         */
 
-        if (req.authData.role != ROLES.adminRole) {
+        if (
+            req.authData.role != ROLES.adminRole &&
+            req.authData.role != ROLES.staffRole
+        ) {
             return res.status(403).json({
                 success: false,
                 error: {
-                    message: "Unauthorize operation",
+                    message:
+                        "Unauthorize, you do not have permission to this operation",
                 },
             });
         }
@@ -61,8 +65,11 @@ const createUser = [
         }
 
         // Retreive filename and byte data
-        if (file.mimetype != "image/jpeg" || file.mimetype != "image/png") {
-            return res.status(403).json({
+        if (
+            req.file.mimetype != "image/jpeg" ||
+            req.file.mimetype != "image/png"
+        ) {
+            return res.status(415).json({
                 success: false,
                 error: {
                     message: "Only JPEG and PNG files are allowed",

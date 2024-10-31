@@ -18,6 +18,7 @@ const dbCreatProduct = async ({
     categoryId,
     createBy,
     createById,
+    productImages,
 }) => {
     const product = await prisma.product.create({
         data: {
@@ -28,6 +29,13 @@ const dbCreatProduct = async ({
             createAt: new Date(),
             createBy: createBy,
             createById: createById,
+            ...(productImages && {
+                productImage: {
+                    create: productImages.map((image) => ({
+                        image: image.buffer,
+                    })),
+                },
+            }),
         },
     });
     return product;
