@@ -5,7 +5,6 @@ import {
     dbFindProductImageById,
 } from "../db/product.queries.js";
 import { dbFindCategoryById } from "../db/cateogory.queries.js";
-import upload from "../config/multer.config.js";
 import { ROLES } from "../utils/constants.js";
 import { checkImageType, constructUrl } from "../utils/utils.js";
 
