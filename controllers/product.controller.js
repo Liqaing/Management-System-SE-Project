@@ -1,13 +1,31 @@
 import expressAsyncHandler from "express-async-handler";
-import { dbCreatProduct, dbFindAllProduct } from "../db/product.queries.js";
+import {
+    dbCreatProduct,
+    dbFindAllProduct,
+    dbFindProductImageById,
+} from "../db/product.queries.js";
 import { dbFindCategoryById } from "../db/cateogory.queries.js";
 import upload from "../config/multer.config.js";
 import { ROLES } from "../utils/constants.js";
+import { checkImageType, constructUrl } from "../utils/utils.js";
 
 const getAllProduct = expressAsyncHandler(async (req, res) => {
     // #swagger.tags = ['Product']
 
-    const products = await dbFindAllProduct();
+    const products = await dbFindAllProduct({
+        category: true,
+        productImage: true,
+    });
+
+    // Use product iuamge id to construct a image url
+    // which is point to an endpoint that return image
+    const url = constructUrl(req);
+    products.forEach((product) => {
+        product.productImage.forEach((image) => {
+            const imageUrl = `${url}/api/product/image/${image.id}`;
+            image.imageUrl = imageUrl;
+        });
+    });
 
     return res.status(200).json({
         success: true,
@@ -100,4 +118,19 @@ const createProduct = expressAsyncHandler(async (req, res) => {
     });
 });
 
-export { getAllProduct, createProduct };
+const getProductImage = expressAsyncHandler(async (req, res) => {
+    // response product image
+    const { id } = req.params;
+    const productImage = await dbFindProductImageById(id);
+
+    if (!productImage) {
+        return res.sendStatus(404);
+    }
+
+    const image = productImage.image;
+    const imageType = checkImageType(image);
+    res.set("Content-Type", imageType);
+    res.status(200).send(image);
+});
+
+export { getAllProduct, createProduct, getProductImage };

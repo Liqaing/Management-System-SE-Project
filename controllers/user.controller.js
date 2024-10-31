@@ -104,8 +104,11 @@ const getUserImage = expressAsyncHandler(async (req, res) => {
     const { id } = req.params;
     const user = await dbFindUserById(id);
 
+    if (!user) {
+        return res.sendStatus(404);
+    }
     if (req.authData.role != ROLES.adminRole && req.authData.id != user.id) {
-        return res.status(403);
+        return res.sendStatus(404);
     }
 
     const image = user.userImage;

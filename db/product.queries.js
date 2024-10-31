@@ -5,7 +5,20 @@ const prisma = new PrismaClient();
 const dbFindAllProduct = async (includeOptions = {}) => {
     const products = await prisma.product.findMany({
         include: {
-            ...includeOptions,
+            category: includeOptions.category
+                ? {
+                      select: {
+                          categoryName: true,
+                      },
+                  }
+                : false,
+            productImage: includeOptions.productImage
+                ? {
+                      select: {
+                          id: true,
+                      },
+                  }
+                : false,
         },
     });
     return products;
@@ -41,4 +54,13 @@ const dbCreatProduct = async ({
     return product;
 };
 
-export { dbFindAllProduct, dbCreatProduct };
+const dbFindProductImageById = async (id) => {
+    const image = await prisma.productImage.findUnique({
+        where: {
+            id: id,
+        },
+    });
+    return image;
+};
+
+export { dbFindAllProduct, dbCreatProduct, dbFindProductImageById };
