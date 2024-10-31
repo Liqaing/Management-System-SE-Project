@@ -29,6 +29,10 @@ const doc = {
             name: "Category",
             description: "operation on product category",
         },
+        {
+            name: "Product",
+            description: "operation on product",
+        },
     ],
     components: {
         securitySchemes: {

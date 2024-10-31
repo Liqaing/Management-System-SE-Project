@@ -47,6 +47,7 @@ const dbCreateCategory = async ({
             description: description,
             createById: createById,
             createBy: createBy,
+            createAt: new Date(),
         },
     });
     return category;

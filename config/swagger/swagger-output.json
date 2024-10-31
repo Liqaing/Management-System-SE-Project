@@ -29,6 +29,10 @@
     {
       "name": "Category",
       "description": "operation on product category"
+    },
+    {
+      "name": "Product",
+      "description": "operation on product"
     }
   ],
   "paths": {
@@ -422,6 +426,56 @@
           },
           "409": {
             "description": "Conflict"
+          }
+        }
+      }
+    },
+    "/api/product/": {
+      "get": {
+        "tags": [
+          "Product"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Product"
+        ],
+        "description": "",
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "productName": {
+                    "example": "any"
+                  },
+                  "description": {
+                    "example": "any"
+                  },
+                  "price": {
+                    "example": "any"
+                  },
+                  "categoryId": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
         }
       }

@@ -11,4 +11,26 @@ const dbFindAllProduct = async (includeOptions = {}) => {
     return products;
 };
 
-export { dbFindAllProduct };
+const dbCreatProduct = async ({
+    productName,
+    description,
+    price,
+    categoryId,
+    createBy,
+    createById,
+}) => {
+    const product = await prisma.product.create({
+        data: {
+            productName: productName,
+            description: description,
+            price: price,
+            categoryId: categoryId,
+            createAt: new Date(),
+            createBy: createBy,
+            createById: createById,
+        },
+    });
+    return product;
+};
+
+export { dbFindAllProduct, dbCreatProduct };
