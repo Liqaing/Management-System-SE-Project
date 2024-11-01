@@ -2,33 +2,61 @@ import expressAsyncHandler from "express-async-handler";
 import {
     dbCreatProduct,
     dbFindAllProduct,
+    dbFindProductById,
     dbFindProductImageById,
 } from "../db/product.queries.js";
 import { dbFindCategoryById } from "../db/cateogory.queries.js";
-import { ROLES } from "../utils/constants.js";
+import { BooleanString, ROLES } from "../utils/constants.js";
 import { checkImageType, constructUrl } from "../utils/utils.js";
 
 const getAllProduct = expressAsyncHandler(async (req, res) => {
     // #swagger.tags = ['Product']
+    const { includeCategory, includeProductImage } = req.query;
 
     const products = await dbFindAllProduct({
-        category: true,
-        productImage: true,
+        category: includeCategory === BooleanString.true,
+        productImage: includeProductImage === BooleanString.true,
     });
 
     // Use product iuamge id to construct a image url
     // which is point to an endpoint that return image
-    const url = constructUrl(req);
-    products.forEach((product) => {
-        product.productImage.forEach((image) => {
-            const imageUrl = `${url}/api/product/image/${image.id}`;
-            image.imageUrl = imageUrl;
+    if (includeProductImage === BooleanString.true) {
+        const url = constructUrl(req);
+        products.forEach((product) => {
+            product.productImage.forEach((image) => {
+                const imageUrl = `${url}/api/product/image/${image.id}`;
+                image.imageUrl = imageUrl;
+            });
         });
-    });
+    }
 
     return res.status(200).json({
         success: true,
         data: products,
+    });
+});
+
+const getOneProduct = expressAsyncHandler(async (req, res) => {
+    // #swagger.tags = ['Product']
+    const { id } = req.params;
+    const { includeCategory, includeProductImage } = req.query;
+
+    const product = await dbFindProductById(id, {
+        category: includeCategory === BooleanString.true,
+        productImage: includeProductImage === BooleanString.true,
+    });
+
+    if (includeProductImage === BooleanString.true) {
+        const url = constructUrl(req);
+        product.productImage.forEach((image) => {
+            const imageUrl = `${url}/api/product/image/${image.id}`;
+            image.imageUrl = imageUrl;
+        });
+    }
+
+    return res.status(200).json({
+        success: true,
+        data: product,
     });
 });
 
@@ -132,4 +160,4 @@ const getProductImage = expressAsyncHandler(async (req, res) => {
     res.status(200).send(image);
 });
 
-export { getAllProduct, createProduct, getProductImage };
+export { getAllProduct, createProduct, getProductImage, getOneProduct };

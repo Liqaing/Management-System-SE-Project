@@ -8,6 +8,7 @@ const dbFindAllProduct = async (includeOptions = {}) => {
             category: includeOptions.category
                 ? {
                       select: {
+                          id: true,
                           categoryName: true,
                       },
                   }
@@ -22,6 +23,33 @@ const dbFindAllProduct = async (includeOptions = {}) => {
         },
     });
     return products;
+};
+
+const dbFindProductById = async (id, includeOptions = {}) => {
+    const product = await prisma.product.findUnique({
+        where: {
+            id: id,
+        },
+        include: {
+            category: includeOptions.category
+                ? {
+                      select: {
+                          id: true,
+                          categoryName: true,
+                      },
+                  }
+                : false,
+            productImage: includeOptions.productImage
+                ? {
+                      select: {
+                          id: true,
+                      },
+                  }
+                : false,
+        },
+    });
+
+    return product;
 };
 
 const dbCreatProduct = async ({
@@ -63,4 +91,9 @@ const dbFindProductImageById = async (id) => {
     return image;
 };
 
-export { dbFindAllProduct, dbCreatProduct, dbFindProductImageById };
+export {
+    dbFindAllProduct,
+    dbCreatProduct,
+    dbFindProductImageById,
+    dbFindProductById,
+};

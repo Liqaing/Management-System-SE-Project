@@ -1,4 +1,4 @@
-import { body } from "express-validator";
+import { body, query } from "express-validator";
 import { validatorHandler } from "../validator.middleware.js";
 
 const validateProductCreate = [
@@ -29,4 +29,16 @@ const validateProductCreate = [
     validatorHandler,
 ];
 
-export { validateProductCreate };
+const validateProductQueryParams = [
+    query("includeCategory")
+        .optional({ checkFalsy: true })
+        .isBoolean()
+        .withMessage("includeCategory must be a true or false value"),
+    query("includeProductImage")
+        .optional({ checkFalsy: true })
+        .isBoolean()
+        .withMessage("includeProductImage must be a true or false value"),
+    validatorHandler,
+];
+
+export { validateProductCreate, validateProductQueryParams };
