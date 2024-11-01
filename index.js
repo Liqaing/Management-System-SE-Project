@@ -23,7 +23,7 @@ const swaggerFilePath = path.join(
 const swaggerFile = JSON.parse(fs.readFileSync(swaggerFilePath, "utf-8"));
 
 const app = express();
-const port = 8000;
+const port = process.env.PORT || 8000;
 
 // middlewares]
 app.use(cors());
