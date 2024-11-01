@@ -145,6 +145,11 @@ const createProduct = expressAsyncHandler(async (req, res) => {
     });
 });
 
+const deleteProduct = expressAsyncHandler(async (req, res) => {
+    const { id } = req.params;
+    return;
+});
+
 const getProductImage = expressAsyncHandler(async (req, res) => {
     // response product image
     const { id } = req.params;
@@ -160,4 +165,10 @@ const getProductImage = expressAsyncHandler(async (req, res) => {
     res.status(200).send(image);
 });
 
-export { getAllProduct, createProduct, getProductImage, getOneProduct };
+export {
+    getAllProduct,
+    createProduct,
+    getProductImage,
+    getOneProduct,
+    deleteProduct,
+};

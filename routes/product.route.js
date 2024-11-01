@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
     createProduct,
+    deleteProduct,
     getAllProduct,
     getOneProduct,
     getProductImage,
@@ -29,7 +30,7 @@ productRouter.post(
     validateProductCreate,
     createProduct
 );
-
+productRouter.delete("/:id", verifyToken, validateParamId, deleteProduct);
 productRouter.get("/image/:id", validateParamId, getProductImage);
 
 export { productRouter };
