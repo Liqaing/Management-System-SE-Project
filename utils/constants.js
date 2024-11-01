@@ -4,4 +4,9 @@ const ROLES = {
     staffRole: "STAFF",
 };
 
-export { ROLES };
+const BooleanString = {
+    true: "true",
+    false: "false",
+};
+
+export { ROLES, BooleanString };

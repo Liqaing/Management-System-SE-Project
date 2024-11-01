@@ -6,6 +6,9 @@ const getAllRoles = expressAsyncHandler(async (req, res) => {
     // #swagger.tags = ['Role']
     // #swagger.security = [{ "bearerAuth": [] }]
 
+    /**
+     * Return all role in db
+     */
     if (req.authData.role != ROLES.adminRole) {
         return res.status(403).json({
             success: false,

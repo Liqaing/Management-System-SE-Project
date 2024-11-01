@@ -25,6 +25,14 @@ const doc = {
             name: "Role",
             description: "operation on role",
         },
+        {
+            name: "Category",
+            description: "operation on product category",
+        },
+        {
+            name: "Product",
+            description: "operation on product",
+        },
     ],
     components: {
         securitySchemes: {
@@ -39,7 +47,7 @@ const doc = {
             cookieAuth: {
                 type: "apiKey",
                 in: "cookie",
-                name: "token", // This should match your cookie name for JWT
+                name: "token",
             },
         },
     },
@@ -51,6 +59,6 @@ const doc = {
 };
 
 const outputFile = "./swagger/swagger-output.json";
-const routes = ["../server.js"];
+const routes = ["./index.js"];
 
 swaggerAutogen({ openapi: "3.0.0" })(outputFile, routes, doc);
