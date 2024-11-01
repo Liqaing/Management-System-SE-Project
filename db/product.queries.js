@@ -82,6 +82,15 @@ const dbCreatProduct = async ({
     return product;
 };
 
+const dbDeleteProduct = async (id) => {
+    const product = prisma.product.delete({
+        where: {
+            id: id,
+        },
+    });
+    return product;
+};
+
 const dbFindProductImageById = async (id) => {
     const image = await prisma.productImage.findUnique({
         where: {
@@ -96,4 +105,5 @@ export {
     dbCreatProduct,
     dbFindProductImageById,
     dbFindProductById,
+    dbDeleteProduct,
 };

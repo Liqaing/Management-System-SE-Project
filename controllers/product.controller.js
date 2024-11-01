@@ -1,6 +1,7 @@
 import expressAsyncHandler from "express-async-handler";
 import {
     dbCreatProduct,
+    dbDeleteProduct,
     dbFindAllProduct,
     dbFindProductById,
     dbFindProductImageById,
@@ -146,8 +147,39 @@ const createProduct = expressAsyncHandler(async (req, res) => {
 });
 
 const deleteProduct = expressAsyncHandler(async (req, res) => {
+    // #swagger.tags = ['Product']
+
     const { id } = req.params;
-    return;
+
+    if (
+        req.authData.role != ROLES.adminRole &&
+        req.authData.role != ROLES.staffRole
+    ) {
+        return res.status(403).json({
+            success: false,
+            error: {
+                message: "Unauthorize operation",
+            },
+        });
+    }
+
+    const existProduct = await dbFindProductById(id);
+    if (!existProduct) {
+        return res.status(404).json({
+            success: false,
+            error: {
+                message: "Product not found",
+            },
+        });
+    }
+
+    const deleteProduct = await dbDeleteProduct(id);
+    return res.status(200).json({
+        success: true,
+        data: {
+            message: `Product ${deleteProduct.productName} has been successfully deleted`,
+        },
+    });
 });
 
 const getProductImage = expressAsyncHandler(async (req, res) => {

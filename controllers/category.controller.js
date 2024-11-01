@@ -173,7 +173,7 @@ const deleteCategory = expressAsyncHandler(async (req, res) => {
             },
         });
     }
-    console.log(existCategory);
+
     if (existCategory.product.length !== 0) {
         return res.status(409).json({
             success: false,
