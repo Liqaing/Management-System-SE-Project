@@ -91,8 +91,55 @@ const dbDeleteProduct = async (id) => {
     return product;
 };
 
+const dbUpdateProduct = async ({
+    id,
+    productName,
+    description,
+    price,
+    categoryId,
+    updateById,
+    updateBy,
+    productImages,
+}) => {
+    const product = prisma.product.update({
+        where: {
+            id: id,
+        },
+        data: {
+            productName: productName,
+            description: description,
+            price: price,
+            category: {
+                connect: {
+                    id: categoryId,
+                },
+            },
+            updateAt: new Date(),
+            updateBy: updateBy,
+            updateById: updateById,
+            ...(productImages && {
+                productImage: {
+                    create: productImages.map((image) => ({
+                        image: image.buffer,
+                    })),
+                },
+            }),
+        },
+    });
+    return product;
+};
+
 const dbFindProductImageById = async (id) => {
     const image = await prisma.productImage.findUnique({
+        where: {
+            id: id,
+        },
+    });
+    return image;
+};
+
+const dbDeleteProductImage = async (id) => {
+    const image = await prisma.productImage.delete({
         where: {
             id: id,
         },
@@ -106,4 +153,6 @@ export {
     dbFindProductImageById,
     dbFindProductById,
     dbDeleteProduct,
+    dbUpdateProduct,
+    dbDeleteProductImage,
 };

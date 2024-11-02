@@ -5,10 +5,11 @@ import {
     getAllProduct,
     getOneProduct,
     getProductImage,
+    updateProduct,
 } from "../controllers/product.controller.js";
 import { verifyToken } from "../middlewares/auth.middleware.js";
 import {
-    validateProductCreate,
+    validateProductUpSert,
     validateProductQueryParams,
 } from "../middlewares/validators/product.validator.js";
 import upload from "../config/multer.config.js";
@@ -26,9 +27,17 @@ productRouter.get(
 productRouter.post(
     "/",
     verifyToken,
-    upload.array("userImage", 5),
-    validateProductCreate,
+    upload.array("userImage", 8),
+    validateProductUpSert,
     createProduct
+);
+productRouter.put(
+    "/:id",
+    verifyToken,
+    upload.array("userImage", 8),
+    validateParamId,
+    validateProductUpSert,
+    updateProduct
 );
 productRouter.delete("/:id", verifyToken, validateParamId, deleteProduct);
 productRouter.get("/image/:id", validateParamId, getProductImage);

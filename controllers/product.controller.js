@@ -2,9 +2,11 @@ import expressAsyncHandler from "express-async-handler";
 import {
     dbCreatProduct,
     dbDeleteProduct,
+    dbDeleteProductImage,
     dbFindAllProduct,
     dbFindProductById,
     dbFindProductImageById,
+    dbUpdateProduct,
 } from "../db/product.queries.js";
 import { dbFindCategoryById } from "../db/cateogory.queries.js";
 import { BooleanString, ROLES } from "../utils/constants.js";
@@ -103,7 +105,7 @@ const createProduct = expressAsyncHandler(async (req, res) => {
 
     const category = await dbFindCategoryById(categoryId);
     if (!category) {
-        return res.status(415).json({
+        return res.status(404).json({
             success: false,
             error: {
                 message:
@@ -182,6 +184,149 @@ const deleteProduct = expressAsyncHandler(async (req, res) => {
     });
 });
 
+const updateProduct = expressAsyncHandler(async (req, res) => {
+    /* #swagger.tags = ['Product']
+           #swagger.description = 'Endpoint to create a product with image uploads in the request body.'
+           #swagger.requestBody = {
+               content: {
+                   "multipart/form-data": {
+                       schema: {
+                           type: "object",
+                           properties: {
+                               productName: { type: "string", description: "Name of the product" },
+                               description: { type: "string", description: "Product description" },
+                               price: { type: "number", description: "Product price" },
+                               categoryId: { type: "integer", description: "ID of the product category" },
+                               imagesToDeleteId: { type: "array", items: {type: "integer"}, description: "List ID of the product image to delete" },                               
+                               userImage: {
+                                   type: "array",
+                                   items: {
+                                       type: "string",
+                                       format: "binary",
+                                   },
+                                   description: "Upload up to 10 images in JPEG or PNG format for the product.",
+                               },
+                           },
+                           required: ["productName", "price", "categoryId", "userImage"],
+                       },
+                   },
+               },
+           }
+        */
+
+    const { id } = req.params;
+    const { productName, description, price, categoryId } = req.body;
+
+    // Parsing and validator imagesToDeleteId as array of integer
+    if (typeof req.body.imagesToDeleteId === "string") {
+        req.body.imagesToDeleteId = req.body.imagesToDeleteId
+            .split(",")
+            .map((id) => parseInt(id.trim(), 10))
+            .filter(Number.isInteger);
+    }
+
+    if (!Array.isArray(req.body.imagesToDeleteId)) {
+        return res.status(422).json({
+            success: false,
+            error: {
+                message: "Please input a list of product image ids to delete",
+            },
+        });
+    }
+
+    req.body.imagesToDeleteId.map((id) => {
+        if (!Number.isInteger(id)) {
+            return res.status(422).json({
+                success: false,
+                error: {
+                    message: "Invalid, Please provide a valid image id",
+                },
+            });
+        }
+    });
+
+    const imagesToDeleteId = req.body.imagesToDeleteId;
+    const productImages = req.files;
+
+    if (
+        req.authData.role != ROLES.adminRole &&
+        req.authData.role != ROLES.staffRole
+    ) {
+        return res.status(403).json({
+            success: false,
+            error: {
+                message: "Unauthorize operation",
+            },
+        });
+    }
+
+    const product = await dbFindProductById(id);
+    if (!product) {
+        return res.status(404).json({
+            success: false,
+            error: {
+                message:
+                    "The product is not exist, Please input a valid product",
+            },
+        });
+    }
+
+    const category = await dbFindCategoryById(categoryId);
+    if (!category) {
+        return res.status(404).json({
+            success: false,
+            error: {
+                message:
+                    "The category is not exist, Please input a valid category",
+            },
+        });
+    }
+
+    if (productImages) {
+        productImages.forEach((productImage) => {
+            if (
+                productImage.mimetype != "image/jpeg" &&
+                productImage.mimetype != "image/png"
+            ) {
+                return res.status(415).json({
+                    success: false,
+                    error: {
+                        message: "Only JPEG and PNG files are allowed",
+                    },
+                });
+            }
+        });
+    }
+
+    if (imagesToDeleteId) {
+        imagesToDeleteId.map(async (id) => {
+            try {
+                await dbDeleteProductImage(id);
+            } catch (err) {
+                // pass, unable to delete image, maybe due to iamge not exist or other cause
+            }
+        });
+    }
+
+    const updatedProduct = await dbUpdateProduct({
+        id,
+        productName,
+        description,
+        price,
+        categoryId,
+        updateBy: req.authData.username,
+        updateById: req.authData.userId,
+        productImages,
+    });
+
+    return res.status(200).json({
+        success: true,
+        data: {
+            message: `Product ${updatedProduct.productName} has been successfully updated`,
+        },
+    });
+});
+
 const getProductImage = expressAsyncHandler(async (req, res) => {
     // response product image
     const { id } = req.params;
@@ -203,4 +348,5 @@ export {
     getProductImage,
     getOneProduct,
     deleteProduct,
+    updateProduct,
 };

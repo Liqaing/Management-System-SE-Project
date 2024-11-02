@@ -1,7 +1,7 @@
 import { body, query } from "express-validator";
 import { validatorHandler } from "../validator.middleware.js";
 
-const validateProductCreate = [
+const validateProductUpSert = [
     body("productName")
         .notEmpty()
         .withMessage("Product name cannot be empty")
@@ -41,4 +41,4 @@ const validateProductQueryParams = [
     validatorHandler,
 ];
 
-export { validateProductCreate, validateProductQueryParams };
+export { validateProductUpSert, validateProductQueryParams };

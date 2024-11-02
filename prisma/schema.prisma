@@ -55,7 +55,7 @@ model product {
   createById   Int?
   createBy     String?        @db.VarChar(255)
   createAt     DateTime?      @default(now())
-  updateAtId   Int?
+  updateById   Int?
   updateBy     String?        @db.VarChar(255)
   updateAt     DateTime?
   categoryId   Int
