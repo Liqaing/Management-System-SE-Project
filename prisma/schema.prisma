@@ -55,7 +55,7 @@ model product {
   createById   Int?
   createBy     String?        @db.VarChar(255)
   createAt     DateTime?      @default(now())
-  updateAtId   Int?
+  updateById   Int?
   updateBy     String?        @db.VarChar(255)
   updateAt     DateTime?
   categoryId   Int
@@ -66,6 +66,6 @@ model product {
 model productImage {
   id        Int     @id @default(autoincrement())
   image     Bytes   @db.ByteA
-  product   product @relation(fields: [productId], references: [id])
+  product   product @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId Int
 }
