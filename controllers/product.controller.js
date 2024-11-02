@@ -35,7 +35,9 @@ const getAllProduct = expressAsyncHandler(async (req, res) => {
 
     return res.status(200).json({
         success: true,
-        data: products,
+        data: {
+            value: [...products],
+        },
     });
 });
 
@@ -59,7 +61,9 @@ const getOneProduct = expressAsyncHandler(async (req, res) => {
 
     return res.status(200).json({
         success: true,
-        data: product,
+        data: {
+            value: [product],
+        },
     });
 });
 
