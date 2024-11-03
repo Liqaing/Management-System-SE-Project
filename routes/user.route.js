@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
     createUser,
     getAllUser,
+    getOneUser,
     getUserImage,
 } from "../controllers/user.controller.js";
 import { verifyToken } from "../middlewares/auth.middleware.js";
@@ -13,6 +14,7 @@ const userRouter = Router();
 
 // Create user
 userRouter.get("/", verifyToken, getAllUser);
+userRouter.get("/:id", verifyToken, validateParamId, getOneUser);
 userRouter.post(
     "/",
     verifyToken,

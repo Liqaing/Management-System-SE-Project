@@ -115,7 +115,37 @@ const getAllUser = expressAsyncHandler(async (req, res) => {
     });
 });
 
-const getOneUser = expressAsyncHandler(async (req, res) => {});
+const getOneUser = expressAsyncHandler(async (req, res) => {
+    // #swagger.tags = ['User']
+
+    const { id } = req.params;
+
+    if (req.authData.role != ROLES.adminRole && req.authData.id != user.id) {
+        return res.status(403).json({
+            success: false,
+            error: {
+                message: "Unauthorize operation",
+            },
+        });
+    }
+
+    const user = await dbFindUserById(id);
+    if (!user) {
+        return res.status(404).json({
+            success: false,
+            error: {
+                message: "This user does not exist",
+            },
+        });
+    }
+
+    return res.status(200).json({
+        success: true,
+        data: {
+            value: [user],
+        },
+    });
+});
 
 const getUserImage = expressAsyncHandler(async (req, res) => {
     // #swagger.tags = ['User']
@@ -136,4 +166,4 @@ const getUserImage = expressAsyncHandler(async (req, res) => {
     res.status(200).send(image);
 });
 
-export { createUser, getUserImage, getAllUser };
+export { createUser, getUserImage, getAllUser, getOneUser };
