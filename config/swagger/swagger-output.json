@@ -148,6 +148,23 @@
       }
     },
     "/api/user/": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      },
       "post": {
         "tags": [
           "User"
@@ -210,6 +227,9 @@
     },
     "/api/user/image/{id}": {
       "get": {
+        "tags": [
+          "User"
+        ],
         "description": "",
         "parameters": [
           {
@@ -476,6 +496,9 @@
           "403": {
             "description": "Forbidden"
           },
+          "404": {
+            "description": "Not Found"
+          },
           "415": {
             "description": "Unsupported Media Type"
           }
@@ -584,8 +607,14 @@
           "403": {
             "description": "Forbidden"
           },
+          "404": {
+            "description": "Not Found"
+          },
           "415": {
             "description": "Unsupported Media Type"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
           }
         },
         "requestBody": {

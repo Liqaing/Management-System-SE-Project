@@ -3,6 +3,7 @@ import {
     dbCreateUser,
     dbFindUserByTel,
     dbFindUserById,
+    dbFindAllUser,
 } from "../db/user.queries.js";
 import saltRounds from "../config/bcrypt.config.js";
 import { ROLES } from "../utils/constants.js";
@@ -14,10 +15,8 @@ import { checkImageType } from "../utils/utils.js";
  * Create new user with select role
  * only admin user is allow
  */
-const createUser = [
-    upload.single("userImage"),
-    expressAsyncHandler(async (req, res) => {
-        /*
+const createUser = expressAsyncHandler(async (req, res) => {
+    /*
             #swagger.tags = ['User']
             #swagger.consumes = ['multipart/form-data']
                      
@@ -39,67 +38,87 @@ const createUser = [
         }         
         */
 
-        if (
-            req.authData.role != ROLES.adminRole &&
-            req.authData.role != ROLES.staffRole
-        ) {
-            return res.status(403).json({
-                success: false,
-                error: {
-                    message:
-                        "Unauthorize, you do not have permission to this operation",
-                },
-            });
-        }
-
-        const { username, password, telephone, roleId } = req.body;
-
-        const existing_user = await dbFindUserByTel(telephone);
-        if (existing_user != null) {
-            return res.status(409).json({
-                success: false,
-                error: {
-                    message: "A user with this telephone is already exist",
-                },
-            });
-        }
-
-        // Retreive filename and byte data
-        if (
-            req.file.mimetype != "image/jpeg" ||
-            req.file.mimetype != "image/png"
-        ) {
-            return res.status(415).json({
-                success: false,
-                error: {
-                    message: "Only JPEG and PNG files are allowed",
-                },
-            });
-        }
-        const { buffer } = req.file;
-
-        //hashing the password and saving it in the database
-        bcrypt.hash(password, saltRounds, async (err, hash) => {
-            if (err) {
-                console.error("Error hashing password:", err);
-                throw err;
-            } else {
-                await dbCreateUser(
-                    username,
-                    hash,
-                    telephone,
-                    Number(roleId),
-                    buffer
-                );
-                return res.status(201).json({
-                    success: true,
-                });
-            }
+    if (
+        req.authData.role != ROLES.adminRole &&
+        req.authData.role != ROLES.staffRole
+    ) {
+        return res.status(403).json({
+            success: false,
+            error: {
+                message:
+                    "Unauthorize, you do not have permission to this operation",
+            },
         });
-    }),
-];
+    }
+
+    const { username, password, telephone, roleId } = req.body;
+
+    const existing_user = await dbFindUserByTel(telephone);
+    if (existing_user != null) {
+        return res.status(409).json({
+            success: false,
+            error: {
+                message: "A user with this telephone is already exist",
+            },
+        });
+    }
+
+    // Retreive filename and byte data
+    if (req.file.mimetype != "image/jpeg" || req.file.mimetype != "image/png") {
+        return res.status(415).json({
+            success: false,
+            error: {
+                message: "Only JPEG and PNG files are allowed",
+            },
+        });
+    }
+    const { buffer } = req.file;
+
+    //hashing the password and saving it in the database
+    bcrypt.hash(password, saltRounds, async (err, hash) => {
+        if (err) {
+            console.error("Error hashing password:", err);
+            throw err;
+        } else {
+            await dbCreateUser(
+                username,
+                hash,
+                telephone,
+                Number(roleId),
+                buffer
+            );
+            return res.status(201).json({
+                success: true,
+            });
+        }
+    });
+});
+
+const getAllUser = expressAsyncHandler(async (req, res) => {
+    // #swagger.tags = ['User']
+
+    if (req.authData.role != ROLES.adminRole) {
+        return res.status(403).json({
+            success: false,
+            error: {
+                message: "Unauthorize operation",
+            },
+        });
+    }
+
+    const users = await dbFindAllUser();
+    return res.status(200).json({
+        success: true,
+        data: {
+            value: [...users],
+        },
+    });
+});
+
+const getOneUser = expressAsyncHandler(async (req, res) => {});
 
 const getUserImage = expressAsyncHandler(async (req, res) => {
+    // #swagger.tags = ['User']
     // Endpoint for retireving user iamge
     const { id } = req.params;
     const user = await dbFindUserById(id);
@@ -117,4 +136,4 @@ const getUserImage = expressAsyncHandler(async (req, res) => {
     res.status(200).send(image);
 });
 
-export { createUser, getUserImage };
+export { createUser, getUserImage, getAllUser };

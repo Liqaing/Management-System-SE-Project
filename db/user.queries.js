@@ -21,6 +21,19 @@ const dbCreateUser = async (
     return user;
 };
 
+const dbFindAllUser = async () => {
+    const users = await prisma.users.findMany({
+        select: {
+            id: true,
+            username: true,
+            telephone: true,
+            createAt: true,
+            createBy: true,
+        },
+    });
+    return users;
+};
+
 const dbFindUserByTel = async (telephone, includeOptions = {}) => {
     const user = await prisma.users.findUnique({
         where: {
@@ -45,4 +58,4 @@ const dbFindUserById = async (id, includeOptions = {}) => {
     return user;
 };
 
-export { dbCreateUser, dbFindUserById, dbFindUserByTel };
+export { dbCreateUser, dbFindUserById, dbFindUserByTel, dbFindAllUser };
