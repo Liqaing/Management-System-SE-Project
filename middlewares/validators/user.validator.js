@@ -15,8 +15,27 @@ const validateUserCreate = [
         .withMessage("Role cannot be empty")
         .trim()
         .isNumeric()
-        .withMessage("Invalid, Please input role id"),
+        .withMessage("Invalid, Please input role id")
+        .toInt(),
     validatorHandler,
 ];
 
-export { validateUserCreate };
+const validateUserUpdate = [
+    body("username").notEmpty().withMessage("Username cannot be empty").trim(),
+    body("telephone")
+        .notEmpty()
+        .withMessage("Telephone cannot be empty")
+        .trim()
+        .isNumeric()
+        .withMessage("Invalid, Telephone can only contain number"),
+    body("roleId")
+        .notEmpty()
+        .withMessage("Role cannot be empty")
+        .trim()
+        .isInt()
+        .withMessage("Invalid, Please input role id")
+        .toInt(),
+    validatorHandler,
+];
+
+export { validateUserCreate, validateUserUpdate };

@@ -58,6 +58,25 @@ const dbFindUserById = async (id, includeOptions = {}) => {
     return user;
 };
 
+const dbUpdateUser = async ({ id, username, telephone, roleId, userImage }) => {
+    const user = prisma.users.update({
+        where: {
+            id: id,
+        },
+        data: {
+            username: username,
+            telephone: telephone,
+            role: {
+                connect: {
+                    id: roleId,
+                },
+            },
+            ...(userImage && { userImage: userImage.buffer }),
+        },
+    });
+    return user;
+};
+
 const dbDeleteUser = async (id) => {
     const user = prisma.users.delete({
         where: {
@@ -72,5 +91,6 @@ export {
     dbFindUserById,
     dbFindUserByTel,
     dbFindAllUser,
+    dbUpdateUser,
     dbDeleteUser,
 };

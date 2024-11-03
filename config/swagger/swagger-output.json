@@ -256,6 +256,71 @@
           }
         }
       },
+      "put": {
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint to update user.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "415": {
+            "description": "Unsupported Media Type"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "description": "New Username"
+                  },
+                  "telephone": {
+                    "type": "number",
+                    "description": "New telephone"
+                  },
+                  "roleId": {
+                    "type": "integer",
+                    "description": "ID of the user role"
+                  },
+                  "userImage": {
+                    "type": "file",
+                    "description": "New useriamge if upload will replace old one"
+                  }
+                },
+                "required": [
+                  "username",
+                  "telephone",
+                  "roleId"
+                ]
+              }
+            }
+          }
+        }
+      },
       "delete": {
         "tags": [
           "User"
