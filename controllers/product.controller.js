@@ -51,6 +51,15 @@ const getOneProduct = expressAsyncHandler(async (req, res) => {
         productImage: includeProductImage === BooleanString.true,
     });
 
+    if (!product) {
+        return res.status(404).json({
+            success: false,
+            error: {
+                message: "The product does not exist",
+            },
+        });
+    }
+
     if (includeProductImage === BooleanString.true) {
         const url = constructUrl(req);
         product.productImage.forEach((image) => {
@@ -62,7 +71,7 @@ const getOneProduct = expressAsyncHandler(async (req, res) => {
     return res.status(200).json({
         success: true,
         data: {
-            value: [product],
+            value: product,
         },
     });
 });

@@ -11,9 +11,18 @@ const dbFindRole = async (roleNmae) => {
     return role;
 };
 
+const dbFindRoleById = async (id) => {
+    const role = await prisma.role.findUnique({
+        where: {
+            id: id,
+        },
+    });
+    return role;
+};
+
 const dbFindAllRoles = async () => {
     const roles = await prisma.role.findMany();
     return roles;
 };
 
-export { dbFindRole, dbFindAllRoles };
+export { dbFindRole, dbFindAllRoles, dbFindRoleById };
