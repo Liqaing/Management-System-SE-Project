@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
     createUser,
+    deleteUser,
     getAllUser,
     getOneUser,
     getUserImage,
@@ -22,6 +23,7 @@ userRouter.post(
     validateUserCreate,
     createUser
 );
+userRouter.delete("/:id", verifyToken, validateParamId, deleteUser);
 userRouter.get("/image/:id", verifyToken, validateParamId, getUserImage);
 
 export { userRouter };

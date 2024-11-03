@@ -58,4 +58,19 @@ const dbFindUserById = async (id, includeOptions = {}) => {
     return user;
 };
 
-export { dbCreateUser, dbFindUserById, dbFindUserByTel, dbFindAllUser };
+const dbDeleteUser = async (id) => {
+    const user = prisma.users.delete({
+        where: {
+            id: id,
+        },
+    });
+    return user;
+};
+
+export {
+    dbCreateUser,
+    dbFindUserById,
+    dbFindUserByTel,
+    dbFindAllUser,
+    dbDeleteUser,
+};

@@ -4,6 +4,7 @@ import {
     dbFindUserByTel,
     dbFindUserById,
     dbFindAllUser,
+    dbDeleteUser,
 } from "../db/user.queries.js";
 import saltRounds from "../config/bcrypt.config.js";
 import { ROLES } from "../utils/constants.js";
@@ -147,6 +148,38 @@ const getOneUser = expressAsyncHandler(async (req, res) => {
     });
 });
 
+const deleteUser = expressAsyncHandler(async (req, res) => {
+    // #swagger.tags = ['User']
+    const { id } = req.params;
+
+    if (req.authData.role != ROLES.adminRole && req.authData.id != user.id) {
+        return res.status(403).json({
+            success: false,
+            error: {
+                message: "Unauthorize operation",
+            },
+        });
+    }
+
+    const existUser = await dbFindUserById(id);
+    if (!existUser) {
+        return res.status(404).json({
+            success: false,
+            error: {
+                message: "This user does not exist",
+            },
+        });
+    }
+
+    const deleteUser = await dbDeleteUser(id);
+    return res.status(200).json({
+        success: true,
+        data: {
+            message: `User ${deleteUser.username} has been successfully deleted`,
+        },
+    });
+});
+
 const getUserImage = expressAsyncHandler(async (req, res) => {
     // #swagger.tags = ['User']
     // Endpoint for retireving user iamge
@@ -166,4 +199,4 @@ const getUserImage = expressAsyncHandler(async (req, res) => {
     res.status(200).send(image);
 });
 
-export { createUser, getUserImage, getAllUser, getOneUser };
+export { createUser, getUserImage, getAllUser, getOneUser, deleteUser };
