@@ -4,6 +4,8 @@
 
 ```
     DATABASE_URL=postgresql://<USER>:<PASSWORD>@<HOST>:<PORT>/<DATABASE>?schema=public
+    JWT_SECRET_KEY=8cf5874b782c9f127fa3d32b9980006b45d65d99fb47d98bfb5e1089b975fcac
+    PORT=8000
 ```
 
 ### 1. Setup PostgreSQL Database
@@ -38,10 +40,6 @@ How to install PostgreSQL DB and pgAdmin using Docker:
 
 2. **Migrate the database:**
 
-    - Navigate to the `src` directory:
-        ```bash
-        cd src
-        ```
     - Run the following command to create the initial migration:
         ```bash
         prisma migrate dev --name init
