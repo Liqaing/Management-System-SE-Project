@@ -19,7 +19,7 @@ const getAllCategory = expressAsyncHandler(async (req, res) => {
     return res.status(200).json({
         success: true,
         data: {
-            ...categories,
+            value: [...categories],
         },
     });
 });
@@ -45,7 +45,9 @@ const getOneCategory = expressAsyncHandler(async (req, res) => {
 
     return res.status(200).json({
         success: true,
-        data: category,
+        data: {
+            value: [category],
+        },
     });
 });
 
@@ -173,7 +175,7 @@ const deleteCategory = expressAsyncHandler(async (req, res) => {
             },
         });
     }
-    console.log(existCategory);
+
     if (existCategory.product.length !== 0) {
         return res.status(409).json({
             success: false,
