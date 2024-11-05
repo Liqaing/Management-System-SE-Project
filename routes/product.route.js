@@ -27,14 +27,14 @@ productRouter.get(
 productRouter.post(
     "/",
     verifyToken,
-    upload.array("userImage", 8),
+    upload.array("productImages", 8),
     validateProductUpSert,
     createProduct
 );
 productRouter.put(
     "/:id",
     verifyToken,
-    upload.array("userImage", 8),
+    upload.array("productImages", 8),
     validateParamId,
     validateProductUpSert,
     updateProduct
