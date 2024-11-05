@@ -21,7 +21,7 @@ const dbCreateUser = async (
     return user;
 };
 
-const dbFindAllUser = async () => {
+const dbFindAllUser = async (includeOptions = {}) => {
     const users = await prisma.users.findMany({
         select: {
             id: true,
@@ -29,6 +29,7 @@ const dbFindAllUser = async () => {
             telephone: true,
             createAt: true,
             createBy: true,
+            ...includeOptions,
         },
     });
     return users;
@@ -39,7 +40,12 @@ const dbFindUserByTel = async (telephone, includeOptions = {}) => {
         where: {
             telephone: telephone,
         },
-        include: {
+        select: {
+            id: true,
+            username: true,
+            telephone: true,
+            createAt: true,
+            createBy: true,
             ...includeOptions,
         },
     });
@@ -51,7 +57,12 @@ const dbFindUserById = async (id, includeOptions = {}) => {
         where: {
             id: id,
         },
-        include: {
+        select: {
+            id: true,
+            username: true,
+            telephone: true,
+            createAt: true,
+            createBy: true,
             ...includeOptions,
         },
     });

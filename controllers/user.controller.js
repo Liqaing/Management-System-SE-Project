@@ -116,7 +116,7 @@ const getAllUser = expressAsyncHandler(async (req, res) => {
         });
     }
 
-    const users = await dbFindAllUser();
+    const users = await dbFindAllUser({ role: true });
     if (users) {
         const url = constructUrl(req);
         users.map((user) => {
@@ -148,7 +148,7 @@ const getOneUser = expressAsyncHandler(async (req, res) => {
         });
     }
 
-    const user = await dbFindUserById(id);
+    const user = await dbFindUserById(id, { role: true });
     if (!user) {
         return res.status(404).json({
             success: false,
