@@ -43,6 +43,7 @@ const dbFindUserByTel = async (telephone, includeOptions = {}) => {
         select: {
             id: true,
             username: true,
+            password: true,
             telephone: true,
             createAt: true,
             createBy: true,
