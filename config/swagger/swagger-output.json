@@ -655,7 +655,7 @@
                     "type": "integer",
                     "description": "ID of the product category"
                   },
-                  "userImage": {
+                  "productImages": {
                     "type": "array",
                     "items": {
                       "type": "string",
@@ -668,7 +668,7 @@
                   "productName",
                   "price",
                   "categoryId",
-                  "userImage"
+                  "productImages"
                 ]
               }
             }

@@ -87,7 +87,7 @@ const createProduct = expressAsyncHandler(async (req, res) => {
                                description: { type: "string", description: "Product description" },
                                price: { type: "number", description: "Product price" },
                                categoryId: { type: "integer", description: "ID of the product category" },
-                               userImage: {
+                               productImages: {
                                    type: "array",
                                    items: {
                                        type: "string",
@@ -96,7 +96,7 @@ const createProduct = expressAsyncHandler(async (req, res) => {
                                    description: "Upload up to 10 images in JPEG or PNG format for the product.",
                                },
                            },
-                           required: ["productName", "price", "categoryId", "userImage"],
+                           required: ["productName", "price", "categoryId", "productImages"],
                        },
                    },
                },
@@ -104,6 +104,8 @@ const createProduct = expressAsyncHandler(async (req, res) => {
         */
     const { productName, description, price, categoryId } = req.body;
     const productImages = req.files;
+    console.log(productImages);
+    console.log(req.files);
 
     if (req.authData.role != ROLES.adminRole) {
         return res.status(403).json({
