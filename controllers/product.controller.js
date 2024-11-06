@@ -27,8 +27,7 @@ const getAllProduct = expressAsyncHandler(async (req, res) => {
         const url = constructUrl(req);
         products.forEach((product) => {
             product.productImage.forEach((image) => {
-                const imageUrl = `${url}/api/product/image/${image.id}`;
-                image.imageUrl = imageUrl;
+                image.imageUrl = productImageUrl(url, image.id);
             });
         });
     }
@@ -63,8 +62,7 @@ const getOneProduct = expressAsyncHandler(async (req, res) => {
     if (includeProductImage === BooleanString.true) {
         const url = constructUrl(req);
         product.productImage.forEach((image) => {
-            const imageUrl = `${url}/api/product/image/${image.id}`;
-            image.imageUrl = imageUrl;
+            image.imageUrl = productImageUrl(url, image.id);
         });
     }
 
@@ -355,6 +353,39 @@ const getProductImage = expressAsyncHandler(async (req, res) => {
     res.status(200).send(image);
 });
 
+const getSearchProduct = expressAsyncHandler(async (req, res) => {
+    // #swagger.tags = ['Product']
+
+    const { searchProductName } = req.body;
+    const { includeCategory, includeProductImage } = req.query;
+
+    const products = await dbFindAllProduct(
+        {
+            category: includeCategory === BooleanString.true,
+            productImage: includeProductImage === BooleanString.true,
+        },
+        {
+            productName: { contains: searchProductName, mode: "insensitive" },
+        }
+    );
+
+    if (includeProductImage === BooleanString.true) {
+        const url = constructUrl(req);
+        products.forEach((product) => {
+            product.productImage.forEach((image) => {
+                image.imageUrl = productImageUrl(url, image.id);
+            });
+        });
+    }
+
+    return res.status(200).json({
+        success: true,
+        data: {
+            value: [...products],
+        },
+    });
+});
+
 export {
     getAllProduct,
     createProduct,
@@ -362,4 +393,5 @@ export {
     getOneProduct,
     deleteProduct,
     updateProduct,
+    getSearchProduct,
 };

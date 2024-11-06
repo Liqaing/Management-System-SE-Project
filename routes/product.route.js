@@ -5,6 +5,7 @@ import {
     getAllProduct,
     getOneProduct,
     getProductImage,
+    getSearchProduct,
     updateProduct,
 } from "../controllers/product.controller.js";
 import { verifyToken } from "../middlewares/auth.middleware.js";
@@ -41,5 +42,7 @@ productRouter.put(
 );
 productRouter.delete("/:id", verifyToken, validateParamId, deleteProduct);
 productRouter.get("/image/:id", validateParamId, getProductImage);
+
+productRouter.post("/search", validateProductQueryParams, getSearchProduct);
 
 export { productRouter };
