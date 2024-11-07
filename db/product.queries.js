@@ -2,8 +2,11 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-const dbFindAllProduct = async (includeOptions = {}) => {
+const dbFindAllProduct = async (includeOptions = {}, findOptions = {}) => {
     const products = await prisma.product.findMany({
+        where: {
+            ...findOptions,
+        },
         include: {
             category: includeOptions.category
                 ? {

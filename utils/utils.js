@@ -15,4 +15,8 @@ const constructUrl = (req) => {
     return `${req.protocol}://${req.get("host")}`;
 };
 
-export { checkImageType, constructUrl };
+const productImageUrl = (url, id) => {
+    return (imageUrl = `${url}/api/product/image/${id}`);
+};
+
+export { checkImageType, constructUrl, productImageUrl };
