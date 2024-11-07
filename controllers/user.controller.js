@@ -12,6 +12,7 @@ import { ROLES } from "../utils/constants.js";
 import expressAsyncHandler from "express-async-handler";
 import { checkImageType, constructUrl } from "../utils/utils.js";
 import { dbFindRoleById } from "../db/role.queries.js";
+import { query } from "express";
 
 /**
  * Create new user with select role
@@ -107,6 +108,13 @@ const createUser = expressAsyncHandler(async (req, res) => {
 const getAllUser = expressAsyncHandler(async (req, res) => {
     // #swagger.tags = ['User']
 
+    const { filter } = req.query;
+    const filterOptions = {};
+
+    if (filter && filter.roleName) {
+        filterOptions.role = { roleName: filter.roleName };
+    }
+    
     if (req.authData.role != ROLES.adminRole) {
         return res.status(403).json({
             success: false,
@@ -116,7 +124,7 @@ const getAllUser = expressAsyncHandler(async (req, res) => {
         });
     }
 
-    const users = await dbFindAllUser({ role: true });
+    const users = await dbFindAllUser(filterOptions, { role: true });
     if (users) {
         const url = constructUrl(req);
         users.map((user) => {

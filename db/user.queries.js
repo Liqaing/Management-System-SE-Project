@@ -21,8 +21,11 @@ const dbCreateUser = async (
     return user;
 };
 
-const dbFindAllUser = async (includeOptions = {}) => {
+const dbFindAllUser = async (filterOptions = {}, includeOptions = {}) => {
     const users = await prisma.users.findMany({
+        where: {
+            ...filterOptions,
+        },
         select: {
             id: true,
             username: true,
