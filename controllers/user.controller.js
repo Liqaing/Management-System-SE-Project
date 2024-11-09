@@ -188,29 +188,6 @@ const getOneUser = expressAsyncHandler(async (req, res) => {
 });
 
 const updateUser = expressAsyncHandler(async (req, res) => {
-    /*  #swagger.tags = ['User']
-           #swagger.description = 'Endpoint to update user.'
-           #swagger.requestBody = {
-               content: {
-                   "multipart/form-data": {
-                       schema: {
-                           type: "object",
-                           properties: {
-                               username: { type: "string", description: "New Username" },
-                               telephone: { type: "number", description: "New telephone" },
-                               roleId: { type: "integer", description: "ID of the user role" },
-                                userImage: {
-                                    type: "file",                                    
-                                    description: "New useriamge if upload will replace old one",
-                                },
-                           },
-                           required: ["username", "telephone", "roleId",],
-                       },
-                   },
-               },
-           }
-        */
-
     const { id } = req.params;
     const { username, telephone, roleId } = req.body;
     const userImage = req.file;
@@ -277,7 +254,6 @@ const updateUser = expressAsyncHandler(async (req, res) => {
 });
 
 const deleteUser = expressAsyncHandler(async (req, res) => {
-    // #swagger.tags = ['User']
     const { id } = req.params;
 
     if (req.authData.role != ROLES.adminRole && req.authData.id != user.id) {
@@ -310,7 +286,6 @@ const deleteUser = expressAsyncHandler(async (req, res) => {
 });
 
 const getUserImage = expressAsyncHandler(async (req, res) => {
-    // #swagger.tags = ['User']
     // Endpoint for retireving user iamge
     const { id } = req.params;
     const user = await dbFindUserById(id);
