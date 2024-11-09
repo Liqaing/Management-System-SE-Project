@@ -10,20 +10,23 @@ import {
 } from "../db/product.queries.js";
 import { dbFindCategoryById } from "../db/cateogory.queries.js";
 import { BooleanString, ROLES } from "../utils/constants.js";
-import { checkImageType, constructUrl } from "../utils/utils.js";
+import {
+    checkImageType,
+    constructUrl,
+    productImageUrl,
+} from "../utils/utils.js";
 
 const getAllProduct = expressAsyncHandler(async (req, res) => {
-    // #swagger.tags = ['Product']
-    const { includeCategory, includeProductImage } = req.query;
+    const { include = {} } = req.query;
 
     const products = await dbFindAllProduct({
-        category: includeCategory === BooleanString.true,
-        productImage: includeProductImage === BooleanString.true,
+        category: include.category === BooleanString.true,
+        productImage: include.productImage === BooleanString.true,
     });
 
     // Use product iuamge id to construct a image url
     // which is point to an endpoint that return image
-    if (includeProductImage === BooleanString.true) {
+    if (include.productImage === BooleanString.true) {
         const url = constructUrl(req);
         products.forEach((product) => {
             product.productImage.forEach((image) => {
@@ -41,13 +44,12 @@ const getAllProduct = expressAsyncHandler(async (req, res) => {
 });
 
 const getOneProduct = expressAsyncHandler(async (req, res) => {
-    // #swagger.tags = ['Product']
     const { id } = req.params;
-    const { includeCategory, includeProductImage } = req.query;
+    const { include = {} } = req.query;
 
     const product = await dbFindProductById(id, {
-        category: includeCategory === BooleanString.true,
-        productImage: includeProductImage === BooleanString.true,
+        category: include.category === BooleanString.true,
+        productImage: include.productImage === BooleanString.true,
     });
 
     if (!product) {
@@ -59,7 +61,7 @@ const getOneProduct = expressAsyncHandler(async (req, res) => {
         });
     }
 
-    if (includeProductImage === BooleanString.true) {
+    if (include.productImage === BooleanString.true) {
         const url = constructUrl(req);
         product.productImage.forEach((image) => {
             image.imageUrl = productImageUrl(url, image.id);
@@ -75,37 +77,8 @@ const getOneProduct = expressAsyncHandler(async (req, res) => {
 });
 
 const createProduct = expressAsyncHandler(async (req, res) => {
-    /* #swagger.tags = ['Product']
-           #swagger.description = 'Endpoint to create a product with image uploads in the request body.'
-           #swagger.requestBody = {
-               content: {
-                   "multipart/form-data": {
-                       schema: {
-                           type: "object",
-                           properties: {
-                               productName: { type: "string", description: "Name of the product" },
-                               description: { type: "string", description: "Product description" },
-                               price: { type: "number", description: "Product price" },
-                               categoryId: { type: "integer", description: "ID of the product category" },
-                               productImages: {
-                                   type: "array",
-                                   items: {
-                                       type: "string",
-                                       format: "binary",
-                                   },
-                                   description: "Upload up to 10 images in JPEG or PNG format for the product.",
-                               },
-                           },
-                           required: ["productName", "price", "categoryId", "productImages"],
-                       },
-                   },
-               },
-           }
-        */
     const { productName, description, price, categoryId } = req.body;
     const productImages = req.files;
-    console.log(productImages);
-    console.log(req.files);
 
     if (req.authData.role != ROLES.adminRole) {
         return res.status(403).json({
@@ -162,8 +135,6 @@ const createProduct = expressAsyncHandler(async (req, res) => {
 });
 
 const deleteProduct = expressAsyncHandler(async (req, res) => {
-    // #swagger.tags = ['Product']
-
     const { id } = req.params;
 
     if (

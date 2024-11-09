@@ -16,7 +16,7 @@ const constructUrl = (req) => {
 };
 
 const productImageUrl = (url, id) => {
-    return (imageUrl = `${url}/api/product/image/${id}`);
+    return `${url}/api/product/image/${id}`;
 };
 
 export { checkImageType, constructUrl, productImageUrl };

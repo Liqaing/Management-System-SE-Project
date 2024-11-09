@@ -1,5 +1,7 @@
 import swaggerAutogen from "swagger-autogen";
+import swaggerJSDoc from "swagger-jsdoc";
 
+/*
 const doc = {
     info: {
         version: "1.0.0",
@@ -62,3 +64,61 @@ const outputFile = "./swagger/swagger-output.json";
 const routes = ["./index.js"];
 
 swaggerAutogen({ openapi: "3.0.0" })(outputFile, routes, doc);
+*/
+
+// Swagger setup
+const swaggerOptions = {
+    swaggerDefinition: {
+        myapi: "3.0.0",
+        info: {
+            title: "My API",
+            version: "1.0.0",
+            description: "API documentation",
+        },
+        servers: [
+            {
+                url: "http://localhost:8000/api",
+            },
+        ],
+        components: {
+            securitySchemes: {
+                cookieAuth: {
+                    type: "apiKey",
+                    in: "cookie",
+                    name: "token",
+                },
+            },
+        },
+        security: [
+            {
+                bearerAuth: [],
+            },
+        ],
+        tags: [
+            {
+                name: "Auth", // Tag name
+                description: "authentication user", // Tag description
+            },
+            {
+                name: "User",
+                description: "operation on user",
+            },
+            {
+                name: "Role",
+                description: "operation on role",
+            },
+            {
+                name: "Category",
+                description: "operation on product category",
+            },
+            {
+                name: "Product",
+                description: "operation on product",
+            },
+        ],
+    },
+    apis: ["./routes/*.js"],
+};
+
+const swaggerDocs = swaggerJSDoc(swaggerOptions);
+export default swaggerDocs;

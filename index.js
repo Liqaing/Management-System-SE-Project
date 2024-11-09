@@ -12,18 +12,21 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import { categoryRouter } from "./routes/category.route.js";
 import { productRouter } from "./routes/product.route.js";
+import swaggerDocs from "./config/swagger.config.js";
 
 dotenv.config();
 
-const swaggerFilePath = path.join(
-    process.cwd(),
-    "config/swagger/swagger-output.json"
-);
+// const swaggerFilePath = path.join(
+//     process.cwd(),
+//     "config/swagger/swagger-output.json"
+// );
 
-const swaggerFile = JSON.parse(fs.readFileSync(swaggerFilePath, "utf-8"));
+//const swaggerFile = JSON.parse(fs.readFileSync(swaggerFilePath, "utf-8"));
 
 const app = express();
 const port = process.env.PORT || 8000;
+
+app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // middlewares]
 app.use(
@@ -51,7 +54,8 @@ app.get("/api", (req, res) => {
     });
 });
 
-app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerFile));
+// app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerFile));
+
 app.use(errorHandler);
 
 app.listen(port, () => {
