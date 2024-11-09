@@ -10,12 +10,11 @@ import {
 import { BooleanString, ROLES } from "../utils/constants.js";
 
 const getAllCategory = expressAsyncHandler(async (req, res) => {
-    // #swagger.tags = ['Category']
-    const { includeProducts } = req.query;
-
+    const { include = {} } = req.query;
     const categories = await dbFindAllCategory({
-        product: includeProducts === BooleanString.true,
+        product: include.product && include.product === BooleanString.true,
     });
+
     return res.status(200).json({
         success: true,
         data: {
@@ -25,13 +24,11 @@ const getAllCategory = expressAsyncHandler(async (req, res) => {
 });
 
 const getOneCategory = expressAsyncHandler(async (req, res) => {
-    // #swagger.tags = ['Category']
-
     const { id } = req.params;
-    const { includeProducts } = req.query;
+    const { include = {} } = req.query;
 
     const category = await dbFindCategoryById(id, {
-        product: includeProducts === BooleanString.true,
+        product: include.product === BooleanString.true,
     });
 
     if (!category) {
@@ -52,8 +49,6 @@ const getOneCategory = expressAsyncHandler(async (req, res) => {
 });
 
 const createCategory = expressAsyncHandler(async (req, res) => {
-    // #swagger.tags = ['Category']
-    // Create new category
     const { categoryName, description } = req.body;
     if (
         req.authData.role != ROLES.adminRole &&
@@ -149,7 +144,6 @@ const updateCategory = expressAsyncHandler(async (req, res) => {
 });
 
 const deleteCategory = expressAsyncHandler(async (req, res) => {
-    // #swagger.tags = ['Category']
     // Delete category
     const { id } = req.params;
 
