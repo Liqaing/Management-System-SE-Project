@@ -157,6 +157,9 @@
           {
             "name": "filter",
             "in": "query",
+            "description": "Filter users by role name",
+            "required": false,
+            "example": "admin",
             "schema": {
               "type": "string"
             }
@@ -179,7 +182,6 @@
           "User"
         ],
         "description": "",
-        "parameters": [],
         "responses": {
           "201": {
             "description": "Created"
@@ -201,36 +203,41 @@
           }
         },
         "requestBody": {
+          "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "properties": {
-                  "in": {
-                    "example": "any"
-                  },
-                  "description": {
-                    "example": "any"
-                  },
-                  "required": {
-                    "example": "any"
-                  },
-                  "schema": {
-                    "example": "any"
+                  "username": {
+                    "type": "string",
+                    "example": "john_doe"
                   },
                   "password": {
-                    "example": "any"
+                    "type": "string",
+                    "example": "password123"
                   },
                   "telephone": {
-                    "example": "any"
+                    "type": "string",
+                    "example": "+1234567890"
                   },
                   "roleId": {
-                    "example": "any"
+                    "type": "integer",
+                    "example": 1
                   },
                   "userImage": {
-                    "example": "any"
+                    "type": "string",
+                    "format": "binary",
+                    "description": "User profile image file"
                   }
-                }
+                },
+                "required": [
+                  "username",
+                  "password",
+                  "telephone",
+                  "roleId",
+                  "userImage"
+                ]
               }
             }
           }
