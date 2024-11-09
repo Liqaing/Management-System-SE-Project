@@ -134,8 +134,8 @@ async function main() {
         // }
     }
 
-    // await seedRole();
-    // await seedUser();
+    await seedRole();
+    await seedUser();
     await seedCategories();
     await seedProducts();
 }

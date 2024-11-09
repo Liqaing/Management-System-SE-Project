@@ -108,22 +108,15 @@ const createUser = expressAsyncHandler(async (req, res) => {
 });
 
 const getAllUser = expressAsyncHandler(async (req, res) => {
-    /*  #swagger.tags = ['User']
-        #swagger.parameters['filter[roleName]'] = {
-            in: 'query',
-            description: 'Filter users by role name',
+    /*  
+        #swagger.tags = ['User']
+        #swagger.parameters['filter'] = {
+            name: 'filter[roleName]',
             required: false,
             type: 'string',
-            example: 'admin'
         }
     */
-
     const { filter } = req.query;
-    const filterOptions = {};
-
-    if (filter && filter.roleName) {
-        filterOptions.role = { roleName: filter.roleName };
-    }
 
     if (req.authData.role != ROLES.adminRole) {
         return res.status(403).json({
@@ -132,6 +125,12 @@ const getAllUser = expressAsyncHandler(async (req, res) => {
                 message: "Unauthorize operation",
             },
         });
+    }
+
+    const filterOptions = {};
+
+    if (filter && filter.roleName) {
+        filterOptions.role = { roleName: filter.roleName };
     }
 
     const users = await dbFindAllUser(filterOptions, { role: true });

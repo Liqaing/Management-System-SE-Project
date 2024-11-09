@@ -155,11 +155,16 @@
         "description": "",
         "parameters": [
           {
+            "name": "filter[roleName]",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "filter",
             "in": "query",
-            "description": "Filter users by role name",
-            "required": false,
-            "example": "admin",
             "schema": {
               "type": "string"
             }
@@ -604,17 +609,10 @@
         "tags": [
           "Product"
         ],
-        "description": "",
+        "description": "Endpoint to retrieve all products, optionally including category and product images.",
         "parameters": [
           {
-            "name": "includeCategory",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "includeProductImage",
+            "name": "include",
             "in": "query",
             "schema": {
               "type": "string"

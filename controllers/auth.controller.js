@@ -9,13 +9,6 @@ import expressAsyncHandler from "express-async-handler";
 import { constructUrl } from "../utils/utils.js";
 
 const loginUser = expressAsyncHandler(async (req, res) => {
-    // #swagger.tags = ['Auth']
-    // #swagger.description = 'Log in a user'
-
-    /**
-     * Use for login and authenticate user
-     */
-
     const { password, telephone } = req.body;
     const user = await dbFindUserByTel(telephone, { role: true });
 
@@ -74,13 +67,7 @@ const loginUser = expressAsyncHandler(async (req, res) => {
 });
 
 const signupUser = expressAsyncHandler(async (req, res) => {
-    // #swagger.tags = ['Auth']
-    // #swagger.description = 'Singup a user, only call this endpoint on creat customer'
-
-    /**
-     * Signup a user, create a new user with customer role
-     */
-
+    
     const { username, password, telephone } = req.body;
     const existing_user = await dbFindUserByTel(telephone);
     if (existing_user != null) {
@@ -94,7 +81,7 @@ const signupUser = expressAsyncHandler(async (req, res) => {
 
     const role = await dbFindRole(ROLES.userRole);
 
-    //hashing the password and saving it in the database
+    // hashing the password and saving it in the database
     bcrypt.hash(password, saltRounds, async (err, hash) => {
         if (err) {
             console.error("Error hashing password:", err);
@@ -109,9 +96,6 @@ const signupUser = expressAsyncHandler(async (req, res) => {
 });
 
 const AuthUser = expressAsyncHandler(async (req, res) => {
-    // #swagger.tags = ['Auth']
-    // #swagger.description = 'Verify if a user is login, or is thier token is not expired'
-
     const token = req.cookies.token;
     if (!token) {
         return res.status(401).json({
@@ -145,9 +129,7 @@ const AuthUser = expressAsyncHandler(async (req, res) => {
     });
 });
 
-const logoutUser = expressAsyncHandler(async (req, res) => {
-    // #swagger.tags = ['Auth']
-    // #swagger.description = 'Logout a user'
+const logoutUser = expressAsyncHandler(async (req, res) => {    
     res.clearCookie("token");
     return res.status(200).json({
         success: true,
