@@ -12,6 +12,7 @@ import { ROLES } from "../utils/constants.js";
 import expressAsyncHandler from "express-async-handler";
 import { checkImageType, constructUrl } from "../utils/utils.js";
 import { dbFindRoleById } from "../db/role.queries.js";
+import { query } from "express";
 
 /**
  * Create new user with select role
@@ -19,26 +20,28 @@ import { dbFindRoleById } from "../db/role.queries.js";
  */
 const createUser = expressAsyncHandler(async (req, res) => {
     /*
-            #swagger.tags = ['User']
-            #swagger.consumes = ['multipart/form-data']
-                     
-            #swagger.parameters['body'] = {
-            in: 'body',
-            description: 'User creation data',
+        #swagger.tags = ['User']
+        #swagger.consumes = ['multipart/form-data']
+        
+        #swagger.requestBody = {
             required: true,
-            schema: {
-                    type: 'object',
-                    properties: {
-                    username: { type: 'string', example: 'john_doe' },
-                    password: { type: 'string', example: 'password123' },
-                    telephone: { type: 'string', example: '+1234567890' },
-                    roleId: { type: 'integer', example: 1 },
-                    userImage: { in: 'formData', type: 'file', description: 'User profile image file' }
-                },
-                required: ['username', 'password', 'telephone', 'roleId', 'userImage']
+            content: {
+                "multipart/form-data": {
+                    schema: {
+                        type: "object",
+                        properties: {
+                            username: { type: "string", example: "john_doe" },
+                            password: { type: "string", example: "password123" },
+                            telephone: { type: "string", example: "+1234567890" },
+                            roleId: { type: "integer", example: 1 },
+                            userImage: { type: "string", format: "binary", description: "User profile image file" }
+                        },
+                        required: ["username", "password", "telephone", "roleId", "userImage"]
+                    }
+                }
             }
-        }         
-        */
+        }
+*/
 
     if (req.authData.role != ROLES.adminRole) {
         return res.status(403).json({
@@ -74,7 +77,7 @@ const createUser = expressAsyncHandler(async (req, res) => {
     }
 
     // Retreive filename and byte data
-    if (req.file.mimetype != "image/jpeg" || req.file.mimetype != "image/png") {
+    if (req.file.mimetype != "image/jpeg" && req.file.mimetype != "image/png") {
         return res.status(415).json({
             success: false,
             error: {
@@ -105,7 +108,22 @@ const createUser = expressAsyncHandler(async (req, res) => {
 });
 
 const getAllUser = expressAsyncHandler(async (req, res) => {
-    // #swagger.tags = ['User']
+    /*  #swagger.tags = ['User']
+        #swagger.parameters['filter[roleName]'] = {
+            in: 'query',
+            description: 'Filter users by role name',
+            required: false,
+            type: 'string',
+            example: 'admin'
+        }
+    */
+
+    const { filter } = req.query;
+    const filterOptions = {};
+
+    if (filter && filter.roleName) {
+        filterOptions.role = { roleName: filter.roleName };
+    }
 
     if (req.authData.role != ROLES.adminRole) {
         return res.status(403).json({
@@ -116,7 +134,7 @@ const getAllUser = expressAsyncHandler(async (req, res) => {
         });
     }
 
-    const users = await dbFindAllUser({ role: true });
+    const users = await dbFindAllUser(filterOptions, { role: true });
     if (users) {
         const url = constructUrl(req);
         users.map((user) => {
