@@ -310,5 +310,4 @@ export {
     getOneProduct,
     deleteProduct,
     updateProduct,
-    getSearchProduct,
 };

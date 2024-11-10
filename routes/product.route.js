@@ -5,7 +5,6 @@ import {
     getAllProduct,
     getOneProduct,
     getProductImage,
-    getSearchProduct,
     updateProduct,
 } from "../controllers/product.controller.js";
 import { verifyToken } from "../middlewares/auth.middleware.js";

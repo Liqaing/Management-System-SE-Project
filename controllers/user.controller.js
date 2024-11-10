@@ -84,15 +84,6 @@ const createUser = expressAsyncHandler(async (req, res) => {
 });
 
 const getAllUser = expressAsyncHandler(async (req, res) => {
-    /*  
-        #swagger.tags = ['User']
-        #swagger.parameters['filter'] = {
-            name: 'filter[roleName]',
-            required: false,
-            type: 'string',
-        }
-    */
-
     if (req.authData.role != ROLES.adminRole) {
         return res.status(403).json({
             success: false,
@@ -104,7 +95,7 @@ const getAllUser = expressAsyncHandler(async (req, res) => {
 
     const { filter = {} } = req.query;
     const users = await dbFindAllUser(
-        { roleName: filter.roleName === BooleanString.true },
+        { role: { roleName: filter.roleName } },
         { role: true }
     );
 
