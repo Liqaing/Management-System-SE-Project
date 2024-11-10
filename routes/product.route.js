@@ -259,6 +259,11 @@ productRouter.get(
  *               format: float
  *               description: Price of the product.
  *               example: 5.99
+ *             qty:
+ *               type: number
+ *               format: integer
+ *               description: quantity of a product.
+ *               example: 1
  *             categoryId:
  *               type: integer
  *               description: ID of the category the product belongs to.
@@ -378,6 +383,11 @@ productRouter.post(
  *               format: float
  *               description: Price of the product.
  *               example: 7.99
+ *             qty:
+ *               type: number
+ *               format: integer
+ *               description: quantity of a product.
+ *               example: 1
  *             categoryId:
  *               type: integer
  *               description: ID of the category the product belongs to.

@@ -52,6 +52,7 @@ model product {
   productName  String         @db.VarChar(300)
   description  String?        @db.VarChar
   price        Decimal        @db.Decimal
+  qty          Int            @default(0) @db.Integer
   createById   Int?
   createBy     String?        @db.VarChar(255)
   createAt     DateTime?      @default(now())

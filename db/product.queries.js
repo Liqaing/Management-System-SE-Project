@@ -59,6 +59,7 @@ const dbCreatProduct = async ({
     productName,
     description,
     price,
+    qty,
     categoryId,
     createBy,
     createById,
@@ -69,6 +70,7 @@ const dbCreatProduct = async ({
             productName: productName,
             description: description,
             price: price,
+            qty: qty,
             categoryId: categoryId,
             createAt: new Date(),
             createBy: createBy,
@@ -99,6 +101,7 @@ const dbUpdateProduct = async ({
     productName,
     description,
     price,
+    qty,
     categoryId,
     updateById,
     updateBy,
@@ -112,6 +115,7 @@ const dbUpdateProduct = async ({
             productName: productName,
             description: description,
             price: price,
+            qty: qty,
             category: {
                 connect: {
                     id: categoryId,

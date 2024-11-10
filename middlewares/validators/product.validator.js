@@ -19,6 +19,13 @@ const validateProductUpSert = [
         .isFloat({ min: 0 })
         .withMessage("Invalid, Please input a valid product price")
         .toFloat(),
+    body("qty")
+        .notEmpty()
+        .withMessage("Product quantity cannot be empty")
+        .trim()
+        .isInt({ min: 0 })
+        .withMessage("Product quantity must be a positive number")
+        .toInt(),
     body("categoryId")
         .notEmpty()
         .withMessage("Must select a category for product")

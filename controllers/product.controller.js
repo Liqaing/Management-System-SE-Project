@@ -83,7 +83,7 @@ const getOneProduct = expressAsyncHandler(async (req, res) => {
 });
 
 const createProduct = expressAsyncHandler(async (req, res) => {
-    const { productName, description, price, categoryId } = req.body;
+    const { productName, description, price, qty, categoryId } = req.body;
     const productImages = req.files;
 
     if (req.authData.role != ROLES.adminRole) {
@@ -126,6 +126,7 @@ const createProduct = expressAsyncHandler(async (req, res) => {
         productName,
         description,
         price,
+        qty,
         categoryId,
         createBy: req.authData.username,
         createById: req.authData.userId,
@@ -176,7 +177,7 @@ const deleteProduct = expressAsyncHandler(async (req, res) => {
 
 const updateProduct = expressAsyncHandler(async (req, res) => {
     const { id } = req.params;
-    const { productName, description, price, categoryId } = req.body;
+    const { productName, description, price, qty, categoryId } = req.body;
 
     // Parsing and validator imagesToDeleteId as array of integer
     if (typeof req.body.imagesToDeleteId === "string") {
@@ -184,6 +185,10 @@ const updateProduct = expressAsyncHandler(async (req, res) => {
             .split(",")
             .map((id) => parseInt(id.trim(), 10))
             .filter(Number.isInteger);
+    }
+
+    if (!req.body.imagesToDeleteId) {
+        req.body.imagesToDeleteId = [];
     }
 
     if (!Array.isArray(req.body.imagesToDeleteId)) {
@@ -274,6 +279,7 @@ const updateProduct = expressAsyncHandler(async (req, res) => {
         productName,
         description,
         price,
+        qty,
         categoryId,
         updateBy: req.authData.username,
         updateById: req.authData.userId,
