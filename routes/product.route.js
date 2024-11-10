@@ -42,6 +42,13 @@ const productRouter = Router();
  *           type: string
  *           enum: [true, false]
  *           default: "false"
+ *       - in: query
+ *         name: search[productName]
+ *         required: false
+ *         description: The product name to search for
+ *         schema:
+ *           type: string
+ *           example: "product a"
  *     responses:
  *       200:
  *         description: Successfully retrieved all products
@@ -575,7 +582,5 @@ productRouter.delete("/:id", verifyToken, validateParamId, deleteProduct);
  *                       example: "Product image not found"
  */
 productRouter.get("/image/:id", validateParamId, getProductImage);
-
-productRouter.post("/search", validateProductQueryParams, getSearchProduct);
 
 export { productRouter };

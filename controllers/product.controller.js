@@ -18,11 +18,17 @@ import {
 
 const getAllProduct = expressAsyncHandler(async (req, res) => {
     const { include = {} } = req.query;
+    const { search = {} } = req.query;
 
-    const products = await dbFindAllProduct({
-        category: include.category === BooleanString.true,
-        productImage: include.productImage === BooleanString.true,
-    });
+    const products = await dbFindAllProduct(
+        {
+            category: include.category === BooleanString.true,
+            productImage: include.productImage === BooleanString.true,
+        },
+        {
+            productName: { contains: search.productName, mode: "insensitive" },
+        }
+    );
 
     // Use product iuamge id to construct a image url
     // which is point to an endpoint that return image
@@ -169,35 +175,6 @@ const deleteProduct = expressAsyncHandler(async (req, res) => {
 });
 
 const updateProduct = expressAsyncHandler(async (req, res) => {
-    /* #swagger.tags = ['Product']
-           #swagger.description = 'Endpoint to create a product with image uploads in the request body.'
-           #swagger.requestBody = {
-               content: {
-                   "multipart/form-data": {
-                       schema: {
-                           type: "object",
-                           properties: {
-                               productName: { type: "string", description: "Name of the product" },
-                               description: { type: "string", description: "Product description" },
-                               price: { type: "number", description: "Product price" },
-                               categoryId: { type: "integer", description: "ID of the product category" },
-                               imagesToDeleteId: { type: "array", items: {type: "integer"}, description: "List ID of the product image to delete" },                               
-                               userImage: {
-                                   type: "array",
-                                   items: {
-                                       type: "string",
-                                       format: "binary",
-                                   },
-                                   description: "Upload up to 10 images in JPEG or PNG format for the product.",
-                               },
-                           },
-                           required: ["productName", "price", "categoryId", "userImage"],
-                       },
-                   },
-               },
-           }
-        */
-
     const { id } = req.params;
     const { productName, description, price, categoryId } = req.body;
 
@@ -324,39 +301,6 @@ const getProductImage = expressAsyncHandler(async (req, res) => {
     const imageType = checkImageType(image);
     res.set("Content-Type", imageType);
     res.status(200).send(image);
-});
-
-const getSearchProduct = expressAsyncHandler(async (req, res) => {
-    // #swagger.tags = ['Product']
-
-    const { searchProductName } = req.body;
-    const { includeCategory, includeProductImage } = req.query;
-
-    const products = await dbFindAllProduct(
-        {
-            category: includeCategory === BooleanString.true,
-            productImage: includeProductImage === BooleanString.true,
-        },
-        {
-            productName: { contains: searchProductName, mode: "insensitive" },
-        }
-    );
-
-    if (includeProductImage === BooleanString.true) {
-        const url = constructUrl(req);
-        products.forEach((product) => {
-            product.productImage.forEach((image) => {
-                image.imageUrl = productImageUrl(url, image.id);
-            });
-        });
-    }
-
-    return res.status(200).json({
-        success: true,
-        data: {
-            value: [...products],
-        },
-    });
 });
 
 export {
