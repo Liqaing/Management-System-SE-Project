@@ -29,7 +29,7 @@ const dbFindCategoryById = async (id, includeOptions = {}) => {
             id: id,
         },
         include: {
-            ...includeOptions,
+            ...includeOptions,            
         },
     });
     return category;

@@ -8,12 +8,39 @@ import {
     dbUpdateCategory,
 } from "../db/cateogory.queries.js";
 import { BooleanString, ROLES } from "../utils/constants.js";
+import { constructUrl, productImageUrl } from "../utils/utils.js";
 
 const getAllCategory = expressAsyncHandler(async (req, res) => {
     const { include = {} } = req.query;
     const categories = await dbFindAllCategory({
-        product: include.product && include.product === BooleanString.true,
+        ...(include.product === BooleanString.true && {
+            product: true,
+            product: {
+                include: {
+                    productImage: {
+                        select: {
+                            id: true,
+                        },
+                    },
+                    category: {
+                        select: {
+                            id: true,
+                            categoryName: true,
+                        },
+                    },
+                },
+            },
+        }),
     });
+
+    if (include.product === BooleanString.true) {
+        const url = constructUrl(req);
+        category.product.forEach((product) => {
+            product.productImage.forEach((image) => {
+                image.imageUrl = productImageUrl(url, image.id);
+            });
+        });
+    }
 
     return res.status(200).json({
         success: true,
@@ -28,7 +55,24 @@ const getOneCategory = expressAsyncHandler(async (req, res) => {
     const { include = {} } = req.query;
 
     const category = await dbFindCategoryById(id, {
-        product: include.product === BooleanString.true,
+        ...(include.product === BooleanString.true && {
+            product: true,
+            product: {
+                include: {
+                    productImage: {
+                        select: {
+                            id: true,
+                        },
+                    },
+                    category: {
+                        select: {
+                            id: true,
+                            categoryName: true,
+                        },
+                    },
+                },
+            },
+        }),
     });
 
     if (!category) {
@@ -40,10 +84,22 @@ const getOneCategory = expressAsyncHandler(async (req, res) => {
         });
     }
 
+    if (include.product === BooleanString.true) {
+        const url = constructUrl(req);
+
+        category.product.forEach((product) => {
+            console.log(product);
+            product &&
+                product.productImage.forEach((image) => {
+                    image.imageUrl = productImageUrl(url, image.id);
+                });
+        });
+    }
+
     return res.status(200).json({
         success: true,
         data: {
-            value: [category],
+            category,
         },
     });
 });
