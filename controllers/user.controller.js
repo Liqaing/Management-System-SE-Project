@@ -8,7 +8,7 @@ import {
     dbUpdateUser,
 } from "../db/user.queries.js";
 import saltRounds from "../config/bcrypt.config.js";
-import { ROLES } from "../utils/constants.js";
+import { BooleanString, ROLES } from "../utils/constants.js";
 import expressAsyncHandler from "express-async-handler";
 import { checkImageType, constructUrl } from "../utils/utils.js";
 import { dbFindRoleById } from "../db/role.queries.js";
@@ -19,30 +19,6 @@ import { query } from "express";
  * only admin user is allow
  */
 const createUser = expressAsyncHandler(async (req, res) => {
-    /*
-        #swagger.tags = ['User']
-        #swagger.consumes = ['multipart/form-data']
-        
-        #swagger.requestBody = {
-            required: true,
-            content: {
-                "multipart/form-data": {
-                    schema: {
-                        type: "object",
-                        properties: {
-                            username: { type: "string", example: "john_doe" },
-                            password: { type: "string", example: "password123" },
-                            telephone: { type: "string", example: "+1234567890" },
-                            roleId: { type: "integer", example: 1 },
-                            userImage: { type: "string", format: "binary", description: "User profile image file" }
-                        },
-                        required: ["username", "password", "telephone", "roleId", "userImage"]
-                    }
-                }
-            }
-        }
-*/
-
     if (req.authData.role != ROLES.adminRole) {
         return res.status(403).json({
             success: false,
@@ -108,16 +84,6 @@ const createUser = expressAsyncHandler(async (req, res) => {
 });
 
 const getAllUser = expressAsyncHandler(async (req, res) => {
-    /*  
-        #swagger.tags = ['User']
-        #swagger.parameters['filter'] = {
-            name: 'filter[roleName]',
-            required: false,
-            type: 'string',
-        }
-    */
-    const { filter } = req.query;
-
     if (req.authData.role != ROLES.adminRole) {
         return res.status(403).json({
             success: false,
@@ -127,13 +93,12 @@ const getAllUser = expressAsyncHandler(async (req, res) => {
         });
     }
 
-    const filterOptions = {};
+    const { filter = {} } = req.query;
+    const users = await dbFindAllUser(
+        { role: { roleName: filter.roleName } },
+        { role: true }
+    );
 
-    if (filter && filter.roleName) {
-        filterOptions.role = { roleName: filter.roleName };
-    }
-
-    const users = await dbFindAllUser(filterOptions, { role: true });
     if (users) {
         const url = constructUrl(req);
         users.map((user) => {

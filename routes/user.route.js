@@ -482,7 +482,7 @@ userRouter.delete("/:id", verifyToken, validateParamId, deleteUser);
 
 /**
  * @swagger
- * /api/user/{id}/image:
+ * /api/user/image/{id}:
  *   get:
  *     tags:
  *       - User
@@ -502,7 +502,7 @@ userRouter.delete("/:id", verifyToken, validateParamId, deleteUser);
  *             schema:
  *               type: string
  *               format: binary
-       404:
+ *       404:
  *         description: User or user image not found, or unauthorized operation
  *         content:
  *           application/json:
@@ -517,7 +517,7 @@ userRouter.delete("/:id", verifyToken, validateParamId, deleteUser);
  *                   properties:
  *                     message:
  *                       type: string
- *                       example: "User does not exist or image not found, or unauthorized operation"
+ *                       example: "User does not exist, image not found, or unauthorized operation"
  *       403:
  *         description: Unauthorized operation, only accessible by admin or the user themselves.
  *         content:
@@ -533,7 +533,7 @@ userRouter.delete("/:id", verifyToken, validateParamId, deleteUser);
  *                   properties:
  *                     message:
  *                       type: string
- *                       example: "Unauthorized, you do not have permission to this operation"
+ *                       example: "Unauthorized, you do not have permission for this operation"
  */
 userRouter.get("/image/:id", verifyToken, validateParamId, getUserImage);
 

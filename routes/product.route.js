@@ -5,7 +5,6 @@ import {
     getAllProduct,
     getOneProduct,
     getProductImage,
-    getSearchProduct,
     updateProduct,
 } from "../controllers/product.controller.js";
 import { verifyToken } from "../middlewares/auth.middleware.js";
@@ -42,6 +41,13 @@ const productRouter = Router();
  *           type: string
  *           enum: [true, false]
  *           default: "false"
+ *       - in: query
+ *         name: search[productName]
+ *         required: false
+ *         description: The product name to search for
+ *         schema:
+ *           type: string
+ *           example: "product a"
  *     responses:
  *       200:
  *         description: Successfully retrieved all products
@@ -253,6 +259,11 @@ productRouter.get(
  *               format: float
  *               description: Price of the product.
  *               example: 5.99
+ *             qty:
+ *               type: number
+ *               format: integer
+ *               description: quantity of a product.
+ *               example: 1
  *             categoryId:
  *               type: integer
  *               description: ID of the category the product belongs to.
@@ -372,6 +383,11 @@ productRouter.post(
  *               format: float
  *               description: Price of the product.
  *               example: 7.99
+ *             qty:
+ *               type: number
+ *               format: integer
+ *               description: quantity of a product.
+ *               example: 1
  *             categoryId:
  *               type: integer
  *               description: ID of the category the product belongs to.
@@ -575,7 +591,5 @@ productRouter.delete("/:id", verifyToken, validateParamId, deleteProduct);
  *                       example: "Product image not found"
  */
 productRouter.get("/image/:id", validateParamId, getProductImage);
-
-productRouter.post("/search", validateProductQueryParams, getSearchProduct);
 
 export { productRouter };
