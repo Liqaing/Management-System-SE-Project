@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -18,13 +12,12 @@ model users {
   username   String    @db.VarChar(255)
   password   String    @db.VarChar(255)
   telephone  String    @unique @db.VarChar(255)
-  userImage  Bytes?    @db.ByteA
-  createById Int?
   createAt   DateTime? @default(now())
   createBy   String?   @db.VarChar(255)
-
-  role   role @relation(fields: [roleId], references: [id])
-  roleId Int
+  roleId     Int
+  userImage  Bytes?
+  createById Int?
+  role       role      @relation(fields: [roleId], references: [id])
 }
 
 model role {
@@ -38,12 +31,12 @@ model category {
   id           Int       @id @default(autoincrement())
   categoryName String    @unique @db.VarChar(255)
   description  String?   @db.VarChar
-  createById   Int?
-  createBy     String?   @db.VarChar(255)
   createAt     DateTime? @default(now())
-  updateById   Int?
+  createBy     String?   @db.VarChar(255)
   updateAt     DateTime?
   updateBy     String?   @db.VarChar(255)
+  createById   Int?
+  updateById   Int?
   product      product[]
 }
 
@@ -52,20 +45,20 @@ model product {
   productName  String         @db.VarChar(300)
   description  String?        @db.VarChar
   price        Decimal        @db.Decimal
-  createById   Int?
-  createBy     String?        @db.VarChar(255)
   createAt     DateTime?      @default(now())
-  updateById   Int?
-  updateBy     String?        @db.VarChar(255)
+  createBy     String?        @db.VarChar(255)
   updateAt     DateTime?
+  updateBy     String?        @db.VarChar(255)
   categoryId   Int
+  createById   Int?
+  updateById   Int?
   category     category       @relation(fields: [categoryId], references: [id])
   productImage productImage[]
 }
 
 model productImage {
   id        Int     @id @default(autoincrement())
-  image     Bytes   @db.ByteA
-  product   product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  image     Bytes
   productId Int
+  product   product @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
