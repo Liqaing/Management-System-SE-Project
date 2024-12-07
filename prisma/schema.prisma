@@ -70,3 +70,18 @@ model productImage {
   product   product @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId Int
 }
+
+model coupon {
+  id            Int       @id @default(autoincrement())
+  couponCode    String    @db.VarChar(6)
+  status        String    @db.VarChar(50)
+  effectiveDate DateTime
+  expireDate    DateTime
+  limitUsange   Int
+  createById    Int?
+  createBy      String?   @db.VarChar(255)
+  createAt      DateTime? @default(now())
+  updateById    Int?
+  updateBy      String?   @db.VarChar(255)
+  updateAt      DateTime?
+}
