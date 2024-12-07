@@ -67,7 +67,6 @@ const loginUser = expressAsyncHandler(async (req, res) => {
 });
 
 const signupUser = expressAsyncHandler(async (req, res) => {
-    
     const { username, password, telephone } = req.body;
     const existing_user = await dbFindUserByTel(telephone);
     if (existing_user != null) {
@@ -129,7 +128,7 @@ const AuthUser = expressAsyncHandler(async (req, res) => {
     });
 });
 
-const logoutUser = expressAsyncHandler(async (req, res) => {    
+const logoutUser = expressAsyncHandler(async (req, res) => {
     res.clearCookie("token");
     return res.status(200).json({
         success: true,
