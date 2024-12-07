@@ -33,6 +33,13 @@ async function main() {
                     role: {
                         connect: { id: 1 }, // Assuming admin role has ID 1
                     },
+
+                    username: "Soda",
+                    password: bcrypt.hashSync("sodaIT@123", saltRounds),
+                    telephone: "010987001",
+                    role: {
+                        connect: { id: 1 },
+                    },
                 },
             });
         }

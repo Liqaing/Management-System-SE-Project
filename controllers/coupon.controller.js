@@ -12,4 +12,8 @@ const getAllCoupon = expressAsyncHandler(async (req, res) => {
     });
 });
 
+const createCoupon = expressAsyncHandler(async (req, res) => {
+    
+})
+
 export { getAllCoupon };
