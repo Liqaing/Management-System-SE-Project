@@ -1,5 +1,5 @@
 import { body } from "express-validator";
-import { validatorHandler } from "../validator.middleware";
+import { validatorHandler } from "../validator.middleware.js";
 
 const validateCouponUpsert = [
     body("couponCode")

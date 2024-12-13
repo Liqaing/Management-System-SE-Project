@@ -9,4 +9,10 @@ const BooleanString = {
     false: "false",
 };
 
-export { ROLES, BooleanString };
+const CouponStatus = {
+    active: "Active",
+    inActive: "Inactive",
+    expire: "expire",
+};
+
+export { ROLES, BooleanString, CouponStatus };

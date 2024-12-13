@@ -73,7 +73,7 @@ model productImage {
 
 model coupon {
   id                 Int       @id @default(autoincrement())
-  couponCode         String    @db.VarChar(6)
+  couponCode         String    @unique @db.VarChar(6)
   DiscountPercentage Float
   status             String    @db.VarChar(50)
   effectiveDate      DateTime
