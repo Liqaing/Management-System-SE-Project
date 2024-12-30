@@ -3,7 +3,7 @@ import { validatorHandler } from "../validator.middleware.js";
 
 const validateCouponUpsert = [
     body("couponCode")
-        .optional()
+        .notEmpty()
         .isLength({ min: 6, max: 6 })
         .withMessage("Coupon conde can only be 6 character long")
         .trim(),

@@ -20,6 +20,15 @@ const dbFindCouponByCode = async (couponCode) => {
     return coupon;
 };
 
+const dbFindCouponById = async (id) => {
+    const coupon = await prisma.coupon.findUnique({
+        where: {
+            id: id,
+        },
+    });
+    return coupon;
+};
+
 const dbCreateCoupon = async ({
     couponCode,
     DiscountPercentage,
@@ -46,4 +55,19 @@ const dbCreateCoupon = async ({
     return coupon;
 };
 
-export { dbFindAllCoupon, dbFindCouponByCode, dbCreateCoupon };
+const dbDeleteCoupon = async (id) => {
+    const coupon = prisma.coupon.delete({
+        where: {
+            id: id,
+        },
+    });
+    return coupon;
+};
+
+export {
+    dbFindAllCoupon,
+    dbFindCouponByCode,
+    dbCreateCoupon,
+    dbFindCouponById,
+    dbDeleteCoupon,
+};
