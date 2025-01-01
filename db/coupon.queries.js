@@ -64,10 +64,41 @@ const dbDeleteCoupon = async (id) => {
     return coupon;
 };
 
+const dbUpdateCoupon = async ({
+    id,
+    couponCode,
+    DiscountPercentage,
+    status,
+    effectiveDate,
+    expireDate,
+    limitUsange,
+    updateById,
+    updateBy,
+}) => {
+    const coupon = prisma.coupon.update({
+        where: {
+            id: id,
+        },
+        data: {
+            couponCode,
+            DiscountPercentage,
+            status,
+            effectiveDate,
+            expireDate,
+            limitUsange,
+            updateBy,
+            updateById,
+            updateAt: new Date(),
+        },
+    });
+    return coupon;
+};
+
 export {
     dbFindAllCoupon,
     dbFindCouponByCode,
     dbCreateCoupon,
     dbFindCouponById,
     dbDeleteCoupon,
+    dbUpdateCoupon,
 };
