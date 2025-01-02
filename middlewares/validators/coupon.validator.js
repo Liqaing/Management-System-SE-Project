@@ -5,7 +5,7 @@ const validateCouponUpsert = [
     body("couponCode")
         .notEmpty()
         .isLength({ min: 6, max: 6 })
-        .withMessage("Coupon conde can only be 6 character long")
+        .withMessage("Coupon code can only be 6 character long")
         .trim(),
     body("DiscountPercentage")
         .notEmpty()
