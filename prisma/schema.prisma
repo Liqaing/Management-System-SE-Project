@@ -97,7 +97,7 @@ model orderHeader {
   remark      String?  @db.VarChar
   orderType   String   @db.VarChar(50)
 
-  DiscountPercentage Float
+  discountPercentage Float
   couponCode         String
 
   paymentMethod   String @db.VarChar(50)
@@ -131,6 +131,8 @@ model orderDetail {
   product   product @relation(fields: [productId], references: [id])
   productId Int
 
+  productName   String @db.VarChar(300)
+  categoryName  String @db.VarChar(255)
   orderQuantity Int
   unitPrice     Float
   totalPrice    Float

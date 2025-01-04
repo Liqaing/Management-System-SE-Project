@@ -25,15 +25,19 @@ const validateOrderInSert = [
         .isInt()
         .withMessage("Invalid product id")
         .toInt(),
-    body("items.*.qty")
+    body("items.*.orderQuantity")
         .notEmpty()
         .withMessage("Order Product quantity cannot be empty")
         .trim()
         .isInt({ min: 0 })
         .withMessage("Order Product quantity must be a positive number")
         .toInt(),
+    body("items.*.categoryName")
+        .notEmpty()
+        .withMessage("Order Product Category name cannot be empty")
+        .trim(),
 
-    body("DiscountPercentage")
+    body("discountPercentage")
         .optional()
         .isFloat({ min: 0 })
         .withMessage("Invalid, Please input a valid discount percentage")
