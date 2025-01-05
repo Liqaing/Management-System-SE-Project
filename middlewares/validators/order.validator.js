@@ -36,18 +36,17 @@ const validateOrderInSert = [
         .notEmpty()
         .withMessage("Order Product Category name cannot be empty")
         .trim(),
-
-    body("discountPercentage")
-        .optional()
-        .isFloat({ min: 0 })
-        .withMessage("Invalid, Please input a valid discount percentage")
-        .toFloat(),
-    body("couponCode")
-        .optional()
-        .isLength({ min: 6, max: 6 })
-        .withMessage("Coupon code can only be 6 character long")
+    body("items.*.productName")
+        .notEmpty()
+        .withMessage("Order Product name cannot be empty")
         .trim(),
 
+    body("couponId")
+        .optional()
+        .trim()
+        .isInt()
+        .withMessage("Invalid coupon Id")
+        .toInt(),
     validatorHandler,
 ];
 

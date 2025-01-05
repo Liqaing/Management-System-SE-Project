@@ -15,4 +15,10 @@ const CouponStatus = {
     expire: "expire",
 };
 
-export { ROLES, BooleanString, CouponStatus };
+const OrderStatus = {
+    preparing: "Preparing",
+    orderReady: "Order Ready",
+    complete: "Completed",
+};
+
+export { ROLES, BooleanString, CouponStatus, OrderStatus };

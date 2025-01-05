@@ -94,6 +94,19 @@ const dbUpdateCoupon = async ({
     return coupon;
 };
 
+const dbUpdateCouponUsage = async (id, updateUsageObj) => {
+    const coupon = await prisma.coupon.update({
+        where: {
+            id: id,
+        },
+        data: {
+            limitUsange: { ...updateUsageObj },
+        },
+    });
+
+    return coupon;
+};
+
 export {
     dbFindAllCoupon,
     dbFindCouponByCode,
@@ -101,4 +114,5 @@ export {
     dbFindCouponById,
     dbDeleteCoupon,
     dbUpdateCoupon,
+    dbUpdateCouponUsage,
 };
