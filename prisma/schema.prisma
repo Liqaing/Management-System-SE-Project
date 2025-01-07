@@ -90,25 +90,28 @@ model coupon {
 }
 
 model orderHeader {
-  id          Int      @id @default(autoincrement())
-  orderDate   DateTime
-  totalPrice  Float
-  orderStatus String   @db.VarChar(50)
-  remark      String?  @db.VarChar
-  orderType   String   @db.VarChar(50)
+  id         Int      @id @default(autoincrement())
+  orderDate  DateTime
+  totalPrice Float
+  discount   Float
+  grandTotal Float
 
-  discountPercentage Float
-  couponCode         String
+  orderStatus String  @db.VarChar(50)
+  remark      String? @db.VarChar
+  orderType   String  @db.VarChar(50)
 
-  paymentMethod   String @db.VarChar(50)
-  SessionId       String
-  PaymentIntentId String
+  discountPercentage Float?
+  couponCode         String? @db.VarChar(6)
+
+  paymentMethod   String  @db.VarChar(50)
+  SessionId       String?
+  PaymentIntentId String?
 
   orderBy   String? @db.VarChar(255)
   orderById Int?
   user      users?  @relation(fields: [orderById], references: [id])
 
-  telephone String @db.VarChar(255)
+  telephone String? @db.VarChar(255)
 
   // Address
 

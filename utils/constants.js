@@ -21,4 +21,24 @@ const OrderStatus = {
     complete: "Completed",
 };
 
-export { ROLES, BooleanString, CouponStatus, OrderStatus };
+const PaymentMethod = {
+    cash: "Cash",
+    qr: "QR",
+
+    // online order
+    card: "Card",
+};
+
+const OrderType = {
+    counter: "Counter",
+    online: "Online",
+};
+
+export {
+    ROLES,
+    BooleanString,
+    CouponStatus,
+    OrderStatus,
+    PaymentMethod,
+    OrderType,
+};

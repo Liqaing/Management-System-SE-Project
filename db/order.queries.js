@@ -15,6 +15,8 @@ const dbCreateOrder = async ({
     orderDetails,
     discountPercentage,
     totalPrice,
+    discount,
+    grandTotal,
     couponCode,
     telephone,
     createBy,
@@ -24,12 +26,17 @@ const dbCreateOrder = async ({
         data: {
             orderDate: new Date(),
             totalPrice: totalPrice,
+            grandTotal: grandTotal,
             orderStatus: orderStatus,
             paymentMethod: paymentMethod,
             remark: remark,
             orderType: orderType,
-            discountPercentage: discountPercentage,
-            couponCode: couponCode,
+            ...(couponCode !== undefined && {
+                discountPercentage: discountPercentage,
+                couponCode: couponCode,
+                discount: discount,
+            }),
+
             telephone: telephone,
             createBy: createBy,
             createById: createById,
