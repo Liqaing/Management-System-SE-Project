@@ -26,6 +26,7 @@ model users {
   role        role          @relation(fields: [roleId], references: [id])
   roleId      Int
   orderHeader orderHeader[]
+  Cart        Cart[]
 }
 
 model role {
@@ -64,6 +65,7 @@ model product {
   category     category       @relation(fields: [categoryId], references: [id])
   productImage productImage[]
   orderDetail  orderDetail[]
+  Cart         Cart[]
 }
 
 model productImage {
@@ -139,4 +141,25 @@ model orderDetail {
   orderQuantity Int
   unitPrice     Float
   totalPrice    Float
+}
+
+model Cart {
+  id        Int     @id @default(autoincrement())
+  Product   product @relation(fields: [productId], references: [id])
+  productId Int
+
+  orderQuantity Int
+  unitPrice     Float
+  totalPrice    Float
+  cartStatus    String @db.VarChar(50)
+
+  user    users @relation(fields: [usersId], references: [id])
+  usersId Int
+
+  createById Int?
+  createBy   String?   @db.VarChar(255)
+  createAt   DateTime? @default(now())
+  updateById Int?
+  updateBy   String?   @db.VarChar(255)
+  updateAt   DateTime?
 }

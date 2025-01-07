@@ -17,7 +17,7 @@ const CouponStatus = {
 
 const OrderStatus = {
     preparing: "Preparing",
-    orderReady: "Order Ready",
+    orderReady: "Ready",
     complete: "Completed",
 };
 
