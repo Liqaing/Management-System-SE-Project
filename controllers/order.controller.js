@@ -1,18 +1,25 @@
 import expressAsyncHandler from "express-async-handler";
-import { dbCreateOrder, dbFindAllOrder } from "../db/order.queries.js";
-import { OrderStatus, PaymentMethod, ROLES } from "../utils/constants.js";
+import { dbCreateOrder, dbFindAllOrderHeaders } from "../db/order.queries.js";
+import {
+    BooleanString,
+    OrderStatus,
+    PaymentMethod,
+    ROLES,
+} from "../utils/constants.js";
 import {
     dbFindProductById,
     dbUpdateProductQty,
 } from "../db/product.queries.js";
-import {
-    dbFindCouponByCode,
-    dbFindCouponById,
-    dbUpdateCouponUsage,
-} from "../db/coupon.queries.js";
+import { dbFindCouponById, dbUpdateCouponUsage } from "../db/coupon.queries.js";
 
 const getAllOrder = expressAsyncHandler(async (req, res) => {
-    const orders = await dbFindAllOrder();
+    const { include = {} } = req.query;
+
+    const orders = await dbFindAllOrderHeaders({
+        include: {
+            orderDetail: include.OrderDetail === BooleanString.true,
+        },
+    });
 
     return res.status(200).json({
         success: true,

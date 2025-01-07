@@ -2,9 +2,11 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-const dbFindAllOrder = async () => {
-    const orders = await prisma.order.findMany();
-    return orders;
+const dbFindAllOrderHeaders = async (includeOptions = {}, findOptions = {}) => {
+    const orderHeaders = await prisma.orderHeader.findMany({
+        ...includeOptions,
+    });
+    return orderHeaders;
 };
 
 const dbCreateOrder = async ({
@@ -57,4 +59,4 @@ const dbCreateOrder = async ({
     return orderHeader;
 };
 
-export { dbFindAllOrder, dbCreateOrder };
+export { dbFindAllOrderHeaders, dbCreateOrder };

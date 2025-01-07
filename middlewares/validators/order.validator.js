@@ -1,4 +1,4 @@
-import { body } from "express-validator";
+import { body, query } from "express-validator";
 import { validatorHandler } from "../validator.middleware.js";
 
 const validateOrderInSert = [
@@ -50,4 +50,12 @@ const validateOrderInSert = [
     validatorHandler,
 ];
 
-export { validateOrderInSert };
+const validateOrderQueryParams = [
+    query("includeOrderDetail")
+        .optional({ checkFalsy: true })
+        .isBoolean()
+        .withMessage("includeOrderDetail must be a true or false value"),
+    validatorHandler,
+];
+
+export { validateOrderInSert, validateOrderQueryParams };
