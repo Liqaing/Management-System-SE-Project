@@ -289,6 +289,7 @@ const updateProduct = expressAsyncHandler(async (req, res) => {
     return res.status(200).json({
         success: true,
         data: {
+            value: updatedProduct,
             message: `Product ${updatedProduct.productName} has been successfully updated`,
         },
     });

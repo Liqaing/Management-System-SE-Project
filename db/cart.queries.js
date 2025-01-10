@@ -2,22 +2,69 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
+const dbFindCartByUserId = async (userId, findOptions = {}) => {
+    const cart = await prisma.cart.findFirst({
+        where: {
+            userId,
+            ...findOptions,
+        },
+    });
+
+    return cart;
+};
+
 const dbCreateCart = async ({
-    id,
     productId,
+    productName,
+    categoryName,
     orderQuantity,
     unitPrice,
     totalPrice,
-    cartStatus,
-    usersId,
+    isActive,
+    userId,
     createBy,
 }) => {
     const cart = await prisma.cart.create({
-        data: {},
+        data: {
+            productId,
+            productName,
+            categoryName,
+            orderQuantity,
+            unitPrice,
+            totalPrice,
+            isActive,
+            userId,
+            createAt: new Date(),
+            createBy,
+            createById: userId,
+        },
     });
     return cart;
 };
 
-const dbUpdateCart = async ({}) => {};
+const dbUpdateCartAdd = async ({
+    id,
+    orderQuantity,
+    unitPrice,
+    totalPrice,
+    updateById,
+    updateBy,
+}) => {
+    const cart = prisma.cart.update({
+        where: {
+            id: id,
+        },
+        data: {
+            orderQuantity,
+            unitPrice,
+            totalPrice,
+            updateAt: new Date(),
+            updateBy: updateBy,
+            updateById: updateById,
+        },
+    });
 
-export { dbCreateCart, dbUpdateCart };
+    return cart;
+};
+
+export { dbCreateCart, dbUpdateCartAdd, dbFindCartByUserId };

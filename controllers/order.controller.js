@@ -109,7 +109,7 @@ const createCounterOrder = expressAsyncHandler(async (req, res) => {
             productId: item.productId,
             productName: item.productName,
             categoryName: item.categoryName,
-            orderQuantity: item.orderQuantity,
+            ordreQuantity: item.orderQuantity,
             unitPrice: product.price,
             totalPrice: item.orderQuantity * product.price,
         };

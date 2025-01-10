@@ -26,7 +26,7 @@ model users {
   role        role          @relation(fields: [roleId], references: [id])
   roleId      Int
   orderHeader orderHeader[]
-  Cart        Cart[]
+  cart        cart[]
 }
 
 model role {
@@ -65,7 +65,7 @@ model product {
   category     category       @relation(fields: [categoryId], references: [id])
   productImage productImage[]
   orderDetail  orderDetail[]
-  Cart         Cart[]
+  cart         cart[]
 }
 
 model productImage {
@@ -143,15 +143,16 @@ model orderDetail {
   totalPrice    Float
 }
 
-model Cart {
-  id        Int     @id @default(autoincrement())
-  Product   product @relation(fields: [productId], references: [id])
-  productId Int
-
+model cart {
+  id            Int     @id @default(autoincrement())
+  Product       product @relation(fields: [productId], references: [id])
+  productId     Int
+  productName   String  @db.VarChar(300)
+  categoryName  String  @db.VarChar(255)
   orderQuantity Int
   unitPrice     Float
   totalPrice    Float
-  cartStatus    String @db.VarChar(50)
+  isActive      Boolean
 
   user    users @relation(fields: [usersId], references: [id])
   usersId Int
