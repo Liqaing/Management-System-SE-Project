@@ -28,6 +28,11 @@ const validateCartRemove = [
         .isInt()
         .withMessage("Invalid, Please select a valid cart item")
         .toInt(),
+    body("deleteAll")
+        .optional()
+        .isBoolean()
+        .withMessage("Invalid, Please select enter a boolean value")
+        .toBoolean(),
 
     validatorHandler,
 ];

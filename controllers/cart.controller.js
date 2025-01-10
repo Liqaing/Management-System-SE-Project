@@ -31,7 +31,6 @@ const addCart = expressAsyncHandler(async (req, res) => {
     });
 
     if (existCart) {
-        
         if (existCart.userId !== userId) {
             return res.status(403).json({
                 success: false,
@@ -90,7 +89,7 @@ const addCart = expressAsyncHandler(async (req, res) => {
 
 const removeCart = expressAsyncHandler(async (req, res) => {
     const { userId } = req.authData;
-    const { cartId } = req.body;
+    const { cartId, deleteAll } = req.body;
 
     const cart = await dbFindCart({
         id: cartId,
@@ -114,7 +113,7 @@ const removeCart = expressAsyncHandler(async (req, res) => {
         });
     }
 
-    if (cart.orderQuantity == 1) {
+    if (cart.orderQuantity === 1 || deleteAll === true) {
         // delete cart
         await dbDeleteCart(id);
 
