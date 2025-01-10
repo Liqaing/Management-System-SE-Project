@@ -115,7 +115,7 @@ const removeCart = expressAsyncHandler(async (req, res) => {
 
     if (cart.orderQuantity === 1 || deleteAll === true) {
         // delete cart
-        await dbDeleteCart(id);
+        await dbDeleteCart(cartId);
 
         return res.status(200).json({
             success: true,
