@@ -66,4 +66,37 @@ const dbUpdateCartAdd = async ({
     return cart;
 };
 
-export { dbCreateCart, dbUpdateCartAdd, dbFindCart };
+const dbUpdateCartRemove = async ({ id, updateById, updateBy }) => {
+    const cart = await prisma.cart.update({
+        where: {
+            id: id,
+        },
+        data: {
+            orderQuantity: {
+                decrement: 1,
+            },
+            updateAt: new Date(),
+            updateBy: updateBy,
+            updateById: updateById,
+        },
+    });
+
+    return cart;
+};
+
+const dbDeleteCart = async (id) => {
+    const cart = prisma.cart.delete({
+        where: {
+            id: id,
+        },
+    });
+    return cart;
+};
+
+export {
+    dbCreateCart,
+    dbUpdateCartAdd,
+    dbFindCart,
+    dbUpdateCartRemove,
+    dbDeleteCart,
+};

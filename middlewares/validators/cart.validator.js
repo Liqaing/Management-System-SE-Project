@@ -20,4 +20,16 @@ const validateCartAdd = [
     validatorHandler,
 ];
 
-export { validateCartAdd };
+const validateCartRemove = [
+    body("cartId")
+        .notEmpty()
+        .withMessage("Must select a product to remove to cart")
+        .trim()
+        .isInt()
+        .withMessage("Invalid, Please select a valid cart item")
+        .toInt(),
+
+    validatorHandler,
+];
+
+export { validateCartAdd, validateCartRemove };

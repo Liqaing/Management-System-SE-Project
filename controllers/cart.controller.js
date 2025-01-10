@@ -1,8 +1,10 @@
 import expressAsyncHandler from "express-async-handler";
 import {
     dbCreateCart,
+    dbDeleteCart,
     dbFindCart,
     dbUpdateCartAdd,
+    dbUpdateCartRemove,
 } from "../db/cart.queries.js";
 import { dbFindProductById } from "../db/product.queries.js";
 
@@ -29,6 +31,16 @@ const addCart = expressAsyncHandler(async (req, res) => {
     });
 
     if (existCart) {
+        
+        if (existCart.userId !== userId) {
+            return res.status(403).json({
+                success: false,
+                error: {
+                    message: "Unauthorize operation",
+                },
+            });
+        }
+
         orderQuantity += existCart.orderQuantity;
     }
 
@@ -77,12 +89,56 @@ const addCart = expressAsyncHandler(async (req, res) => {
 });
 
 const removeCart = expressAsyncHandler(async (req, res) => {
-    return res.status(200).json({
-        success: true,
-        data: {
-            message: `has been successfully updated`,
-        },
+    const { userId } = req.authData;
+    const { cartId } = req.body;
+
+    const cart = await dbFindCart({
+        id: cartId,
     });
+
+    if (!cart) {
+        return res.status(404).json({
+            success: false,
+            error: {
+                message: "This item deos not exist in cart",
+            },
+        });
+    }
+
+    if (cart.userId !== userId) {
+        return res.status(403).json({
+            success: false,
+            error: {
+                message: "Unauthorize operation",
+            },
+        });
+    }
+
+    if (cart.orderQuantity == 1) {
+        // delete cart
+        await dbDeleteCart(id);
+
+        return res.status(200).json({
+            success: true,
+            data: {
+                message: `${cart.productName} has been successfully remove from cart`,
+            },
+        });
+    } else {
+        const updateCart = await dbUpdateCartRemove({
+            id: cartId,
+            updateById: userId,
+            updateBy: req.authData.username,
+        });
+
+        return res.status(200).json({
+            success: true,
+            data: {
+                value: updateCart,
+                message: `${cart.productName} has been successfully remove from cart`,
+            },
+        });
+    }
 });
 
 export { addCart, removeCart };
