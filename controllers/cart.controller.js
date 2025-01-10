@@ -1,17 +1,17 @@
 import expressAsyncHandler from "express-async-handler";
 import {
     dbCreateCart,
-    dbFindCartByUserId,
+    dbFindCart,
     dbUpdateCartAdd,
-} from "../db/cart.queries";
-import { dbFindProductById } from "../db/product.queries";
+} from "../db/cart.queries.js";
+import { dbFindProductById } from "../db/product.queries.js";
 
 const addCart = expressAsyncHandler(async (req, res) => {
     const { userId } = req.authData;
     const { productId } = req.body;
     let orderQuantity = req.body.orderQuantity;
 
-    const product = await dbFindProductById(id, { category: true });
+    const product = await dbFindProductById(productId, { category: true });
     if (!product) {
         return res.status(404).json({
             success: false,
@@ -22,7 +22,12 @@ const addCart = expressAsyncHandler(async (req, res) => {
         });
     }
 
-    let existCart = await dbFindCartByUserId(userId, { isActive: true });
+    let existCart = await dbFindCart({
+        userId,
+        productId,
+        isActive: true,
+    });
+
     if (existCart) {
         orderQuantity += existCart.orderQuantity;
     }
@@ -40,7 +45,8 @@ const addCart = expressAsyncHandler(async (req, res) => {
     const totalPrice = orderQuantity * product.price;
 
     if (existCart) {
-        existCart = dbUpdateCartAdd({
+        existCart = await dbUpdateCartAdd({
+            id: existCart.id,
             orderQuantity,
             unitPrice: product.price,
             totalPrice,

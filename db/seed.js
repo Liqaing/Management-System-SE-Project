@@ -40,6 +40,13 @@ async function main() {
                     role: {
                         connect: { id: 1 },
                     },
+
+                    username: "customer",
+                    password: bcrypt.hashSync("customer", saltRounds),
+                    telephone: "0111111",
+                    role: {
+                        connect: { id: 2 },
+                    },
                 },
             });
         }
@@ -47,25 +54,25 @@ async function main() {
 
     async function seedCategories() {
         const categories = await prisma.category.findMany();
-        // if (categories.length === 0) {
-        await prisma.category.createMany({
-            data: [
-                {
-                    categoryName: "Burgers",
-                    description: "Delicious burgers",
-                },
-                {
-                    categoryName: "Fries",
-                    description: "Crispy french fries",
-                },
-                {
-                    categoryName: "Drinks",
-                    description: "Refreshing beverages",
-                },
-                { categoryName: "Desserts", description: "Sweet treats" },
-            ],
-        });
-        // }
+        if (categories.length === 0) {
+            await prisma.category.createMany({
+                data: [
+                    {
+                        categoryName: "Burgers",
+                        description: "Delicious burgers",
+                    },
+                    {
+                        categoryName: "Fries",
+                        description: "Crispy french fries",
+                    },
+                    {
+                        categoryName: "Drinks",
+                        description: "Refreshing beverages",
+                    },
+                    { categoryName: "Desserts", description: "Sweet treats" },
+                ],
+            });
+        }
     }
 
     async function seedProducts() {

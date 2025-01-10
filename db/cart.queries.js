@@ -2,10 +2,9 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-const dbFindCartByUserId = async (userId, findOptions = {}) => {
+const dbFindCart = async (findOptions = {}) => {
     const cart = await prisma.cart.findFirst({
         where: {
-            userId,
             ...findOptions,
         },
     });
@@ -50,7 +49,7 @@ const dbUpdateCartAdd = async ({
     updateById,
     updateBy,
 }) => {
-    const cart = prisma.cart.update({
+    const cart = await prisma.cart.update({
         where: {
             id: id,
         },
@@ -67,4 +66,4 @@ const dbUpdateCartAdd = async ({
     return cart;
 };
 
-export { dbCreateCart, dbUpdateCartAdd, dbFindCartByUserId };
+export { dbCreateCart, dbUpdateCartAdd, dbFindCart };

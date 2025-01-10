@@ -154,8 +154,8 @@ model cart {
   totalPrice    Float
   isActive      Boolean
 
-  user    users @relation(fields: [usersId], references: [id])
-  usersId Int
+  user   users @relation(fields: [userId], references: [id])
+  userId Int
 
   createById Int?
   createBy   String?   @db.VarChar(255)
