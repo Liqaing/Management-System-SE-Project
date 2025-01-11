@@ -14,6 +14,7 @@ import { dbFindCouponById, dbUpdateCouponUsage } from "../db/coupon.queries.js";
 import { dbFindAllCart, dbUpdateCartStatus } from "../db/cart.queries.js";
 import { dbFindUserById } from "../db/user.queries.js";
 import stripe from "../config/stipe.config.js";
+import { constructUrl } from "../utils/utils.js";
 
 const getAllOrder = expressAsyncHandler(async (req, res) => {
     const { include = {} } = req.query;
@@ -289,7 +290,6 @@ const createOnlineOrder = expressAsyncHandler(async (req, res) => {
         },
         quantity: item.orderQuantity,
     }));
-    console.log(lineItems);
 
     // if (discount > 0) {
     //     lineItems.push({
@@ -302,12 +302,13 @@ const createOnlineOrder = expressAsyncHandler(async (req, res) => {
     //     });
     // }
 
+    const url = constructUrl(req);
     const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
         line_items: lineItems,
         mode: "payment",
-        success_url: `${process.env.FRONTEND_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${process.env.FRONTEND_URL}/cancel`,
+        success_url: `${url}/api/order/online/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${url}/api/order/online/cancel`,
         metadata: {
             userId,
             remark,
