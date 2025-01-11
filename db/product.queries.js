@@ -154,6 +154,18 @@ const dbDeleteProductImage = async (id) => {
     return image;
 };
 
+const dbUpdateProductQty = async (id, updateQtyObj) => {
+    const product = await prisma.product.update({
+        where: {
+            id: id,
+        },
+        data: {
+            qty: { ...updateQtyObj },
+        },
+    });
+    return product;
+};
+
 export {
     dbFindAllProduct,
     dbCreatProduct,
@@ -162,4 +174,5 @@ export {
     dbDeleteProduct,
     dbUpdateProduct,
     dbDeleteProductImage,
+    dbUpdateProductQty,
 };
