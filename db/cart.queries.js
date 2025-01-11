@@ -12,6 +12,15 @@ const dbFindCart = async (findOptions = {}) => {
     return cart;
 };
 
+const dbFindAllCart = async (findOptions = {}) => {
+    const carts = await prisma.cart.findMany({
+        where: {
+            ...findOptions,
+        },
+    });
+    return carts;
+};
+
 const dbCreateCart = async ({
     productId,
     productName,
@@ -99,4 +108,5 @@ export {
     dbFindCart,
     dbUpdateCartRemove,
     dbDeleteCart,
+    dbFindAllCart,
 };

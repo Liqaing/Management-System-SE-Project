@@ -16,8 +16,11 @@ const CouponStatus = {
 };
 
 const OrderStatus = {
+    // Order online need to be confirm byy staff
+    pending: "Pending",
     preparing: "Preparing",
     orderReady: "Ready",
+    delivering: "Delivering",
     complete: "Completed",
 };
 
