@@ -102,6 +102,19 @@ const dbDeleteCart = async (id) => {
     return cart;
 };
 
+const dbUpdateCartStatus = async (id, isActive) => {
+    const cart = await prisma.cart.update({
+        where: {
+            id: id,
+        },
+        data: {
+            isActive: isActive,
+        },
+    });
+
+    return cart;
+};
+
 export {
     dbCreateCart,
     dbUpdateCartAdd,
@@ -109,4 +122,5 @@ export {
     dbUpdateCartRemove,
     dbDeleteCart,
     dbFindAllCart,
+    dbUpdateCartStatus,
 };

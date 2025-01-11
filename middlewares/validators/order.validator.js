@@ -1,7 +1,7 @@
 import { body, query } from "express-validator";
 import { validatorHandler } from "../validator.middleware.js";
 
-const validateOrderInSert = [
+const validateOrderCounterInsert = [
     body("paymentMethod")
         .notEmpty()
         .withMessage("Payment Method cannot be empty")
@@ -12,10 +12,6 @@ const validateOrderInSert = [
         .withMessage("Remark can be up to 800 characters long")
         .trim()
         .escape(),
-    body("orderType")
-        .notEmpty()
-        .withMessage("Order Type name cannot be empty")
-        .trim(),
 
     body("items").isArray().withMessage("Order product cannot be empty"),
     body("items.*.productId")
@@ -50,6 +46,26 @@ const validateOrderInSert = [
     validatorHandler,
 ];
 
+const validateOrderOnlineInsert = [
+    body("paymentMethod")
+        .notEmpty()
+        .withMessage("Payment Method cannot be empty")
+        .trim(),
+    body("remark")
+        .optional()
+        .isLength({ max: 800 })
+        .withMessage("Remark can be up to 800 characters long")
+        .trim()
+        .escape(),
+    body("couponId")
+        .optional()
+        .trim()
+        .isInt()
+        .withMessage("Invalid coupon Id")
+        .toInt(),
+    validatorHandler,
+];
+
 const validateOrderQueryParams = [
     query("includeOrderDetail")
         .optional({ checkFalsy: true })
@@ -58,4 +74,8 @@ const validateOrderQueryParams = [
     validatorHandler,
 ];
 
-export { validateOrderInSert, validateOrderQueryParams };
+export {
+    validateOrderCounterInsert,
+    validateOrderOnlineInsert,
+    validateOrderQueryParams,
+};

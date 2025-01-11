@@ -11,7 +11,8 @@ import {
     dbUpdateProductQty,
 } from "../db/product.queries.js";
 import { dbFindCouponById, dbUpdateCouponUsage } from "../db/coupon.queries.js";
-import { dbFindCart } from "../db/cart.queries.js";
+import { dbFindAllCart, dbUpdateCartStatus } from "../db/cart.queries.js";
+import { dbFindUserById } from "../db/user.queries.js";
 
 const getAllOrder = expressAsyncHandler(async (req, res) => {
     const { include = {} } = req.query;
@@ -31,8 +32,7 @@ const getAllOrder = expressAsyncHandler(async (req, res) => {
 });
 
 const createCounterOrder = expressAsyncHandler(async (req, res) => {
-    const { paymentMethod, remark, orderType, items, couponId, telephone } =
-        req.body;
+    const { paymentMethod, remark, items, couponId, telephone } = req.body;
 
     if (
         req.authData.role != ROLES.adminRole &&
@@ -134,7 +134,7 @@ const createCounterOrder = expressAsyncHandler(async (req, res) => {
     const orderHeader = await dbCreateOrder({
         paymentMethod,
         remark,
-        orderType,
+        orderType: "Counter",
         orderStatus: OrderStatus.preparing,
         orderDetails,
         ...(coupon && {
@@ -171,9 +171,12 @@ const createCounterOrder = expressAsyncHandler(async (req, res) => {
     });
 });
 
-const createOnlineOrder = expressAsyncHandler(async () => {
-    const { paymentMethod, remark, orderType, couponId } = req.body;
+const createOnlineOrder = expressAsyncHandler(async (req, res) => {
+    const { paymentMethod, remark, couponId } = req.body;
     const { userId } = req.authData;
+
+    // Find user and address (todo)
+    const user = await dbFindUserById(userId);
 
     if (
         paymentMethod != PaymentMethod.cash &&
@@ -213,19 +216,22 @@ const createOnlineOrder = expressAsyncHandler(async () => {
         }
     }
 
-    const carts = dbFindCart({ userId, isActive: true });
+    const carts = await dbFindAllCart({ userId, isActive: true });
+    console.log(carts);
     if (!carts) {
         return res.status(409).json({
             success: false,
             error: {
-                message: `The cart does not exist`,
+                message: `You don't have any item in your cart`,
             },
         });
     }
 
     const orderDetails = [];
-    for (const cart in carts) {
-        const product = await dbFindProductById(cart.productId);
+    for (const cart of carts) {
+        const product = await dbFindProductById(cart.productId, {
+            category: true,
+        });
 
         if (!product) {
             return res.status(409).json({
@@ -235,7 +241,7 @@ const createOnlineOrder = expressAsyncHandler(async () => {
                 },
             });
         }
-
+        console.log("order qty", cart.orderQuantity);
         if (cart.orderQuantity > product.qty) {
             return res.status(409).json({
                 success: false,
@@ -248,8 +254,8 @@ const createOnlineOrder = expressAsyncHandler(async () => {
         const orderDetail = {
             productId: cart.productId,
             productName: product.productName,
-            categoryName: product.categoryName,
-            ordreQuantity: cart.orderQuantity,
+            categoryName: product.category.categoryName,
+            orderQuantity: cart.orderQuantity,
             unitPrice: product.price,
             totalPrice: cart.orderQuantity * product.price,
         };
@@ -270,10 +276,12 @@ const createOnlineOrder = expressAsyncHandler(async () => {
         grandTotal -= discount;
     }
 
+    // Checkout
+
     const orderHeader = await dbCreateOrder({
         paymentMethod,
         remark,
-        orderType,
+        orderType: "Online",
         orderStatus: OrderStatus.pending,
         orderDetails,
         ...(coupon && {
@@ -281,16 +289,19 @@ const createOnlineOrder = expressAsyncHandler(async () => {
             discountPercentage: coupon.discountPercentage,
             discount,
         }),
-        telephone: telephone,
+        telephone: user.telephone,
         totalPrice: totalPrice,
         grandTotal,
     });
 
-    // Reduce product qty
-    items.forEach((item) => {
-        dbUpdateProductQty(item.productId, {
-            decrement: item.orderQuantity,
+    carts.forEach((cart) => {
+        // Reduce product qty
+        dbUpdateProductQty(cart.productId, {
+            decrement: cart.orderQuantity,
         });
+
+        // update cart status inactive
+        dbUpdateCartStatus(cart.id, false);
     });
 
     if (coupon) {
