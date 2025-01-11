@@ -2,11 +2,23 @@ import expressAsyncHandler from "express-async-handler";
 import {
     dbCreateCart,
     dbDeleteCart,
+    dbFindAllCart,
     dbFindCart,
     dbUpdateCartAdd,
     dbUpdateCartRemove,
 } from "../db/cart.queries.js";
 import { dbFindProductById } from "../db/product.queries.js";
+
+const getCart = expressAsyncHandler(async (req, res) => {
+    const { userId } = req.authData;
+    const carts = await dbFindAllCart({ userId, isActive: true });
+    return res.status(200).json({
+        success: true,
+        data: {
+            value: [...carts],
+        },
+    });
+});
 
 const addCart = expressAsyncHandler(async (req, res) => {
     const { userId } = req.authData;
@@ -140,4 +152,4 @@ const removeCart = expressAsyncHandler(async (req, res) => {
     }
 });
 
-export { addCart, removeCart };
+export { addCart, removeCart, getCart };

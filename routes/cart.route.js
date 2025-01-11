@@ -1,6 +1,10 @@
 import { Router } from "express";
 import { verifyToken } from "../middlewares/auth.middleware.js";
-import { addCart, removeCart } from "../controllers/cart.controller.js";
+import {
+    addCart,
+    getCart,
+    removeCart,
+} from "../controllers/cart.controller.js";
 import {
     validateCartAdd,
     validateCartRemove,
@@ -8,7 +12,7 @@ import {
 
 const cartRouter = Router();
 
-cartRouter.get("/", verifyToken);
+cartRouter.get("/", verifyToken, getCart);
 cartRouter.post("/add", verifyToken, validateCartAdd, addCart);
 cartRouter.post("/remove", verifyToken, validateCartRemove, removeCart);
 
