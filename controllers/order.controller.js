@@ -13,6 +13,7 @@ import {
 import { dbFindCouponById, dbUpdateCouponUsage } from "../db/coupon.queries.js";
 import { dbFindAllCart, dbUpdateCartStatus } from "../db/cart.queries.js";
 import { dbFindUserById } from "../db/user.queries.js";
+import stripe from "../config/stipe.config.js";
 
 const getAllOrder = expressAsyncHandler(async (req, res) => {
     const { include = {} } = req.query;
@@ -217,7 +218,6 @@ const createOnlineOrder = expressAsyncHandler(async (req, res) => {
     }
 
     const carts = await dbFindAllCart({ userId, isActive: true });
-    console.log(carts);
     if (!carts) {
         return res.status(409).json({
             success: false,
@@ -241,7 +241,7 @@ const createOnlineOrder = expressAsyncHandler(async (req, res) => {
                 },
             });
         }
-        console.log("order qty", cart.orderQuantity);
+
         if (cart.orderQuantity > product.qty) {
             return res.status(409).json({
                 success: false,
@@ -277,6 +277,43 @@ const createOnlineOrder = expressAsyncHandler(async (req, res) => {
     }
 
     // Checkout
+    const lineItems = orderDetails.map((item) => ({
+        price_data: {
+            currency: "usd",
+            unit_amount: Math.round(item.unitPrice * 100),
+            product_data: {
+                name: item.productName,
+                description: item.categoryName,
+                // images: ["https://example.com/t-shirt.png"],
+            },
+        },
+        quantity: item.orderQuantity,
+    }));
+    console.log(lineItems);
+
+    // if (discount > 0) {
+    //     lineItems.push({
+    //         price_data: {
+    //             currency: "usd",
+    //             product_data: { name: "Discount" },
+    //             unit_amount: Math.round(-discount * 100), // Negative amount for discount
+    //         },
+    //         quantity: 1,
+    //     });
+    // }
+
+    const session = await stripe.checkout.sessions.create({
+        payment_method_types: ["card"],
+        line_items: lineItems,
+        mode: "payment",
+        success_url: `${process.env.FRONTEND_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${process.env.FRONTEND_URL}/cancel`,
+        metadata: {
+            userId,
+            remark,
+            couponId: coupon?.id || null,
+        },
+    });
 
     const orderHeader = await dbCreateOrder({
         paymentMethod,
@@ -316,6 +353,7 @@ const createOnlineOrder = expressAsyncHandler(async (req, res) => {
             orderId: orderHeader.id,
             orderStatus: orderHeader.orderStatus,
             totalPrice: orderHeader.totalPrice,
+            paymentSessionUrl: session.url,
             message: `Order Id ${orderHeader.id} has been successfully placed`,
         },
     });

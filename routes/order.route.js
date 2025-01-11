@@ -5,7 +5,10 @@ import {
     createOnlineOrder,
     getAllOrder,
 } from "../controllers/order.controller.js";
-import { validateOrderCounterInsert, validateOrderOnlineInsert } from "../middlewares/validators/order.validator.js";
+import {
+    validateOrderCounterInsert,
+    validateOrderOnlineInsert,
+} from "../middlewares/validators/order.validator.js";
 
 const orderRouter = Router();
 
