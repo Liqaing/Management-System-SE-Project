@@ -2,6 +2,7 @@ const ROLES = {
     adminRole: "ADMIN",
     userRole: "USER",
     staffRole: "STAFF",
+    systemRole: "System",
 };
 
 const BooleanString = {
