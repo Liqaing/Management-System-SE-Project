@@ -17,11 +17,15 @@ const CouponStatus = {
 
 const OrderStatus = {
     // Order online need to be confirm byy staff
+    pendingPayment: "Pending Payment",
     pending: "Pending",
+
     preparing: "Preparing",
     orderReady: "Ready",
     delivering: "Delivering",
     complete: "Completed",
+    
+    cancel: "Cancel",
 };
 
 const PaymentMethod = {

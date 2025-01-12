@@ -94,10 +94,10 @@ const dbUpdateCoupon = async ({
     return coupon;
 };
 
-const dbUpdateCouponUsage = async (id, updateUsageObj) => {
+const dbUpdateCouponUsage = async (findOptions = {}, updateUsageObj) => {
     const coupon = await prisma.coupon.update({
         where: {
-            id: id,
+            ...findOptions,
         },
         data: {
             limitUsange: { ...updateUsageObj },

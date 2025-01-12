@@ -74,8 +74,24 @@ const validateOrderQueryParams = [
     validatorHandler,
 ];
 
+const validateOrderStripeReturnUrl = [
+    query("orderHeaderId")
+        .notEmpty()
+        .withMessage("Order Id cannot be empty")
+        .isInt()
+        .withMessage("Order Id must be an Integer")
+        .toInt(),
+    query("session_id")
+        .notEmpty()
+        .withMessage("Stripe Session Id cannot be empty")
+        .isString()
+        .withMessage("Stripe Session Id must be a string"),
+    validatorHandler,
+];
+
 export {
     validateOrderCounterInsert,
     validateOrderOnlineInsert,
     validateOrderQueryParams,
+    validateOrderStripeReturnUrl,
 };
