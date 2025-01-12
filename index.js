@@ -16,6 +16,7 @@ import swaggerDocs from "./config/swagger.config.js";
 import { couponRouter } from "./routes/coupon.route.js";
 import { orderRouter } from "./routes/order.route.js";
 import { cartRouter } from "./routes/cart.route.js";
+import { kdsRouter } from "./routes/kds.route.js";
 
 dotenv.config();
 
@@ -52,6 +53,7 @@ app.use("/api/product", productRouter);
 app.use("/api/coupon", couponRouter);
 app.use("/api/order", orderRouter);
 app.use("/api/cart", cartRouter);
+app.use("/api/kds", kdsRouter);
 
 app.get("/api", (req, res) => {
     return res.status(200).json({

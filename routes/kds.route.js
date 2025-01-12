@@ -1,15 +1,10 @@
 import { Router } from "express";
 import { verifyToken } from "../middlewares/auth.middleware.js";
-import { addCart, removeCart } from "../controllers/cart.controller.js";
-import {
-    validateCartAdd,
-    validateCartRemove,
-} from "../middlewares/validators/cart.validator.js";
+import { getAllPreparingOrder } from "../controllers/kds.controller.js";
 
-const cartRouter = Router();
+// Kitchen Display System
+const kdsRouter = Router();
 
-cartRouter.get("/", verifyToken);
-cartRouter.post("/add", verifyToken, validateCartAdd, addCart);
-cartRouter.post("/remove", verifyToken, validateCartRemove, removeCart);
+kdsRouter.get("/", verifyToken, getAllPreparingOrder);
 
-export { cartRouter };
+export { kdsRouter };
