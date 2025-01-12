@@ -31,7 +31,6 @@ orderRouter.post(
 orderRouter.get(
     "/online/cancel",
     validateOrderStripeReturnUrl,
-    validateOrderPaymentStatus,
     onlineOrderCancel
 );
 orderRouter.get(

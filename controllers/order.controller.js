@@ -7,6 +7,7 @@ import {
 } from "../db/order.queries.js";
 import {
     BooleanString,
+    CouponType,
     OrderStatus,
     PaymentMethod,
     ROLES,
@@ -212,6 +213,17 @@ const createOnlineOrder = expressAsyncHandler(async (req, res) => {
             });
         }
 
+        if (coupon.couponType !== CouponType.online) {
+            if (!coupon) {
+                return res.status(409).json({
+                    success: false,
+                    error: {
+                        message: `This Coupon cannot be use for online order`,
+                    },
+                });
+            }
+        }
+
         if (
             coupon.limitUsange <= 0 ||
             coupon.expireDate < new Date() ||
@@ -220,7 +232,7 @@ const createOnlineOrder = expressAsyncHandler(async (req, res) => {
             return res.status(409).json({
                 success: false,
                 error: {
-                    message: `Order Coupon ${coupon.couponCode} is not available, please check expire and effective date and limited usage`,
+                    message: `Order Coupon ${coupon.couponCode} is not available`,
                 },
             });
         }
@@ -352,6 +364,13 @@ const createOnlineOrder = expressAsyncHandler(async (req, res) => {
         mode: "payment",
         success_url: `${url}/api/order/online/success?orderHeaderId=${orderHeader.id}&session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${url}/api/order/online/cancel?orderHeaderId=${orderHeader.id}&session_id={CHECKOUT_SESSION_ID}`,
+        ...(coupon && {
+            discounts: [
+                {
+                    coupon: coupon.couponCode,
+                },
+            ],
+        }),
         metadata: {
             userId,
             remark,
@@ -379,6 +398,15 @@ const onlineOrderCancel = expressAsyncHandler(async (req, res) => {
         { orderDetail: true }
     );
 
+    if (orderHeader.orderStatus === OrderStatus.cancel) {
+        return res.status(400).json({
+            success: true,
+            data: {
+                message: `Your Order has been already been cancelled`,
+            },
+        });
+    }
+
     const session = await stripe.checkout.sessions.retrieve(session_id);
 
     // Update order cancel
@@ -402,6 +430,7 @@ const onlineOrderCancel = expressAsyncHandler(async (req, res) => {
             }
         );
     }
+
     return res.status(200).json({
         success: true,
         data: {
