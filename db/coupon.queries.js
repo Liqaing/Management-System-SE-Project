@@ -2,10 +2,13 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-const dbFindAllCoupon = async (findOptions = {}) => {
+const dbFindAllCoupon = async (findOptions = {}, orderOption = {}) => {
     const coupons = await prisma.coupon.findMany({
         where: {
             ...findOptions,
+        },
+        orderBy: {
+            ...orderOption,
         },
     });
     return coupons;

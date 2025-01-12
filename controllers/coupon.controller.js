@@ -11,7 +11,7 @@ import { CouponStatus, CouponType, ROLES } from "../utils/constants.js";
 import stripe from "../config/stipe.config.js";
 
 const getAllCoupon = expressAsyncHandler(async (req, res) => {
-    const coupons = await dbFindAllCoupon();
+    const coupons = await dbFindAllCoupon({}, { id: "desc" });
 
     return res.status(200).json({
         success: true,
@@ -68,14 +68,14 @@ const createCoupon = expressAsyncHandler(async (req, res) => {
         });
     }
 
-    if (!(Object.values(CouponStatus).indexOf(status) > -1)) {
-        return res.status(422).json({
-            success: false,
-            error: {
-                message: "Invalid coupon status",
-            },
-        });
-    }
+    // if (!(Object.values(CouponStatus).indexOf(status) > -1)) {
+    //     return res.status(422).json({
+    //         success: false,
+    //         error: {
+    //             message: "Invalid coupon status",
+    //         },
+    //     });
+    // }
 
     const coupon = await dbFindCouponByCode(couponCode);
     if (coupon) {
@@ -176,14 +176,14 @@ const updateCoupon = expressAsyncHandler(async (req, res) => {
         });
     }
 
-    if (!(Object.values(CouponStatus).indexOf(status) > -1)) {
-        return res.status(422).json({
-            success: false,
-            error: {
-                message: "Invalid coupon status",
-            },
-        });
-    }
+    // if (!(Object.values(CouponStatus).indexOf(status) > -1)) {
+    //     return res.status(422).json({
+    //         success: false,
+    //         error: {
+    //             message: "Invalid coupon status",
+    //         },
+    //     });
+    // }
 
     const existCoupon = await dbFindCouponById(id);
     if (!existCoupon) {
