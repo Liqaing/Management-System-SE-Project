@@ -12,6 +12,10 @@ const validateCouponUpsert = [
         .isFloat({ min: 0 })
         .withMessage("Invalid, Please input a valid discount percentage")
         .toFloat(),
+    body("couponType")
+        .notEmpty()
+        .withMessage("Coupon type cannot be empty")
+        .trim(),
     body("status")
         .notEmpty()
         .withMessage("Coupon status cannot be empty")

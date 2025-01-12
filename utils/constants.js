@@ -15,6 +15,11 @@ const CouponStatus = {
     expire: "expire",
 };
 
+const CouponType = {
+    online: "Online",
+    counter: "Counter",
+};
+
 const OrderStatus = {
     // Order online need to be confirm byy staff
     pendingPayment: "Pending Payment",
@@ -24,7 +29,7 @@ const OrderStatus = {
     orderReady: "Ready",
     delivering: "Delivering",
     complete: "Completed",
-    
+
     cancel: "Cancel",
 };
 
@@ -48,4 +53,5 @@ export {
     OrderStatus,
     PaymentMethod,
     OrderType,
+    CouponType,
 };

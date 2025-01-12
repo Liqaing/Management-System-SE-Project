@@ -7,7 +7,8 @@ import {
     dbFindCouponById,
     dbUpdateCoupon,
 } from "../db/coupon.queries.js";
-import { CouponStatus, ROLES } from "../utils/constants.js";
+import { CouponStatus, CouponType, ROLES } from "../utils/constants.js";
+import stripe from "../config/stipe.config.js";
 
 const getAllCoupon = expressAsyncHandler(async (req, res) => {
     const coupons = await dbFindAllCoupon();
@@ -47,6 +48,7 @@ const createCoupon = expressAsyncHandler(async (req, res) => {
         effectiveDate,
         expireDate,
         limitUsange,
+        couponType,
     } = req.body;
 
     if (req.authData.role != ROLES.adminRole) {
@@ -54,6 +56,15 @@ const createCoupon = expressAsyncHandler(async (req, res) => {
             success: false,
             error: {
                 message: "Unauthorize operation",
+            },
+        });
+    }
+
+    if (couponType !== CouponType.online && couponType !== CouponType.counter) {
+        return res.status(422).json({
+            success: false,
+            error: {
+                message: "Counter type need to be either Counter or Online",
             },
         });
     }
@@ -78,11 +89,26 @@ const createCoupon = expressAsyncHandler(async (req, res) => {
         });
     }
 
+    // Create coupon in stripe
+    if (couponType === CouponType.online) {
+        await stripe.coupons.create({
+            id: couponCode,
+            percent_off: DiscountPercentage,
+            duration: "once",
+            max_redemptions: limitUsange,
+            redeem_by: expireDate
+                ? Math.floor(new Date(expireDate).getTime() / 1000)
+                : null,
+        });
+    }
+
+    // In my database
     const newCoupon = await dbCreateCoupon({
         couponCode,
         DiscountPercentage,
         status,
         effectiveDate,
+        couponType,
         expireDate,
         limitUsange,
         createBy: req.authData.username,
@@ -119,6 +145,9 @@ const deleteCoupon = expressAsyncHandler(async (req, res) => {
         });
     }
 
+    if (existCoupon.couponType === CouponType.online) {
+        await stripe.coupons.del(existCoupon.couponCode);
+    }
     const deleteCoupon = await dbDeleteCoupon(id);
     return res.status(200).json({
         success: true,
@@ -136,6 +165,7 @@ const updateCoupon = expressAsyncHandler(async (req, res) => {
         status,
         effectiveDate,
         expireDate,
+        couponType,
         limitUsange,
     } = req.body;
 
@@ -157,7 +187,8 @@ const updateCoupon = expressAsyncHandler(async (req, res) => {
         });
     }
 
-    if (!(await dbFindCouponById(id))) {
+    const existCoupon = await dbFindCouponById(id);
+    if (!existCoupon) {
         return res.status(404).json({
             success: false,
             error: {
@@ -166,7 +197,15 @@ const updateCoupon = expressAsyncHandler(async (req, res) => {
         });
     }
 
-    const existCoupon = await dbFindCouponByCode(couponCode);
+    if (existCoupon.couponType !== couponType) {
+        return res.status(409).json({
+            success: false,
+            error: {
+                message: "You cannot change coupon type please create new",
+            },
+        });
+    }
+
     if (existCoupon && existCoupon.id !== id) {
         return res.status(409).json({
             success: false,
@@ -177,6 +216,17 @@ const updateCoupon = expressAsyncHandler(async (req, res) => {
         });
     }
 
+    if (couponType === CouponType.online) {
+        await stripe.coupons.update(existCoupon.couponCode, {
+            id: couponCode,
+            percent_off: DiscountPercentage,
+            max_redemptions: limitUsange,
+            redeem_by: expireDate
+                ? Math.floor(new Date(expireDate).getTime() / 1000)
+                : null,
+        });
+    }
+
     const coupon = await dbUpdateCoupon({
         id,
         couponCode,
@@ -184,6 +234,7 @@ const updateCoupon = expressAsyncHandler(async (req, res) => {
         status,
         effectiveDate,
         expireDate,
+        couponType,
         limitUsange,
         updateBy: req.authData.username,
         updateById: req.authData.userId,
