@@ -44,7 +44,6 @@ const createCoupon = expressAsyncHandler(async (req, res) => {
     const {
         couponCode,
         DiscountPercentage,
-        status,
         effectiveDate,
         expireDate,
         limitUsange,
@@ -106,7 +105,7 @@ const createCoupon = expressAsyncHandler(async (req, res) => {
     const newCoupon = await dbCreateCoupon({
         couponCode,
         DiscountPercentage,
-        status,
+        status: CouponStatus.active,
         effectiveDate,
         couponType,
         expireDate,
@@ -162,7 +161,6 @@ const updateCoupon = expressAsyncHandler(async (req, res) => {
     const {
         couponCode,
         DiscountPercentage,
-        status,
         effectiveDate,
         expireDate,
         couponType,
@@ -231,7 +229,7 @@ const updateCoupon = expressAsyncHandler(async (req, res) => {
         id,
         couponCode,
         DiscountPercentage,
-        status,
+        status: CouponStatus.active,
         effectiveDate,
         expireDate,
         couponType,

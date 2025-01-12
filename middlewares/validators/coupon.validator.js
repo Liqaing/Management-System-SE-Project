@@ -16,10 +16,6 @@ const validateCouponUpsert = [
         .notEmpty()
         .withMessage("Coupon type cannot be empty")
         .trim(),
-    body("status")
-        .notEmpty()
-        .withMessage("Coupon status cannot be empty")
-        .trim(),
     body("effectiveDate")
         .notEmpty()
         .withMessage("Coupon effective date cannot be empty")
