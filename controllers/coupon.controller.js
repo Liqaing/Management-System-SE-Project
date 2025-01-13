@@ -68,14 +68,23 @@ const createCoupon = expressAsyncHandler(async (req, res) => {
         });
     }
 
-    // if (!(Object.values(CouponStatus).indexOf(status) > -1)) {
-    //     return res.status(422).json({
-    //         success: false,
-    //         error: {
-    //             message: "Invalid coupon status",
-    //         },
-    //     });
-    // }
+    if (limitUsange < 0) {
+        return res.status(409).json({
+            success: false,
+            error: {
+                message: "Limit usange must not be negative",
+            },
+        });
+    }
+
+    if (DiscountPercentage < 0 || DiscountPercentage > 100) {
+        return res.status(409).json({
+            success: false,
+            error: {
+                message: "Discount percentage must be between 0 and 100",
+            },
+        });
+    }
 
     const coupon = await dbFindCouponByCode(couponCode);
     if (coupon) {
@@ -113,6 +122,8 @@ const createCoupon = expressAsyncHandler(async (req, res) => {
         createBy: req.authData.username,
         createById: req.authData.userId,
     });
+
+    console.log(newCoupon);
 
     return res.status(201).json({
         success: true,
