@@ -36,4 +36,13 @@ const validateCouponUpsert = [
     validatorHandler,
 ];
 
-export { validateCouponUpsert };
+const validateVerifyCoupon = [
+    body("couponCode")
+        .notEmpty()
+        .isLength({ min: 6, max: 6 })
+        .withMessage("Coupon code can only be 6 character long")
+        .trim(),
+    validatorHandler,
+];
+
+export { validateCouponUpsert, validateVerifyCoupon };

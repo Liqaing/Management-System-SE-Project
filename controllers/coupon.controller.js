@@ -246,4 +246,44 @@ const updateCoupon = expressAsyncHandler(async (req, res) => {
     });
 });
 
-export { getAllCoupon, getOneCoupon, createCoupon, deleteCoupon, updateCoupon };
+const verifyCoupon = expressAsyncHandler(async (req, res) => {
+    const { couponCode } = req.body;
+
+    const coupon = await dbFindCouponByCode(couponCode);
+    if (!coupon) {
+        return res.status(409).json({
+            success: false,
+            error: {
+                message: "This coupon does not exist",
+            },
+        });
+    }
+
+    if (coupon.limitUsange <= 0) {
+        return res.status(409).json({
+            success: false,
+            error: {
+                message: "This coupon usage has exceed it limit",
+            },
+        });
+    }
+
+    if (coupon.expireDate > new Date()) {
+        return res.status(409).json({
+            success: false,
+            error: {
+                message: "This coupon has expired",
+            },
+        });
+    }
+
+    return res.status(200).json({
+        success: true,
+        message: "This coupon can be apply",
+        data: {
+            ...coupon,
+        },
+    });
+});
+
+export { getAllCoupon, getOneCoupon, createCoupon, deleteCoupon, updateCoupon, verifyCoupon };
