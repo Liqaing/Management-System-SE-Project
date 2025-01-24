@@ -17,6 +17,7 @@ async function main() {
                     { roleName: ROLES.adminRole },
                     { roleName: ROLES.userRole },
                     { roleName: ROLES.staffRole },
+                    { roleName: ROLES.systemRole },
                 ],
             });
         }

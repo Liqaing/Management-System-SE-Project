@@ -2,10 +2,13 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-const dbFindAllCoupon = async (findOptions = {}) => {
+const dbFindAllCoupon = async (findOptions = {}, orderOption = {}) => {
     const coupons = await prisma.coupon.findMany({
         where: {
             ...findOptions,
+        },
+        orderBy: {
+            ...orderOption,
         },
     });
     return coupons;
@@ -35,6 +38,7 @@ const dbCreateCoupon = async ({
     status,
     effectiveDate,
     expireDate,
+    couponType,
     limitUsange,
     createBy,
     createById,
@@ -47,6 +51,7 @@ const dbCreateCoupon = async ({
             effectiveDate,
             expireDate,
             limitUsange,
+            couponType,
             createBy,
             createById,
         },
@@ -70,6 +75,7 @@ const dbUpdateCoupon = async ({
     DiscountPercentage,
     status,
     effectiveDate,
+    couponType,
     expireDate,
     limitUsange,
     updateById,
@@ -86,6 +92,7 @@ const dbUpdateCoupon = async ({
             effectiveDate,
             expireDate,
             limitUsange,
+            couponType,
             updateBy,
             updateById,
             updateAt: new Date(),
@@ -94,10 +101,10 @@ const dbUpdateCoupon = async ({
     return coupon;
 };
 
-const dbUpdateCouponUsage = async (id, updateUsageObj) => {
+const dbUpdateCouponUsage = async (findOptions = {}, updateUsageObj) => {
     const coupon = await prisma.coupon.update({
         where: {
-            id: id,
+            ...findOptions,
         },
         data: {
             limitUsange: { ...updateUsageObj },

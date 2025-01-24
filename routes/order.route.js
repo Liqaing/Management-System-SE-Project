@@ -4,11 +4,14 @@ import {
     createCounterOrder,
     createOnlineOrder,
     getAllOrder,
+    onlineOrderCancel,
 } from "../controllers/order.controller.js";
 import {
     validateOrderCounterInsert,
     validateOrderOnlineInsert,
+    validateOrderStripeReturnUrl,
 } from "../middlewares/validators/order.validator.js";
+import { validateOrderPaymentStatus } from "../middlewares/order.middleware.js";
 
 const orderRouter = Router();
 
@@ -24,6 +27,16 @@ orderRouter.post(
     verifyToken,
     validateOrderOnlineInsert,
     createOnlineOrder
+);
+orderRouter.get(
+    "/online/cancel",
+    validateOrderStripeReturnUrl,
+    onlineOrderCancel
+);
+orderRouter.get(
+    "/online/success",
+    validateOrderStripeReturnUrl,
+    validateOrderPaymentStatus
 );
 
 export { orderRouter };

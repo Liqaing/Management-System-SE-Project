@@ -80,19 +80,21 @@ model productImage {
 }
 
 model coupon {
-  id                 Int       @id @default(autoincrement())
-  couponCode         String    @unique @db.VarChar(6)
+  id                 Int      @id @default(autoincrement())
+  couponCode         String   @unique @db.VarChar(6)
   DiscountPercentage Float
-  status             String    @db.VarChar(50)
+  status             String   @db.VarChar(50)
   effectiveDate      DateTime
   expireDate         DateTime
   limitUsange        Int
-  createById         Int?
-  createBy           String?   @db.VarChar(255)
-  createAt           DateTime? @default(now())
-  updateById         Int?
-  updateBy           String?   @db.VarChar(255)
-  updateAt           DateTime?
+  couponType         String   @db.VarChar(30)
+
+  createById Int?
+  createBy   String?   @db.VarChar(255)
+  createAt   DateTime? @default(now())
+  updateById Int?
+  updateBy   String?   @db.VarChar(255)
+  updateAt   DateTime?
 }
 
 model orderHeader {

@@ -1,7 +1,13 @@
 import expressAsyncHandler from "express-async-handler";
-import { dbCreateOrder, dbFindAllOrderHeaders } from "../db/order.queries.js";
+import {
+    dbCreateOrder,
+    dbFindAllOrderHeaders,
+    dbFindOrderHeader,
+    dbUpdateOrder,
+} from "../db/order.queries.js";
 import {
     BooleanString,
+    CouponType,
     OrderStatus,
     PaymentMethod,
     ROLES,
@@ -157,9 +163,12 @@ const createCounterOrder = expressAsyncHandler(async (req, res) => {
     });
 
     if (coupon) {
-        dbUpdateCouponUsage(couponId, {
-            decrement: 1,
-        });
+        dbUpdateCouponUsage(
+            { id: couponId },
+            {
+                decrement: 1,
+            }
+        );
     }
 
     return res.status(201).json({
@@ -204,6 +213,17 @@ const createOnlineOrder = expressAsyncHandler(async (req, res) => {
             });
         }
 
+        if (coupon.couponType !== CouponType.online) {
+            if (!coupon) {
+                return res.status(409).json({
+                    success: false,
+                    error: {
+                        message: `This Coupon cannot be use for online order`,
+                    },
+                });
+            }
+        }
+
         if (
             coupon.limitUsange <= 0 ||
             coupon.expireDate < new Date() ||
@@ -212,14 +232,14 @@ const createOnlineOrder = expressAsyncHandler(async (req, res) => {
             return res.status(409).json({
                 success: false,
                 error: {
-                    message: `Order Coupon ${coupon.couponCode} is not available, please check expire and effective date and limited usage`,
+                    message: `Order Coupon ${coupon.couponCode} is not available`,
                 },
             });
         }
     }
 
     const carts = await dbFindAllCart({ userId, isActive: true });
-    if (!carts) {
+    if (carts.length === 0) {
         return res.status(409).json({
             success: false,
             error: {
@@ -302,25 +322,11 @@ const createOnlineOrder = expressAsyncHandler(async (req, res) => {
     //     });
     // }
 
-    const url = constructUrl(req);
-    const session = await stripe.checkout.sessions.create({
-        payment_method_types: ["card"],
-        line_items: lineItems,
-        mode: "payment",
-        success_url: `${url}/api/order/online/success?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${url}/api/order/online/cancel`,
-        metadata: {
-            userId,
-            remark,
-            couponId: coupon?.id || null,
-        },
-    });
-
     const orderHeader = await dbCreateOrder({
         paymentMethod,
         remark,
         orderType: "Online",
-        orderStatus: OrderStatus.pending,
+        orderStatus: OrderStatus.pendingPayment,
         orderDetails,
         ...(coupon && {
             couponCode: coupon.couponCode,
@@ -343,12 +349,36 @@ const createOnlineOrder = expressAsyncHandler(async (req, res) => {
     });
 
     if (coupon) {
-        dbUpdateCouponUsage(couponId, {
-            decrement: 1,
-        });
+        dbUpdateCouponUsage(
+            { id: couponId },
+            {
+                decrement: 1,
+            }
+        );
     }
 
-    return res.status(201).json({
+    const url = constructUrl(req);
+    const session = await stripe.checkout.sessions.create({
+        payment_method_types: ["card"],
+        line_items: lineItems,
+        mode: "payment",
+        success_url: `${url}/api/order/online/success?orderHeaderId=${orderHeader.id}&session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${url}/api/order/online/cancel?orderHeaderId=${orderHeader.id}&session_id={CHECKOUT_SESSION_ID}`,
+        ...(coupon && {
+            discounts: [
+                {
+                    coupon: coupon.couponCode,
+                },
+            ],
+        }),
+        metadata: {
+            userId,
+            remark,
+            couponId: coupon?.id || null,
+        },
+    });
+
+    return res.status(200).json({
         success: true,
         data: {
             orderId: orderHeader.id,
@@ -360,4 +390,58 @@ const createOnlineOrder = expressAsyncHandler(async (req, res) => {
     });
 });
 
-export { getAllOrder, createCounterOrder, createOnlineOrder };
+const onlineOrderCancel = expressAsyncHandler(async (req, res) => {
+    const { orderHeaderId, session_id } = req.query;
+
+    const orderHeader = await dbFindOrderHeader(
+        { id: orderHeaderId },
+        { orderDetail: true }
+    );
+
+    if (orderHeader.orderStatus === OrderStatus.cancel) {
+        return res.status(400).json({
+            success: true,
+            data: {
+                message: `Your Order has been already been cancelled`,
+            },
+        });
+    }
+
+    const session = await stripe.checkout.sessions.retrieve(session_id);
+
+    // Update order cancel
+    await dbUpdateOrder(
+        { id: orderHeader.id },
+        { orderStatus: OrderStatus.cancel, SessionId: session.id }
+    );
+
+    orderHeader.orderDetail.forEach((item) => {
+        // Increase product qty back
+        dbUpdateProductQty(item.productId, {
+            increment: item.orderQuantity,
+        });
+    });
+
+    if (orderHeader.couponCode) {
+        dbUpdateCouponUsage(
+            { couponCode: orderHeader.couponCode },
+            {
+                increment: 1,
+            }
+        );
+    }
+
+    return res.status(200).json({
+        success: true,
+        data: {
+            message: `Your Order has been successfully cancelled`,
+        },
+    });
+});
+
+export {
+    getAllOrder,
+    createCounterOrder,
+    createOnlineOrder,
+    onlineOrderCancel,
+};

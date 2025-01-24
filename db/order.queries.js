@@ -9,6 +9,18 @@ const dbFindAllOrderHeaders = async (includeOptions = {}, findOptions = {}) => {
     return orderHeaders;
 };
 
+const dbFindOrderHeader = async (findOptions = {}, includeOptions = {}) => {
+    const orderHeader = await prisma.orderHeader.findFirst({
+        where: {
+            ...findOptions,
+        },
+        include: {
+            ...includeOptions,
+        },
+    });
+    return orderHeader;
+};
+
 const dbCreateOrder = async ({
     orderStatus,
     paymentMethod,
@@ -59,4 +71,21 @@ const dbCreateOrder = async ({
     return orderHeader;
 };
 
-export { dbFindAllOrderHeaders, dbCreateOrder };
+const dbUpdateOrder = async (findOptions = {}, data = {}) => {
+    const orderHeader = await prisma.orderHeader.update({
+        where: {
+            ...findOptions,
+        },
+        data: {
+            ...data,
+        },
+    });
+    return orderHeader;
+};
+
+export {
+    dbFindAllOrderHeaders,
+    dbCreateOrder,
+    dbFindOrderHeader,
+    dbUpdateOrder,
+};

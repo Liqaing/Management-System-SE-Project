@@ -12,9 +12,9 @@ const validateCouponUpsert = [
         .isFloat({ min: 0 })
         .withMessage("Invalid, Please input a valid discount percentage")
         .toFloat(),
-    body("status")
+    body("couponType")
         .notEmpty()
-        .withMessage("Coupon status cannot be empty")
+        .withMessage("Coupon type cannot be empty")
         .trim(),
     body("effectiveDate")
         .notEmpty()
@@ -36,4 +36,13 @@ const validateCouponUpsert = [
     validatorHandler,
 ];
 
-export { validateCouponUpsert };
+const validateVerifyCoupon = [
+    body("couponCode")
+        .notEmpty()
+        .isLength({ min: 6, max: 6 })
+        .withMessage("Coupon code can only be 6 character long")
+        .trim(),
+    validatorHandler,
+];
+
+export { validateCouponUpsert, validateVerifyCoupon };

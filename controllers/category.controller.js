@@ -32,12 +32,15 @@ const getAllCategory = expressAsyncHandler(async (req, res) => {
             },
         }),
     });
+    console.log(categories);
 
     if (include.product === BooleanString.true) {
         const url = constructUrl(req);
-        category.product.forEach((product) => {
-            product.productImage.forEach((image) => {
-                image.imageUrl = productImageUrl(url, image.id);
+        categories.forEach((category) => {
+            category.product.forEach((product) => {
+                product.productImage.forEach((image) => {
+                    image.imageUrl = productImageUrl(url, image.id);
+                });
             });
         });
     }
