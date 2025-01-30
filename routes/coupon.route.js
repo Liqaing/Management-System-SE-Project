@@ -6,8 +6,12 @@ import {
     getAllCoupon,
     getOneCoupon,
     updateCoupon,
+    verifyCoupon,
 } from "../controllers/coupon.controller.js";
-import { validateCouponUpsert } from "../middlewares/validators/coupon.validator.js";
+import {
+    validateCouponUpsert,
+    validateVerifyCoupon,
+} from "../middlewares/validators/coupon.validator.js";
 import { validateParamId } from "../middlewares/validators/others.validator.js";
 
 const couponRouter = Router();
@@ -22,5 +26,6 @@ couponRouter.put(
     validateCouponUpsert,
     updateCoupon
 );
+couponRouter.post("/verify", verifyToken, validateVerifyCoupon, verifyCoupon);
 
 export { couponRouter };
