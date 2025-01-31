@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "ee6142da-caa8-4381-a10f-956d82e93823",
+		"_postman_id": "15982c2b-1c2c-4ab5-963e-fa4e6d7c18b0",
 		"name": "STORE-FOOD",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "33468313"
+		"_exporter_id": "39376198"
 	},
 	"item": [
 		{
@@ -20,6 +20,32 @@
 								"body": {
 									"mode": "raw",
 									"raw": "{\r\n  \"telephone\": \"010987001\",\r\n  \"password\": \"sodaIT@123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{api_url}}auth/login",
+									"host": [
+										"{{api_url}}auth"
+									],
+									"path": [
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "login Customer",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"telephone\": \"0111111\",\r\n  \"password\": \"customer\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -356,7 +382,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n  \"categoryName\": \"Pizza\",\r\n  \"description\": \"Pizza Description\"\r\n}",
+									"raw": "{\r\n    \"productName\": \"Veggie Burger\",\r\n    \"description\": \"Healthy veggie burger.\",\r\n    \"price\": 4.99,\r\n    \"qty\": 10,\r\n    \"categoryId\": 1,\r\n    \"productImages\": [\r\n        \"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...\"\r\n    ]\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -364,12 +390,12 @@
 									}
 								},
 								"url": {
-									"raw": "{{api_url}}category/1",
+									"raw": "{{api_url}}product/2",
 									"host": [
-										"{{api_url}}category"
+										"{{api_url}}product"
 									],
 									"path": [
-										"1"
+										"2"
 									]
 								}
 							},
@@ -381,9 +407,9 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "{{api_url}}category/9",
+									"raw": "{{api_url}}product/9",
 									"host": [
-										"{{api_url}}category"
+										"{{api_url}}product"
 									],
 									"path": [
 										"9"
@@ -398,23 +424,44 @@
 					"name": "Coupon",
 					"item": [
 						{
-							"name": "get",
+							"name": "get all",
 							"request": {
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{api_url}}product?includeCategory=true&includeProductImage=true",
+									"raw": "{{api_url}}coupon/",
 									"host": [
-										"{{api_url}}product"
+										"{{api_url}}coupon"
+									],
+									"path": [
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{api_url}}coupon/1",
+									"host": [
+										"{{api_url}}coupon"
+									],
+									"path": [
+										"1"
 									],
 									"query": [
 										{
-											"key": "includeCategory",
-											"value": "true"
-										},
-										{
-											"key": "includeProductImage",
-											"value": "true"
+											"key": "id",
+											"value": "3",
+											"disabled": true
 										}
 									]
 								}
@@ -422,13 +469,44 @@
 							"response": []
 						},
 						{
-							"name": "creeate",
+							"name": "get one",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{api_url}}coupon/1",
+									"host": [
+										"{{api_url}}coupon"
+									],
+									"path": [
+										"1"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "3",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "create",
 							"request": {
 								"method": "POST",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n  \"couponCode\": \"012934\",\r\n  \"DiscountPercentage\": \"10\",\r\n  \"status\": \"Active\",\r\n  \"effectiveDate\": \"2024-04-23T18:25:43.511Z\",\r\n  \"expireDate\": \"2025-04-23T18:25:43.511Z\",\r\n  \"limitUsange\": 1\r\n}",
+									"raw": "{\r\n  \"couponCode\": \"AAAAAA\",\r\n  \"DiscountPercentage\": \"10\",\r\n  \"couponType\": \"Online\",\r\n  \"status\": \"Active\",\r\n  \"effectiveDate\": \"2024-04-23T18:25:43.511Z\",\r\n  \"expireDate\": \"2025-04-23T18:25:43.511Z\",\r\n  \"limitUsange\": 1\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -439,6 +517,214 @@
 									"raw": "{{api_url}}coupon/",
 									"host": [
 										"{{api_url}}coupon"
+									],
+									"path": [
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"couponCode\": \"012934\",\r\n  \"DiscountPercentage\": \"15\",\r\n  \"status\": \"Active\",\r\n  \"effectiveDate\": \"2024-04-23T18:25:43.511Z\",\r\n  \"expireDate\": \"2025-04-23T18:25:43.511Z\",\r\n  \"limitUsange\": 10\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{api_url}}coupon/2",
+									"host": [
+										"{{api_url}}coupon"
+									],
+									"path": [
+										"2"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Order",
+					"item": [
+						{
+							"name": "Counter Order",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"paymentMethod\": \"Cash\",\r\n    \"remark\": \"Deliver during the daytime.\",\r\n    \"items\": [\r\n        {\r\n            \"productId\": 1,\r\n            \"orderQuantity\": 2,\r\n            \"categoryName\": \"Cheeseburger\",\r\n            \"productName\": \"Veggie Burger\"\r\n        },\r\n        {\r\n            \"productId\": 2,\r\n            \"orderQuantity\": 1,\r\n            \"categoryName\": \"Burger\",\r\n            \"productName\": \"Cheeseburger Deluxe\"\r\n        }\r\n    ],\r\n    \"couponId\":  2\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{api_url}}order/counter",
+									"host": [
+										"{{api_url}}order"
+									],
+									"path": [
+										"counter"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Online Order",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"paymentMethod\": \"Card\",\r\n    \"remark\": \"Deliver during the daytime.\",\r\n    \"couponId\":  2\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{api_url}}order/online",
+									"host": [
+										"{{api_url}}order"
+									],
+									"path": [
+										"online"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get all",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{api_url}}order?include[OrderDetail]=true",
+									"host": [
+										"{{api_url}}order"
+									],
+									"query": [
+										{
+											"key": "include[OrderDetail]",
+											"value": "true"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Cart",
+					"item": [
+						{
+							"name": "Get",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{api_url}}cart/",
+									"host": [
+										"{{api_url}}cart"
+									],
+									"path": [
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"productId\": 1,\r\n    \"orderQuantity\": 1\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{api_url}}cart/add",
+									"host": [
+										"{{api_url}}cart"
+									],
+									"path": [
+										"add"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Remove",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"cartId\": 1,\r\n    \"deleteAll\": true\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{api_url}}cart/remove",
+									"host": [
+										"{{api_url}}cart"
+									],
+									"path": [
+										"remove"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Kichen Display System",
+					"item": [
+						{
+							"name": "Get Preparing Order",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{api_url}}kds/",
+									"host": [
+										"{{api_url}}kds"
 									],
 									"path": [
 										""

@@ -97,7 +97,7 @@ model orderHeader {
   id         Int      @id @default(autoincrement())
   orderDate  DateTime
   totalPrice Float
-  discount   Float
+  discount   Float    @default(0) 
   grandTotal Float
 
   orderStatus String  @db.VarChar(50)

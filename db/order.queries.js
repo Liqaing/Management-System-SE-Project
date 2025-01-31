@@ -36,6 +36,7 @@ const dbCreateOrder = async ({
     createBy,
     createById,
 }) => {
+    console.log(discount);
     const orderHeader = await prisma.orderHeader.create({
         data: {
             orderDate: new Date(),
