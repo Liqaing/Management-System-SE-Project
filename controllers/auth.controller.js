@@ -10,6 +10,7 @@ import { constructUrl } from "../utils/utils.js";
 
 const loginUser = expressAsyncHandler(async (req, res) => {
     const { password, telephone } = req.body;
+    console.log(req.body);
     const user = await dbFindUserByTel(telephone, { role: true });
 
     if (user == null) {

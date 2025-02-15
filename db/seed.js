@@ -26,29 +26,27 @@ async function main() {
     async function seedUser() {
         const users = await prisma.users.findMany();
         if (users.length === 0) {
-            await prisma.users.create({
-                data: {
-                    username: "admin",
-                    password: bcrypt.hashSync("admin", saltRounds),
-                    telephone: "011",
-                    role: {
-                        connect: { id: 1 }, // Assuming admin role has ID 1
+            await prisma.users.createMany({
+                data: [
+                    {
+                        username: "admin",
+                        password: bcrypt.hashSync("admin", saltRounds),
+                        telephone: "011",
+                        roleId: 1,
                     },
-
-                    username: "Soda",
-                    password: bcrypt.hashSync("sodaIT@123", saltRounds),
-                    telephone: "010987001",
-                    role: {
-                        connect: { id: 1 },
+                    {
+                        username: "Soda",
+                        password: bcrypt.hashSync("sodaIT@123", saltRounds),
+                        telephone: "010987001",
+                        roleId: 1,
                     },
-
-                    username: "customer",
-                    password: bcrypt.hashSync("customer", saltRounds),
-                    telephone: "0111111",
-                    role: {
-                        connect: { id: 2 },
+                    {
+                        username: "customer",
+                        password: bcrypt.hashSync("customer", saltRounds),
+                        telephone: "0111111",
+                        roleId: 1,
                     },
-                },
+                ],
             });
         }
     }
