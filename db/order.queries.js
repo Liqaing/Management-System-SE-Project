@@ -49,9 +49,8 @@ const dbCreateOrder = async ({
             ...(couponCode !== undefined && {
                 discountPercentage: discountPercentage,
                 couponCode: couponCode,
-                discount: discount,
             }),
-
+            discount: discount,
             telephone: telephone,
             createBy: createBy,
             createById: createById,

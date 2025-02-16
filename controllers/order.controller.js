@@ -148,8 +148,8 @@ const createCounterOrder = expressAsyncHandler(async (req, res) => {
         ...(coupon && {
             couponCode: coupon.couponCode,
             discountPercentage: coupon.discountPercentage,
-            discount,
         }),
+        discount,
         telephone: telephone,
         totalPrice: totalPrice,
         grandTotal,
