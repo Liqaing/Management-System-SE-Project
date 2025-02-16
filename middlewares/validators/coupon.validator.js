@@ -16,11 +16,6 @@ const validateCouponUpsert = [
         .notEmpty()
         .withMessage("Coupon type cannot be empty")
         .trim(),
-    body("effectiveDate")
-        .notEmpty()
-        .withMessage("Coupon effective date cannot be empty")
-        .isISO8601()
-        .toDate(),
     body("expireDate")
         .notEmpty()
         .withMessage("Coupon expire date date cannot be empty")
@@ -41,6 +36,10 @@ const validateVerifyCoupon = [
         .notEmpty()
         .isLength({ min: 6, max: 6 })
         .withMessage("Coupon code can only be 6 character long")
+        .trim(),
+    body("couponType")
+        .notEmpty()
+        .withMessage("Coupon type cannot be empty")
         .trim(),
     validatorHandler,
 ];

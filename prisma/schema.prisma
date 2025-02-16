@@ -80,7 +80,6 @@ model coupon {
   couponCode         String   @unique @db.VarChar(6)
   DiscountPercentage Float
   status             String   @db.VarChar(50)
-  effectiveDate      DateTime
   expireDate         DateTime
   limitUsange        Int
   couponType         String   @db.VarChar(30)
@@ -97,7 +96,7 @@ model orderHeader {
   id         Int      @id @default(autoincrement())
   orderDate  DateTime
   totalPrice Float
-  discount   Float    @default(0) 
+  discount   Float    @default(0)
   grandTotal Float
 
   orderStatus String  @db.VarChar(50)

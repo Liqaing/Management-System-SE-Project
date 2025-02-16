@@ -78,11 +78,7 @@ const createCounterOrder = expressAsyncHandler(async (req, res) => {
             });
         }
 
-        if (
-            coupon.limitUsange <= 0 ||
-            coupon.expireDate < new Date() ||
-            coupon.effectiveDate > new Date()
-        ) {
+        if (coupon.limitUsange <= 0 || coupon.expireDate < new Date()) {
             return res.status(409).json({
                 success: false,
                 error: {
@@ -224,11 +220,7 @@ const createOnlineOrder = expressAsyncHandler(async (req, res) => {
             }
         }
 
-        if (
-            coupon.limitUsange <= 0 ||
-            coupon.expireDate < new Date() ||
-            coupon.effectiveDate > new Date()
-        ) {
+        if (coupon.limitUsange <= 0 || coupon.expireDate < new Date()) {
             return res.status(409).json({
                 success: false,
                 error: {

@@ -14,10 +14,10 @@ const dbFindAllCoupon = async (findOptions = {}, orderOption = {}) => {
     return coupons;
 };
 
-const dbFindCouponByCode = async (couponCode) => {
+const dbFindCoupon = async (findOptions = {}) => {
     const coupon = await prisma.coupon.findUnique({
         where: {
-            couponCode: couponCode,
+            ...findOptions,
         },
     });
     return coupon;
@@ -36,7 +36,6 @@ const dbCreateCoupon = async ({
     couponCode,
     DiscountPercentage,
     status,
-    effectiveDate,
     expireDate,
     couponType,
     limitUsange,
@@ -48,7 +47,6 @@ const dbCreateCoupon = async ({
             couponCode,
             DiscountPercentage,
             status,
-            effectiveDate,
             expireDate,
             limitUsange,
             couponType,
@@ -74,7 +72,6 @@ const dbUpdateCoupon = async ({
     couponCode,
     DiscountPercentage,
     status,
-    effectiveDate,
     couponType,
     expireDate,
     limitUsange,
@@ -89,7 +86,6 @@ const dbUpdateCoupon = async ({
             couponCode,
             DiscountPercentage,
             status,
-            effectiveDate,
             expireDate,
             limitUsange,
             couponType,
@@ -116,7 +112,7 @@ const dbUpdateCouponUsage = async (findOptions = {}, updateUsageObj) => {
 
 export {
     dbFindAllCoupon,
-    dbFindCouponByCode,
+    dbFindCoupon,
     dbCreateCoupon,
     dbFindCouponById,
     dbDeleteCoupon,

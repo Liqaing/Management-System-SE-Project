@@ -27,7 +27,8 @@ const getAllProduct = expressAsyncHandler(async (req, res) => {
         },
         {
             productName: { contains: search.productName, mode: "insensitive" },
-        }
+        },
+        [{ id: "desc" }]
     );
 
     // Use product iuamge id to construct a image url

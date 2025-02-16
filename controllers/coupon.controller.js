@@ -3,7 +3,7 @@ import {
     dbCreateCoupon,
     dbDeleteCoupon,
     dbFindAllCoupon,
-    dbFindCouponByCode,
+    dbFindCoupon,
     dbFindCouponById,
     dbUpdateCoupon,
 } from "../db/coupon.queries.js";
@@ -44,7 +44,6 @@ const createCoupon = expressAsyncHandler(async (req, res) => {
     const {
         couponCode,
         DiscountPercentage,
-        effectiveDate,
         expireDate,
         limitUsange,
         couponType,
@@ -86,7 +85,7 @@ const createCoupon = expressAsyncHandler(async (req, res) => {
         });
     }
 
-    const coupon = await dbFindCouponByCode(couponCode);
+    const coupon = await dbFindCoupon({ couponCode: couponCode });
     if (coupon) {
         return res.status(404).json({
             success: false,
@@ -115,7 +114,6 @@ const createCoupon = expressAsyncHandler(async (req, res) => {
         couponCode,
         DiscountPercentage,
         status: CouponStatus.active,
-        effectiveDate,
         couponType,
         expireDate,
         limitUsange,
@@ -172,7 +170,6 @@ const updateCoupon = expressAsyncHandler(async (req, res) => {
     const {
         couponCode,
         DiscountPercentage,
-        effectiveDate,
         expireDate,
         couponType,
         limitUsange,
@@ -241,7 +238,6 @@ const updateCoupon = expressAsyncHandler(async (req, res) => {
         couponCode,
         DiscountPercentage,
         status: CouponStatus.active,
-        effectiveDate,
         expireDate,
         couponType,
         limitUsange,
@@ -258,9 +254,21 @@ const updateCoupon = expressAsyncHandler(async (req, res) => {
 });
 
 const verifyCoupon = expressAsyncHandler(async (req, res) => {
-    const { couponCode } = req.body;
+    const { couponCode, couponType } = req.body;
 
-    const coupon = await dbFindCouponByCode(couponCode);
+    if (!(Object.values(CouponType).indexOf(couponType) > -1)) {
+        return res.status(422).json({
+            success: false,
+            error: {
+                message: "Invalid coupon type",
+            },
+        });
+    }
+
+    const coupon = await dbFindCoupon({
+        couponCode: couponCode,
+        couponType: couponType,
+    });
     if (!coupon) {
         return res.status(409).json({
             success: false,
@@ -279,7 +287,7 @@ const verifyCoupon = expressAsyncHandler(async (req, res) => {
         });
     }
 
-    if (coupon.expireDate > new Date()) {
+    if (coupon.expireDate < new Date()) {
         return res.status(409).json({
             success: false,
             error: {
@@ -297,4 +305,11 @@ const verifyCoupon = expressAsyncHandler(async (req, res) => {
     });
 });
 
-export { getAllCoupon, getOneCoupon, createCoupon, deleteCoupon, updateCoupon, verifyCoupon };
+export {
+    getAllCoupon,
+    getOneCoupon,
+    createCoupon,
+    deleteCoupon,
+    updateCoupon,
+    verifyCoupon,
+};
