@@ -2,9 +2,19 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-const dbFindAllOrderHeaders = async (includeOptions = {}, findOptions = {}) => {
+const dbFindAllOrderHeaders = async (
+    includeOptions = {},
+    findOptions = {},
+    orderBy = []
+) => {
     const orderHeaders = await prisma.orderHeader.findMany({
-        ...includeOptions,
+        include: {
+            ...includeOptions,
+        },
+        where: {
+            ...findOptions,
+        },
+        orderBy: [...orderBy],
     });
     return orderHeaders;
 };

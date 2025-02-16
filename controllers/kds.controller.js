@@ -5,17 +5,16 @@ import { OrderStatus } from "../utils/constants.js";
 const getAllPreparingOrder = expressAsyncHandler(async (req, res) => {
     // Return all order currently in preparing status
 
-    const { include = {} } = req.query;
+    const { include = {}, orderBy = {} } = req.query;
 
     const orderHeaders = await dbFindAllOrderHeaders(
         {
-            include: {
-                orderDetail: true,
-            },
+            orderDetail: true,
         },
         {
             orderStatus: OrderStatus.preparing,
-        }
+        },
+        [{ id: "desc" }]
     );
 
     return res.status(200).json({
